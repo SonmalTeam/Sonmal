@@ -1,4 +1,5 @@
 import dlib, cv2
+import mediapipe as mp
 import os
 
 BODY_PARTS_BODY_25 = {0: "Nose", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",

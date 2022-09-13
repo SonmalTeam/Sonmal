@@ -1,17 +1,8 @@
 from collections import OrderedDict
 
 import dlib, cv2
+import mediapipe as mp
 import os
-
-FACIAL_LANDMARKS_INDEXES = OrderedDict([
-    ("Mouth", (48, 68)),
-    ("Right_Eyebrow", (17, 22)),
-    ("Left_Eyebrow", (22, 27)),
-    ("Right_Eye", (36, 42)),
-    ("Left_Eye", (42, 48)),
-    ("Nose", (27, 35)),
-    ("Jaw", (0, 17))
-])
 
 POSE_PAIRS_FACE_68 = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10], [10, 11],
                       [11, 12], [12, 13], [13, 14], [14, 15], [15, 16], [17, 18], [18, 19], [19, 20], [20, 21], [22, 23],
@@ -26,9 +17,18 @@ POSE_PAIRS_FACE_68 = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7
 detector = dlib.get_frontal_face_detector()
 sp = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
+mpHands = mp.solutions.hands
+hands = mpHands.Hands()
+mpDraw = mp.solutions.drawing_utils
+mp_holistic = mp.solutions.holistic
+holistic_model = mp_holistic.Holistic(
+    static_image_mode=False,
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5
+)
 
-cam = cv2.VideoCapture('test.mp4')
-#cam = cv2.VideoCapture(0)
+#cam = cv2.VideoCapture('test.mp4')
+cam = cv2.VideoCapture(0)
 
 
 
@@ -41,13 +41,13 @@ while True:
 
     img, frame = cam.read()
     face = detector(frame)
-    print("face")
-    print(face)
+    #print("face")
+    #print(face)
     for f in face:
         #dlib으로 얼굴 검출
         #cv2.rectangle(frame, (f.left(), f.top()), (f.right(), f.bottom()), (0,0,255), 2)
-        print("f")
-        print(f)
+        #print("f")
+        #print(f)
         land = sp(frame, f)
         land_list = []
         #print("land")
@@ -67,7 +67,36 @@ while True:
             if points[partA] and points[partB]:
                 cv2.line(frame, points[partA], points[partB], (0, 255, 0), 1)
 
+    imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = holistic_model.process(imgRGB)
+    # print(results.multi_hand_landmarks)
 
+    if results.right_hand_landmarks:
+        # print(results.right_hand_landmarks)
+        mpDraw.draw_landmarks(frame, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+
+        right_keypoint_pos = []
+        for rightHandLms in results.right_hand_landmarks.landmark:
+            print(rightHandLms)
+            h, w, c = frame.shape
+            cx, cy = int(rightHandLms.x * w), int(rightHandLms.y * h)
+            # print(cx,cy)
+            right_keypoint_pos.append((cx, cy))
+        print("right hand")
+        print(right_keypoint_pos)
+
+    if results.left_hand_landmarks:
+        mpDraw.draw_landmarks(frame, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+
+        left_keypoint_pos = []
+        for leftHandLms in results.left_hand_landmarks.landmark:
+            print(leftHandLms)
+            h, w, c = frame.shape
+            cx, cy = int(leftHandLms.x * w), int(leftHandLms.y * h)
+            # print(cx,cy)
+            left_keypoint_pos.append((cx, cy))
+        print("left hand")
+        print(left_keypoint_pos)
 
     cv2.imshow('A',frame)
 
