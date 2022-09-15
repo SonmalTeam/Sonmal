@@ -457,7 +457,7 @@ class App:
         self.video_source = video_source
 
         if len(sys.argv) > 1:
-            self.filename = filedialog.askopenfilename(initialdir="/home/aircketi/demo_video/", title="Select file",
+            self.filename = filedialog.askopenfilename(initialdir="/home/", title="Select file",
                                                        filetypes=(("video files", "*.MOV"), ("video files", "*.MTS"),
                                                                   ("all files", "*.*")))
             print(self.filename)
