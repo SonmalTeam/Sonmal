@@ -1,0 +1,15 @@
+hello_end
+thanks_middle
+thanks_end
+thanks_start
+mocha_middle
+mocha_end
+hello_start
+hot_start
+mocha_start
+packing_start
+packing_middle
+packing_end
+hello_middle
+hot_middle
+hot_end
