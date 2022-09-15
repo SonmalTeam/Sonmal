@@ -687,7 +687,7 @@ class MyVideoCapture:
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
-        self.channel = grpc.insecure_channel('10.0.0.20:50051')
+        self.channel = grpc.insecure_channel('0.0.0.0:50051')
         # with grpc.insecure_channel('10.0.0.20:50051') as channel:
         self.stub = openpose_pb2_grpc.OpenPoseRPCStub(self.channel)
 
