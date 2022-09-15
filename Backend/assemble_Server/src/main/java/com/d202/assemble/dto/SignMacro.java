@@ -1,4 +1,4 @@
-package com.d202.assemble.domain.macro.dto;
+package com.d202.assemble.dto;
 
 import lombok.Getter;
 import lombok.Setter;
