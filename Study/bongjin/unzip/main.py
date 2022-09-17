@@ -39,20 +39,20 @@ def main(path='video', zip_filename='testing.zip'):
 
     for zip_filename in zipFiles:
     # open the zip file
-    with ZipFile(zip_filename, 'r') as handle:
-        # list of all files to unzip
-        files = handle.namelist()
-    # determine chunksize
-    n_workers = 40
-    chunksize = round(len(files) / n_workers)
-    # start the thread pool
-    with ProcessPoolExecutor(n_workers) as exe:
-        # split the copy operations into chunks
-        for i in range(0, len(files), chunksize):
-            # select a chunk of filenames
-            filenames = files[i:(i + chunksize)]
-            # submit the batch copy task
-            _ = exe.submit(unzip_files, zip_filename, filenames, path)
+        with ZipFile(zip_filename, 'r') as handle:
+            # list of all files to unzip
+            files = handle.namelist()
+        # determine chunksize
+        n_workers = 40
+        chunksize = round(len(files) / n_workers)
+        # start the thread pool
+        with ProcessPoolExecutor(n_workers) as exe:
+            # split the copy operations into chunks
+            for i in range(0, len(files), chunksize):
+                # select a chunk of filenames
+                filenames = files[i:(i + chunksize)]
+                # submit the batch copy task
+                _ = exe.submit(unzip_files, zip_filename, filenames, path)
 
 
 # entry point
