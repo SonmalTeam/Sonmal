@@ -39,6 +39,7 @@ def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zi
 
     for zip_filename in zipFiles:
     # open the zip file
+        print(zip_filename)
         with ZipFile(zip_filename, 'r') as handle:
             # list of all files to unzip
             files = handle.namelist()
