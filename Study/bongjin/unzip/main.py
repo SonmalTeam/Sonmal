@@ -33,7 +33,7 @@ def unzip_files(zip_filename, filenames, path):
 
 
 # unzip a large number of files
-def main(path='video', zip_filename='testing.zip'):
+def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zip'):
 
     zipFiles = glob.glob('/home/jupyter-j7d202/newDataset/*.zip')
 
