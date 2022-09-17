@@ -9,14 +9,13 @@ pathaa='/home/jupyter-j7d202/newDataSet/video/'
 # unzip files from an archive
 def unzip_files(zip_filename, filenames, path):
     # open the zip file
-    print(zip_filename)
     with ZipFile(zip_filename, 'r') as handle:
         # unzip multiple files
         for filename in filenames:
             # unzip the file
             handle.extract(filename, path)
             # report progress
-            print(f'.unzipped {filename}')
+            # print(f'.unzipped {filename}')
 
 
 # unzip a large number of files
@@ -36,6 +35,7 @@ def main(path='/home/jupyter-j7d202/newDataSet/video/', zip_filename='testing.zi
             filenames = files[i:(i + chunksize)]
             # submit the batch copy task
             _ = exe.submit(unzip_files, zip_filename, filenames, path)
+            print('unzip...........', files)
 
 
 # entry point
