@@ -40,7 +40,7 @@ def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zi
 
 # entry point
 if __name__ == '__main__':
-    files = glob.glob(pathaa+'*.zip')
+    files = glob.glob('/home/jupyter-j7d202/newDataset/*.zip')
     print(files)
     for fileName in files:
         main(pathaa, fileName)
