@@ -42,6 +42,7 @@ def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zi
         with ZipFile(zip_filename, 'r') as handle:
             # list of all files to unzip
             files = handle.namelist()
+            print(files)
         # determine chunksize
         n_workers = 40
         chunksize = round(len(files) / n_workers)
