@@ -4,7 +4,7 @@ import glob
 from zipfile import ZipFile
 from concurrent.futures import ProcessPoolExecutor
 
-pathaa='/home/jupyter-j7d202/newDataset/video/'
+pathaa='/home/jupyter-j7d202/newDataSet/video/'
 
 # unzip files from an archive
 def unzip_files(zip_filename, filenames, path):
@@ -20,7 +20,7 @@ def unzip_files(zip_filename, filenames, path):
 
 
 # unzip a large number of files
-def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zip'):
+def main(path='/home/jupyter-j7d202/newDataSet/video/', zip_filename='testing.zip'):
     # open the zip file
     with ZipFile(zip_filename, 'r') as handle:
         # list of all files to unzip
@@ -40,7 +40,7 @@ def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zi
 
 # entry point
 if __name__ == '__main__':
-    files = glob.glob('/home/jupyter-j7d202/newDataset/*.zip')
+    files = glob.glob('/home/jupyter-j7d202/newDataSet/*.zip')
     print(files)
     for fileName in files:
         main(pathaa, fileName)
