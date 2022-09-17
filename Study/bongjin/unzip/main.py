@@ -36,7 +36,7 @@ def unzip_files(zip_filename, filenames, path):
 def main(path='/home/jupyter-j7d202/newDataset/video/', zip_filename='testing.zip'):
 
     zipFiles = glob.glob('/home/jupyter-j7d202/newDataset/*.zip')
-
+    print(zipFiles[0])
     for zip_filename in zipFiles:
     # open the zip file
         print(zip_filename)
