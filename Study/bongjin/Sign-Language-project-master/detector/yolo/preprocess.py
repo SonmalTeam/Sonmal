@@ -8,8 +8,8 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 try:
-    from util import count_parameters as count
-    from util import convert2cpu as cpu
+    from converter import count_parameters as count
+    from converter import convert2cpu as cpu
 except ImportError:
     from yolo.util import count_parameters as count
     from yolo.util import convert2cpu as cpu

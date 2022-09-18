@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 import numpy as np
 import cv2 
-from util import *
+from converter import *
 from darknet import Darknet
 from preprocess import prep_image, inp_to_image
 import pandas as pd
