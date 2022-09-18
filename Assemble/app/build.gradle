@@ -46,8 +46,10 @@ dependencies {
 
     // ViewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+
     // Fragment KTX
     implementation 'androidx.fragment:fragment-ktx:1.5.0'
+
     // Jetpack Navigation Kotlin
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'

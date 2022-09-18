@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.d202.assemble.R
 import com.d202.assemble.databinding.FragmentLoginBinding
 import com.d202.assemble.ui.sign.viewmodel.LoginViewModel
 
