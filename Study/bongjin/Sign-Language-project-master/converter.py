@@ -28,5 +28,8 @@ if __name__ == '__main__':
     model = GRU_AT_Seq2Seq(enc, dec, device).to(device)
 
     print(model)
+    model.eval()
+    x = torch.randn(64, 1, 246, len(vocab))
+    torch.onnx.export(model, x, 'test.onnx', export_params=True, input_names=['input'], output_names=['output'])
     # model = torch.load('download_sh/best_model.pt')
     # print(model)
