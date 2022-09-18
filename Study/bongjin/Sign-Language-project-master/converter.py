@@ -28,8 +28,8 @@ if __name__ == '__main__':
     model = GRU_AT_Seq2Seq(enc, dec, device).to(device)
 
     print(model)
-    model = torch.load('download_sh/best_model.pt')
-    print(model)
+    checkpoint = torch.load('download_sh/best_model.pt')
+    print(checkpoint)
     model.eval()
 
     x = torch.randn()
