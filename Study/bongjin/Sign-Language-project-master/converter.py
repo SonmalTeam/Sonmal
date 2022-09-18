@@ -7,6 +7,7 @@ import torch
 
 from model.seq2seq_gru_attention import GRU_AT_Encoder, GRU_AT_Decoder, Attention, GRU_AT_Seq2Seq
 from utils.seq2seq_preprocessing import target_preprocessing
+from utils.train_utils import init_weights
 
 if __name__ == '__main__':
     shape = [7129, 376, 246]
@@ -26,10 +27,9 @@ if __name__ == '__main__':
     att = Attention(HID_DIM)
     dec = GRU_AT_Decoder(OUTPUT_DIM, emb_dim, HID_DIM, N_LAYERS, att, DEC_DROPOUT)
     model = GRU_AT_Seq2Seq(enc, dec, device).to(device)
-
+    model.apply(init_weights)
+    model.load_state_dict(torch.load('download_sh/best_model.pt'))
     print(model)
-    checkpoint = torch.load('download_sh/best_model.pt')
-    print(checkpoint)
     model.eval()
 
     x = torch.randn()
