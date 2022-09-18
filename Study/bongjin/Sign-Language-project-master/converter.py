@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     print(model)
     model.eval()
-    x = torch.randn(64, 1, 246, len(vocab))
+    x = torch.randn(16, 12, 246, len(vocab))
     torch.onnx.export(model, x, 'test.onnx', export_params=True, input_names=['input'], output_names=['output'])
     # model = torch.load('download_sh/best_model.pt')
     # print(model)
