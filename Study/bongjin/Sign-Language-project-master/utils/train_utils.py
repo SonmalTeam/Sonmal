@@ -11,7 +11,9 @@ import re
 import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
-from metric.bleu import compute_bleu
+
+from utils.metric.bleu import compute_bleu
+
 warnings.filterwarnings('ignore')
 
 torch.manual_seed(0)
