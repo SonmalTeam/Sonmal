@@ -28,7 +28,7 @@ if __name__ == '__main__':
     dec = GRU_AT_Decoder(OUTPUT_DIM, emb_dim, HID_DIM, N_LAYERS, att, DEC_DROPOUT)
     model = GRU_AT_Seq2Seq(enc, dec, device).to(device)
     model.apply(init_weights)
-    model.load_state_dict(torch.load('download_sh/best_model.pt'))
+    model.load_state_dict(torch.load('./download_sh/best_model.pt'))
     print(model)
     model.eval()
 
