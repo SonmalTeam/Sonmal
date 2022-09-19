@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Язык Жестов</string>
+    <string name="no_camera_access">Нет доступа к камере</string>
+    <string name="letter_camera_task">Покажите этот жест</string>
+    <string name="letter_sign_task">Выберите правильный жест</string>
+    <string name="sign_letter_task">Какой это жест?</string>
+    <string name="continue_button">Продолжить</string>
+    <string name="new_sign_message">Новый жест!</string>
+    <string name="lesson_exit_confirmation">Вы уверены, что хотите выйти из урока? Весь прогресс будет утерян.</string>
+    <string name="cancel">Отмена</string>
+    <string name="exit">Выйти</string>
+    <string name="start_lesson_button">Начать урок</string>
+    <string name="english_sign_language">Английский Язык Жестов</string>
+    <string name="reset_progress_button">Сбросить прогресс</string>
+    <string name="progress_reset_message">Прогресс был сброшен</string>
+    <string name="showing_sign_message">Вы показываете %c</string>
+    <string name="right_sign_message">Отлично!</string>
+    <string name="signs">Жесты</string>
+    <string name="lesson_finished_message">Отлично!</string>
+</resources>
