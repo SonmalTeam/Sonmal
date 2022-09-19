@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph_main">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/mainFragment">
 
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.d202.sonmal.ui.main.MainFragment"
+        tools:layout="@layout/fragment_main"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_macroChoiceFragment"
+            app:destination="@id/macroChoiceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/macroChoiceFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroChoiceFragment"
+        tools:layout="@layout/fragment_macro_choice"
+        android:label="MacroChoiceFragment" >
+        <action
+            android:id="@+id/action_macroChoiceFragment_to_macroStoreFragment"
+            app:destination="@id/macroStoreFragment" />
+        <action
+            android:id="@+id/action_macroChoiceFragment_to_macroCafeFragment"
+            app:destination="@id/macroCafeFragment" />
+        <action
+            android:id="@+id/action_macroChoiceFragment_to_macroHospitalFragment"
+            app:destination="@id/macroHospitalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/macroCafeFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroCafeFragment"
+        android:label="MacroCafeFragment" />
+    <fragment
+        android:id="@+id/macroStoreFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroStoreFragment"
+        android:label="MacroStoreFragment" />
+    <fragment
+        android:id="@+id/macroHospitalFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroHospitalFragment"
+        android:label="MacroHospitalFragment" />
 </navigation>
