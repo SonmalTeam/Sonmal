@@ -1,0 +1,29 @@
+2022-09-19 16:27:38.236  INFO 13556 --- [restartedMain] c.d.a.AssembleServerApplication          : Starting AssembleServerApplication using Java 11.0.16 on DESKTOP-KVCQHCD with PID 13556 (C:\Users\multicampus\Desktop\code\AIproj\S07P22D202\Backend\assemble_Server\out\production\classes started by multicampus in C:\Users\multicampus\Desktop\code\AIproj\S07P22D202\Backend\assemble_Server)
+2022-09-19 16:27:38.245  INFO 13556 --- [restartedMain] c.d.a.AssembleServerApplication          : No active profile set, falling back to 1 default profile: "default"
+2022-09-19 16:27:38.292  INFO 13556 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-09-19 16:27:38.293  INFO 13556 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-09-19 16:27:39.571  INFO 13556 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-19 16:27:39.595  INFO 13556 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 JPA repository interfaces.
+2022-09-19 16:27:41.322  INFO 13556 --- [restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8090 (http)
+2022-09-19 16:27:41.339  INFO 13556 --- [restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2022-09-19 16:27:41.340  INFO 13556 --- [restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-19 16:27:41.487  INFO 13556 --- [restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2022-09-19 16:27:41.487  INFO 13556 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3193 ms
+2022-09-19 16:27:41.718  INFO 13556 --- [restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-19 16:27:41.816  INFO 13556 --- [restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-09-19 16:27:42.119  INFO 13556 --- [restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-09-19 16:27:42.309  INFO 13556 --- [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2022-09-19 16:27:42.415  INFO 13556 --- [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2022-09-19 16:27:42.473  INFO 13556 --- [restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MariaDB106Dialect
+2022-09-19 16:27:43.056  INFO 13556 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-19 16:27:43.067  INFO 13556 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-19 16:27:43.288  WARN 13556 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-19 16:27:43.561  INFO 13556 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-09-19 16:27:43.754  INFO 13556 --- [restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8090 (http) with context path ''
+2022-09-19 16:27:43.805  INFO 13556 --- [restartedMain] c.d.a.AssembleServerApplication          : Started AssembleServerApplication in 6.176 seconds (JVM running for 7.116)
+2022-09-19 16:27:53.708  INFO 13556 --- [http-nio-8090-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-09-19 16:27:53.709  INFO 13556 --- [http-nio-8090-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2022-09-19 16:27:53.711  INFO 13556 --- [http-nio-8090-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 2 ms
+2022-09-19 16:28:34.886  INFO 13556 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-19 16:28:34.889  INFO 13556 --- [SpringApplicationShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2022-09-19 16:28:34.897  INFO 13556 --- [SpringApplicationShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
