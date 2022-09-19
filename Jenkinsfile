@@ -16,7 +16,7 @@ pipeline {
                                 sh 'docker container ls -a -f name=back -q \
                                         | xargs -r docker container rm'
 
-                                sh 'docker run -d --name back -p 8080:8080 backimg'
+                                sh 'docker run -d --name back -p 8090:8090 backimg'
                         }
                 }
         }
