@@ -36,7 +36,9 @@ public class SignMacro {
     private String signScr;
 
     // 썸네일
-
+    @Lob
+    @Column(name = "testColumn")
+    private String test;
 
     // 아이콘
 
