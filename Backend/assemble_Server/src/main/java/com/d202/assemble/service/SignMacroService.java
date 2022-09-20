@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SignMacroService {
 
-    private SignMacroRepo signMacroRepo;
-    private CategoryRepo categoryRepo;
+    private final SignMacroRepo signMacroRepo;
+    private final CategoryRepo categoryRepo;
 
 
     @Transactional
@@ -31,7 +31,7 @@ public class SignMacroService {
         signMacro.setCategory(category);
         signMacro.setUserSeq(userSeq);
         signMacro.setRegDttm(LocalDateTime.now());
-
+        signMacro.setCount(new Long(0));
         signMacroRepo.save(signMacro);
     }
 
@@ -39,7 +39,7 @@ public class SignMacroService {
     public List<SignMacroResponseDto> getSignMacroList(long userSeq, long categorySeq) {
 
         List<SignMacroResponseDto> result = new ArrayList<>();
-        List<SignMacro> signMacros = signMacroRepo.findBySeqAndCategorySeq(userSeq, categorySeq);
+        List<SignMacro> signMacros = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq);
 
         for (SignMacro signMacro : signMacros) {
             result.add(new SignMacroResponseDto(signMacro));

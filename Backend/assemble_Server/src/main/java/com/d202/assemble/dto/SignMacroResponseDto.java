@@ -12,16 +12,16 @@ public class SignMacroResponseDto {
     private String content;
     private String signSrc;
     private String icon;
-    private Category categorySeq;
+    private Long categorySeq;
     private Long count;
 
     public SignMacroResponseDto(SignMacro entity) {
         this.seq = entity.getSeq();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.signSrc = entity.getSignScr();
+        this.signSrc = entity.getSignSrc();
         this.icon = entity.getIcon();
-        this.categorySeq = entity.getCategory();
+        this.categorySeq = entity.getCategory().getSeq();
         this.count = entity.getCount();
     }
 }

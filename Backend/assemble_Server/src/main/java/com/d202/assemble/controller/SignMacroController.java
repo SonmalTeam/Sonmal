@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SignMacroController {
 
-    private SignMacroService signMacroService;
+    private final SignMacroService signMacroService;
 
     // 매크로 등록
     @ApiOperation(value = "매크로 등록")
@@ -31,6 +31,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
     public List<SignMacroResponseDto> getSignMacroList(@PathVariable Long categorySeq){
+
         return signMacroService.getSignMacroList(new Long(1), categorySeq);
     }
 
