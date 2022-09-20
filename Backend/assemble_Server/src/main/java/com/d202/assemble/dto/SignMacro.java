@@ -1,9 +1,6 @@
 package com.d202.assemble.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -29,14 +26,14 @@ public class SignMacro {
     private String title;
 
     // 카테고리 FK
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categorySeq")
-//    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categorySeq")
+    private Category category;
 
     // 수어 영상주소
     @Lob
     @Column(name = "sign_src")
-    private String signScr;
+    private String signSrc;
 
     // 아이콘
     @Lob
@@ -56,4 +53,12 @@ public class SignMacro {
     @CreatedDate
     @Column(name = "reg_dttm")
     private LocalDateTime regDttm;
+
+    @Builder
+    public SignMacro(String title, String content, String signSrc, String icon){
+        this.title = title;
+        this.content = content;
+        this.signSrc = signSrc;
+        this.icon = icon;
+    }
 }
