@@ -2,6 +2,7 @@ package com.d202.assemble.dto;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "sign_macro")
 public class SignMacro {
 
@@ -54,11 +56,17 @@ public class SignMacro {
     @Column(name = "reg_dttm")
     private LocalDateTime regDttm;
 
+
+    @Column
+    private Long videoFileId;
+
     @Builder
-    public SignMacro(String title, String content, String signSrc, String icon){
+    public SignMacro(String title, String content, String signSrc, String icon, Long videoFileId){
         this.title = title;
         this.content = content;
         this.signSrc = signSrc;
         this.icon = icon;
+
+        this.videoFileId = videoFileId;
     }
 }
