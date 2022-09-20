@@ -74,33 +74,46 @@ class CallFragment : Fragment() {
         userId = "id"
         userName = "name"
 
+        initView()
+        initViewModel()
 
+    }
+
+    private fun initView(){
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
 
-        binding.btnSwitchCamera.setOnClickListener {
-            session.getLocalParticipant()!!.switchCamera()
+        binding.apply {
+            btnSwitchCamera.setOnClickListener {
+                session.getLocalParticipant()!!.switchCamera()
+            }
+
+            btnExit.setOnClickListener {
+                leaveSession()
+                findNavController().popBackStack()
+            }
+
+            viewsContainer.setOnClickListener {
+                resizeView()
+            }
+            btnSpeakerMode.isActivated = false
+
+            btnSpeakerMode.setOnClickListener {
+                it.isActivated = !it.isActivated
+                audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
+            }
+        }
+    }
+
+    private fun initViewModel(){
+        viewModel.apply {
+            setSurfaceViewRenderer(binding.localGlSurfaceView)
+            bitmap.observe(viewLifecycleOwner){
+                binding.ivTest.setImageBitmap(it)
+            }
+            getFrames()
         }
 
-        binding.btnExit.setOnClickListener {
-            leaveSession()
-            findNavController().popBackStack()
-        }
-
-        binding.viewsContainer.setOnClickListener {
-            resizeView()
-        }
-        binding.btnSpeakerMode.isActivated = false
-
-        binding.btnSpeakerMode.setOnClickListener {
-            it.isActivated = !it.isActivated
-            audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
-        }
-        viewModel.setSurfaceViewRenderer(binding.localGlSurfaceView)
-        viewModel.bitmap.observe(viewLifecycleOwner){
-            binding.ivTest.setImageBitmap(it)
-        }
-        viewModel.getFrames()
     }
 
     private fun resizeView() {

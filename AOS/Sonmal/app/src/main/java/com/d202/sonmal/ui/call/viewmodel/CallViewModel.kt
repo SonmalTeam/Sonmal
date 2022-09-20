@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import org.webrtc.EglRenderer.FrameListener
 import org.webrtc.SurfaceViewRenderer
 
+private const val RECOGNIZE_INTERVAL = 100L
+private const val TAG ="CallViewModel"
 class CallViewModel: ViewModel() {
 
     private val _surfaceViewRenderer = MutableLiveData<SurfaceViewRenderer>()
@@ -26,7 +28,7 @@ class CallViewModel: ViewModel() {
     fun getFrames(){
         viewModelScope.launch(Dispatchers.IO){
             while (true){
-                delay(10)
+                delay(RECOGNIZE_INTERVAL)
                 surfaceViewRenderer.value?.addFrameListener(object : FrameListener{
                     override fun onFrame(p0: Bitmap?) {
                         _bitmap.postValue(p0)
