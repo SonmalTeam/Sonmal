@@ -21,12 +21,15 @@ public class SignMacro {
     private Long seq;
 
     // 유저 FK
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "userSeq")
-//    private User user;
+    @Column(name = "user_seq")
+    private Long userSeq;
+
+    // 매크로 제목
+    @Column(name = "title")
+    private String title;
 
     // 카테고리 FK
-//    @OneToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "categorySeq")
 //    private Category category;
 
@@ -35,13 +38,10 @@ public class SignMacro {
     @Column(name = "sign_src")
     private String signScr;
 
-    // 썸네일
-    @Lob
-    @Column(name = "testColumn")
-    private String test;
-
     // 아이콘
-
+    @Lob
+    @Column(name = "icon")
+    private String icon;
 
     // 번역된 텍스트
     @Lob
@@ -49,7 +49,6 @@ public class SignMacro {
     private String content;
 
     // 매크로 사용횟수
-    @Lob
     @Column(name = "count")
     private Long count;
 
