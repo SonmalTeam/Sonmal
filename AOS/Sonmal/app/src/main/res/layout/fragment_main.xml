@@ -31,5 +31,16 @@
             android:backgroundTint="#4142AC"
             android:text="Macro"/>
 
+        <Button
+            android:id="@+id/btn_call"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_macro"
+            android:layout_margin="30dp"
+            android:backgroundTint="#4142AC"
+            android:text="Call"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

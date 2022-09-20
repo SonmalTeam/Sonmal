@@ -37,7 +37,7 @@ class LocalParticipant(
         val videoCapturer = createCameraCapturer()
         val videoSource = peerConnectionFactory.createVideoSource(videoCapturer!!.isScreencast)
         videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
-        videoCapturer.startCapture(480, 640, 30)
+        videoCapturer.startCapture(800, 1200, 30)
 
         setVideoTrack(peerConnectionFactory.createVideoTrack("102", videoSource))
         getVideoTrack().addSink(surfaceViewRenderer)

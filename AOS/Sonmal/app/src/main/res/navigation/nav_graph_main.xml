@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainFragment_to_macroChoiceFragment"
             app:destination="@id/macroChoiceFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_callFragment"
+            app:destination="@id/callFragment" />
     </fragment>
 
     <fragment
@@ -42,4 +45,8 @@
         android:id="@+id/macroHospitalFragment"
         android:name="com.d202.sonmal.ui.macro.MacroHospitalFragment"
         android:label="MacroHospitalFragment" />
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="com.d202.sonmal.ui.call.CallFragment"
+        android:label="CallFragment" />
 </navigation>

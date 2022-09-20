@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private lateinit var navController: NavController
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,11 +26,21 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view) // navcontroller 탐색
+        initView()
 
-        binding.btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
-            navController.navigate(R.id.action_mainFragment_to_macroChoiceFragment)
+
+    }
+
+    private fun initView() {
+        binding.apply {
+            btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroChoiceFragment())
+            }
+            btnCall.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+            }
         }
+
     }
 
 
