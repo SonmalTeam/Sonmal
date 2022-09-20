@@ -18,10 +18,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.databinding.FragmentCallBinding
+import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
@@ -41,12 +43,13 @@ private const val REQUEST_CODE_PERMISSIONS = 10
 
 class CallFragment : Fragment() {
     private lateinit var binding: FragmentCallBinding
+    private val viewModel: CallViewModel by viewModels()
 
     private lateinit var session: Session
     private lateinit var httpClient: CustomHttpClient
     private var toggle = true
-    private lateinit var customerId: String
-    private lateinit var customerName: String
+    private lateinit var userId: String
+    private lateinit var userName: String
     private lateinit var audioManager: AudioManager
     private val REQUIRED_PERMISSIONS =
         mutableListOf(
@@ -68,8 +71,8 @@ class CallFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        customerId = "id"
-        customerName = "name"
+        userId = "id"
+        userName = "name"
 
 
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -93,6 +96,11 @@ class CallFragment : Fragment() {
             it.isActivated = !it.isActivated
             audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
         }
+        viewModel.setSurfaceViewRenderer(binding.localGlSurfaceView)
+        viewModel.bitmap.observe(viewLifecycleOwner){
+            binding.ivTest.setImageBitmap(it)
+        }
+        viewModel.getFrames()
     }
 
     private fun resizeView() {
@@ -130,7 +138,7 @@ class CallFragment : Fragment() {
             )
             Log.d(TAG, "onResume: CustomHttpClient")
 
-            val sessionId = customerId + "-session"
+            val sessionId = userId + "-session"
             getToken(sessionId)
 
         } else {
@@ -220,7 +228,7 @@ class CallFragment : Fragment() {
         session = Session(sessionId, token, requireActivity() as AppCompatActivity, binding.viewsContainer)
 
         // Initialize our local participant and start local camera
-        val participantName: String = customerName
+        val participantName: String = userName
         val localParticipant =
             LocalParticipant(
                 participantName,
@@ -238,8 +246,6 @@ class CallFragment : Fragment() {
         requireActivity().runOnUiThread {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
-//            binding.remoteGlSurfaceView.clearImage()
-//            binding.remoteGlSurfaceView.release()
         }
     }
 
@@ -280,8 +286,6 @@ class CallFragment : Fragment() {
         requireActivity().runOnUiThread {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
-//            binding.remoteGlSurfaceView.clearImage()
-//            binding.remoteGlSurfaceView.release()
         }
         findNavController().popBackStack()
     }
