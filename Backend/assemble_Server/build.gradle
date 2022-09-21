@@ -38,10 +38,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//swagger
-	//implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 	implementation "io.springfox:springfox-boot-starter:3.0.0"
+	//json parsing
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	
 
 	// firebase
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
