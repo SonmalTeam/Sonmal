@@ -29,7 +29,7 @@ public class SignMacroController {
     // 매크로 등록
     @ApiOperation(value = "매크로 등록")
     @PostMapping
-    public void createSignMacro(@RequestParam("file") MultipartFile files, SignMacroRequestDto request){
+    public void createSignMacro(@RequestParam("file") MultipartFile files, @RequestBody final SignMacroRequestDto request){
         try {
             String origFilename = files.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
