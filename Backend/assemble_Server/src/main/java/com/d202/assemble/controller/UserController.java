@@ -44,7 +44,7 @@ public class UserController {
 	@ApiOperation(value="카카오 회원가입")
 	@PostMapping("/kakao/join")
 	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-		token = "FOP0N5Z6cfTh54e6z70uzNWJm29F8T2Je8KUg7GBCilv1QAAAYNfP0t-";
+		//token = "FOP0N5Z6cfTh54e6z70uzNWJm29F8T2Je8KUg7GBCilv1QAAAYNfP0t-";
 		Map<String, Object> userInfo = userService.getKakaoUserInfo(token);
 		if(userInfo!=null) {
 			User user = new User();
