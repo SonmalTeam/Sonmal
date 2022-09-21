@@ -73,6 +73,7 @@ public class UserService {
 		
 		Map<String, Object> test = new HashMap<>();
 		test.put("email", res.getBody());
+		System.out.println(res.getBody());
 		
 		return test;
 	}
