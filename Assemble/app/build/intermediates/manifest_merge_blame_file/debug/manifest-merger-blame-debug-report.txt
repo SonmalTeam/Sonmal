@@ -1,0 +1,249 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.d202.assemble"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="32" />
+9-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:6:5-67
+11-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:6:22-64
+12    <uses-permission android:name="android.permission.CAMERA" />
+12-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:7:5-65
+12-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:7:22-62
+13    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+13-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:8:5-71
+13-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:8:22-68
+14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+14-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:10:5-79
+14-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:10:22-76
+15
+16    <queries>
+16-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:13:5-23:15
+17
+18        <!-- 네이버앱 : 로그인, 스킴로그인 -->
+19        <package android:name="com.nhn.android.search" />
+19-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:16:9-58
+19-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:16:18-55
+20        <!-- 커스텀탭 로그인 -->
+21        <intent>
+21-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:18:9-20:18
+22            <action android:name="android.support.customtabs.action.CustomTabsService" />
+22-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:19:13-90
+22-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:19:21-87
+23        </intent>
+24
+25        <package android:name="com.android.chrome" />
+25-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:22:9-54
+25-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:22:18-51
+26        <package android:name="com.kakao.talk" />
+26-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:10:9-50
+26-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:10:18-47
+27        <package android:name="com.kakao.talk.alpha" />
+27-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:11:9-56
+27-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:11:18-53
+28        <package android:name="com.kakao.talk.sandbox" />
+28-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:12:9-58
+28-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:12:18-55
+29        <package android:name="com.kakao.onetalk" />
+29-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:13:9-53
+29-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:13:18-50
+30
+31        <intent>
+31-->[com.kakao.sdk:v2-common:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\7dd73e264c4d229b46e61f2860ea8706\transformed\v2-common-2.11.0\AndroidManifest.xml:15:9-21:18
+32            <action android:name="android.intent.action.VIEW" />
+32-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:51:17-69
+32-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:51:25-66
+33
+34            <category android:name="android.intent.category.BROWSABLE" />
+34-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:54:17-78
+34-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:54:27-75
+35
+36            <data android:scheme="https" />
+36-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:56:17-59:59
+36-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:59:21-56
+37        </intent>
+38    </queries>
+39
+40    <application
+40-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:11:5-30:19
+41        android:allowBackup="true"
+41-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:12:9-35
+42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+42-->[androidx.core:core:1.8.0] C:\Users\IdealML\.gradle\caches\transforms-3\3f7a06ae20432c9968341fea38333a8f\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
+43        android:dataExtractionRules="@xml/data_extraction_rules"
+43-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:13:9-65
+44        android:debuggable="true"
+45        android:fullBackupContent="@xml/backup_rules"
+45-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:14:9-54
+46        android:icon="@mipmap/ic_launcher"
+46-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:15:9-43
+47        android:label="@string/app_name"
+47-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:16:9-41
+48        android:roundIcon="@mipmap/ic_launcher_round"
+48-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:17:9-54
+49        android:supportsRtl="true"
+49-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:18:9-35
+50        android:testOnly="true"
+51        android:theme="@style/Theme.Assemble" >
+51-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:19:9-46
+52        <activity
+52-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:21:9-29:20
+53            android:name="com.d202.assemble.ui.MainActivity"
+53-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:22:13-44
+54            android:exported="true" >
+54-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:23:13-36
+55            <intent-filter>
+55-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:24:13-28:29
+56                <action android:name="android.intent.action.MAIN" />
+56-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:25:17-69
+56-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:25:25-66
+57
+58                <category android:name="android.intent.category.LAUNCHER" />
+58-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:27:17-77
+58-->C:\SSAFY\gumi06_07th_seojaehyeong\00Projects\S07P22D202\Assemble\app\src\main\AndroidManifest.xml:27:27-74
+59            </intent-filter>
+60        </activity>
+61        <!-- <activity -->
+62        <!-- android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity" -->
+63        <!-- android:configChanges="orientation|screenSize" -->
+64        <!-- android:theme="@style/Theme.AppCompat.Light.Dialog" /> -->
+65        <activity
+65-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:32:9-35:78
+66            android:name="com.navercorp.nid.oauth.NidOAuthBridgeActivity"
+66-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:33:13-74
+67            android:configChanges="orientation|screenSize"
+67-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:34:13-59
+68            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+68-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:35:13-75
+69        <activity
+69-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:36:9-41:78
+70            android:name="com.navercorp.nid.oauth.activity.NidOAuthWebViewActivity"
+70-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:37:13-84
+71            android:configChanges="orientation|screenSize"
+71-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:38:13-59
+72            android:label="OAuth2.0 by WebView"
+72-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:39:13-48
+73            android:screenOrientation="behind"
+73-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:40:13-47
+74            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+74-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:41:13-75
+75        <activity
+75-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:42:9-61:20
+76            android:name="com.navercorp.nid.oauth.activity.NidOAuthCustomTabActivity"
+76-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:43:13-86
+77            android:configChanges="orientation|screenSize"
+77-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:44:13-59
+78            android:exported="true"
+78-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:45:13-36
+79            android:label="OAuth2.0 by Custom tabs"
+79-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:46:13-52
+80            android:launchMode="singleTask"
+80-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:47:13-44
+81            android:screenOrientation="behind"
+81-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:48:13-47
+82            android:theme="@style/Theme.AppCompat.NoActionBar" >
+82-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:49:13-63
+83            <intent-filter>
+83-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:50:13-60:29
+84                <action android:name="android.intent.action.VIEW" />
+84-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:51:17-69
+84-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:51:25-66
+85
+86                <category android:name="android.intent.category.DEFAULT" />
+86-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:53:17-76
+86-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:53:27-73
+87                <category android:name="android.intent.category.BROWSABLE" />
+87-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:54:17-78
+87-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:54:27-75
+88                <!-- Intent URL 에서 로그인 액티비티를 실행하기 위해 설정 -->
+89                <data
+89-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:56:17-59:59
+90                    android:host="authorize"
+90-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:57:21-45
+91                    android:path="/"
+91-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:58:21-37
+92                    android:scheme="naver3rdpartylogin" />
+92-->[com.navercorp.nid:oauth:5.1.0] C:\Users\IdealML\.gradle\caches\transforms-3\89f0bc231b3426e789083c1b082c98ac\transformed\oauth-5.1.0\AndroidManifest.xml:59:21-56
+93            </intent-filter>
+94        </activity>
+95        <activity
+95-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:10:9-14:56
+96            android:name="com.kakao.sdk.auth.TalkAuthCodeActivity"
+96-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:11:13-67
+97            android:exported="false"
+97-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:12:13-37
+98            android:launchMode="singleTask"
+98-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:13:13-44
+99            android:theme="@style/TransparentCompat" />
+99-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:14:13-53
+100        <activity
+100-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:15:9-18:56
+101            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+101-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:16:13-70
+102            android:launchMode="singleTask"
+102-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:17:13-44
+103            android:theme="@style/TransparentCompat" />
+103-->[com.kakao.sdk:v2-auth:2.11.0] C:\Users\IdealML\.gradle\caches\transforms-3\cda56062dce02e7502004bc63567a845\transformed\v2-auth-2.11.0\AndroidManifest.xml:18:13-53
+104        <activity
+104-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:10:9-14:67
+105            android:name="com.gun0912.tedpermission.TedPermissionActivity"
+105-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:11:13-75
+106            android:configChanges="mcc|mnc|locale|keyboard|keyboardHidden|screenLayout|fontScale|uiMode|orientation|screenSize|layoutDirection"
+106-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:12:13-144
+107            android:screenOrientation="unspecified"
+107-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:13:13-52
+108            android:theme="@style/Theme.Transparent.Permission" />
+108-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:14:13-64
+109
+110        <provider
+110-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:16:9-19:40
+111            android:name="com.gun0912.tedpermission.provider.TedPermissionProvider"
+111-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:17:13-84
+112            android:authorities="com.d202.assemble.tedpermissionprovider"
+112-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:18:13-73
+113            android:exported="false" />
+113-->[io.github.ParkSangGwon:tedpermission:3.3.0] C:\Users\IdealML\.gradle\caches\transforms-3\29916a753ee5bad7634e8293191da0e0\transformed\tedpermission-3.3.0\AndroidManifest.xml:19:13-37
+114
+115        <uses-library
+115-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+116            android:name="androidx.window.extensions"
+116-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+117            android:required="false" />
+117-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+118        <uses-library
+118-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+119            android:name="androidx.window.sidecar"
+119-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+120            android:required="false" />
+120-->[androidx.window:window:1.0.0] C:\Users\IdealML\.gradle\caches\transforms-3\0d7c80c9d5a3677d13dbaa252d18460f\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+121
+122        <provider
+122-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+123            android:name="androidx.startup.InitializationProvider"
+123-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+124            android:authorities="com.d202.assemble.androidx-startup"
+124-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+125            android:exported="false" >
+125-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+126            <meta-data
+126-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+127                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+127-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+128                android:value="androidx.startup" />
+128-->[androidx.emoji2:emoji2:1.2.0] C:\Users\IdealML\.gradle\caches\transforms-3\78f478ee74573dafdc274ea5f229c683\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+129            <meta-data
+129-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\IdealML\.gradle\caches\transforms-3\b93fe0c1de645dad3341937caca4228f\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+130                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+130-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\IdealML\.gradle\caches\transforms-3\b93fe0c1de645dad3341937caca4228f\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+131                android:value="androidx.startup" />
+131-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\IdealML\.gradle\caches\transforms-3\b93fe0c1de645dad3341937caca4228f\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+132        </provider>
+133    </application>
+134
+135</manifest>

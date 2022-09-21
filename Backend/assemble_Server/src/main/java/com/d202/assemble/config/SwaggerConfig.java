@@ -17,8 +17,8 @@ public class SwaggerConfig {
 	@Bean
 	public Docket api() {
 		final ApiInfo apiInfo = new ApiInfoBuilder()
-				.title("±¸¹Ì Æ¯È­2¹İ 2ÆÀ")
-				.description("<h3>±è³²Èñ ¹è½ÃÇö ¹èÇÑ¿ë ¼­ÀçÇü Á¤ºÀÁø Æí¿¹¸°</h3>")
+				.title("êµ¬ë¯¸ íŠ¹í™”2ë°˜ 2íŒ€")
+				.description("<h3>ê¹€ë‚¨í¬ ë°°ì‹œí˜„ ë°°í•œìš© ì„œì¬í˜• ì •ë´‰ì§„ í¸ì˜ˆë¦°</h3>")
 				.contact(new Contact("D202", "https://edu.ssafy.com", "ssafy@ssafy.com"))
 				.license("MIT License")
 				.version("1.0")

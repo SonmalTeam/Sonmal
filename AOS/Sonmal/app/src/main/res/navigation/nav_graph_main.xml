@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_callFragment"
+            app:destination="@id/callFragment" />
     </fragment>
 
     <fragment
@@ -55,4 +58,8 @@
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="com.d202.sonmal.ui.call.CallFragment"
+        android:label="CallFragment" />
 </navigation>
