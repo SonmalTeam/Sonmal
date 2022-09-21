@@ -27,7 +27,7 @@ public class SwaggerConfig {
 				.version("1.0")
 				.build();
 
-		Server serverLocal = new Server("local", "https://d202.kro.kr:8090", "for local usages", Collections.emptyList(), Collections.emptyList());
+		Server serverLocal = new Server("local", "http://d202.kro.kr:8090", "for local usages", Collections.emptyList(), Collections.emptyList());
 		Server testServer = new Server("test", "https://d202.kro.kr:8090", "for testing", Collections.emptyList(), Collections.emptyList());
 //		return new Docket(DocumentationType.SWAGGER_2)
 		return new Docket(DocumentationType.OAS_30)

@@ -18,7 +18,7 @@ public class Workaround implements WebMvcOpenApiTransformationFilter {
         OpenAPI openApi = context.getSpecification();
         Server localServer = new Server();
         localServer.setDescription("local");
-        localServer.setUrl("https://d202.kro.kr:8090");
+        localServer.setUrl("http://d202.kro.kr:8090");
 
         Server testServer = new Server();
         testServer.setDescription("test");
