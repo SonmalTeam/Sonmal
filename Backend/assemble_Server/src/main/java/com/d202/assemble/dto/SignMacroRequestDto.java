@@ -16,12 +16,16 @@ public class SignMacroRequestDto {
     private String icon;
     private Long categorySeq;
 
+    private Long videoFileId;
+
     public SignMacro toEntity() {
         return SignMacro.builder()
                 .title(title)
                 .content(content)
                 .signSrc(signSrc)
                 .icon(icon)
+                .videoFileId(videoFileId)
                 .build();
     }
+
 }

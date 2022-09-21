@@ -2,7 +2,7 @@ package com.d202.assemble.controller;
 
 import com.d202.assemble.dto.SignMacroRequestDto;
 import com.d202.assemble.dto.SignMacroResponseDto;
-import com.d202.assemble.config.service.SignMacroService;
+import com.d202.assemble.service.SignMacroService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
