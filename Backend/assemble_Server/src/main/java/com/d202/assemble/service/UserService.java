@@ -58,9 +58,20 @@ public class UserService {
 				header,
 				String.class
 				);
-		System.out.println(res.getBody());
 		
-		return null;
+		//결과 parsing
+		Map<String, Object> userInfo = null;
+		JSONParser jsonParser = new JSONParser();
+		try {
+			JSONObject jsonObj = (JSONObject)jsonParser.parse(res.getBody());
+			userInfo = new HashMap<>();
+			userInfo.put("email", jsonObj.get("email"));
+			System.out.println(jsonObj.get("email"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return userInfo;
 	}
 
 	//kakao 회원정보 받기

@@ -29,16 +29,24 @@ public class UserController {
 	
 	private final UserService userService;
 	
-	@ApiOperation(value="네이버 회원가입")
-	@PostMapping("/naver/join")
-	public ResponseEntity<?> naverJoin(@RequestBody String token){
+	@ApiOperation(value="네이버 로그인")
+	@PostMapping("/naver/login")
+	public ResponseEntity<?> naverLogin(@RequestBody String token){
 		Map<String, Object> userInfo = userService.getNaverUserInfo(token);
 		if(userInfo!=null) {
-			User user = new User();
-			user.setEmail(userInfo.get("email").toString());
-			if(userService.insertUser(user)) {
-				return new ResponseEntity<Void>(HttpStatus.OK);
+			String email = userInfo.get("email").toString();
+			//가입된 유저인지 확인
+			Optional<User> userOp = userService.getUser(email);
+			if(userOp.isPresent()) {
+				return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
 			}
+			else {//가입 = DB save
+				User user = new User();
+				user.setEmail(userInfo.get("email").toString());
+				if(userService.insertUser(user)) {
+					return new ResponseEntity<User>(user, HttpStatus.OK);
+				}
+			}	
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -61,19 +69,6 @@ public class UserController {
 					return new ResponseEntity<User>(user, HttpStatus.OK);
 				}
 			}	
-		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-	}
-	
-	@ApiOperation(value="네이버 로그인")
-	@PostMapping("/naver/login")
-	public ResponseEntity<?> naverLogin(@RequestBody String token){
-		Map<String, Object> userInfo = userService.getNaverUserInfo(token);
-		if(userInfo!=null) {
-			Optional<User> res = userService.getUser((String)userInfo.get("email"));
-			if(res.isPresent()) {
-				return new ResponseEntity<User>(res.get(), HttpStatus.OK);
-			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
