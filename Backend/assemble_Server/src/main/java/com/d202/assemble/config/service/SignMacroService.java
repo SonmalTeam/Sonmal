@@ -1,4 +1,4 @@
-package com.d202.assemble.service;
+package com.d202.assemble.config.service;
 
 import com.d202.assemble.dto.Category;
 import com.d202.assemble.dto.SignMacro;
