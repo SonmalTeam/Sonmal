@@ -94,10 +94,13 @@ public class UserService {
 		Map<String, Object> userInfo = null;
 		JSONParser jsonParser = new JSONParser();
 		try {
+			System.out.println(res.getBody());
 			JSONObject jsonObj = (JSONObject)jsonParser.parse(res.getBody());
+			jsonObj = (JSONObject)jsonParser.parse(jsonObj.get("kakao_account").toString());
+			System.out.println(jsonObj.get("email"));
 			userInfo = new HashMap<>();
 			userInfo.put("email", jsonObj.get("email"));
-			System.out.println(jsonObj.get("email"));
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
