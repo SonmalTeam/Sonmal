@@ -32,6 +32,10 @@ class MainFragment : Fragment() {
         binding.btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
             navController.navigate(R.id.action_mainFragment_to_macroChoiceFragment)
         }
+
+        binding.btnLogin.setOnClickListener {
+            navController.navigate(R.id.action_mainFragment_to_loginFragment)
+        }
     }
 
 
