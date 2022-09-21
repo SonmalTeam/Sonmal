@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,4 +77,17 @@ public class UserController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ApiOperation(value="회원탈퇴")
+	@DeleteMapping("/{seq}")
+	public ResponseEntity<?> disJoin(@PathVariable int seq){
+		try {
+			userService.deleteUser(seq);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 }

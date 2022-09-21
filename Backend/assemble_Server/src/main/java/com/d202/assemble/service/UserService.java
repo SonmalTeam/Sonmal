@@ -40,6 +40,10 @@ public class UserService {
 		return userRepo.findByEmail(email);
 	}
 	
+	public void deleteUser(int seq) throws Exception {
+		userRepo.deleteById(seq);
+	}
+	
 	//naver 회원정보 받기
 	public Map<String, Object> getNaverUserInfo(String token) {
 		RestTemplate rt = new RestTemplate();
