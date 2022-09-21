@@ -15,6 +15,8 @@ public class SignMacroResponseDto {
     private Long categorySeq;
     private Long count;
 
+    private Long videoFileId;
+
     public SignMacroResponseDto(SignMacro entity) {
         this.seq = entity.getSeq();
         this.title = entity.getTitle();
@@ -23,5 +25,6 @@ public class SignMacroResponseDto {
         this.icon = entity.getIcon();
         this.categorySeq = entity.getCategory().getSeq();
         this.count = entity.getCount();
+        this.videoFileId = entity.getVideoFileId();
     }
 }
