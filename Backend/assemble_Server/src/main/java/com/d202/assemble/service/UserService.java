@@ -64,6 +64,7 @@ public class UserService {
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
 		HttpEntity<MultiValueMap<String, String>> header = new HttpEntity<>(headers);
+		System.out.println("here");
 		ResponseEntity<String> res = rt.exchange(
 				"https://kapi.kakao.com/v2/user/me",
 				HttpMethod.GET,
@@ -73,7 +74,7 @@ public class UserService {
 		
 		Map<String, Object> test = new HashMap<>();
 		test.put("email", res.getBody());
-		System.out.println(res.getBody());
+		System.out.println("body"+res.getBody());
 		
 		return test;
 	}
