@@ -16,20 +16,20 @@ public class VideoFileService {
     }
 
     @Transactional
-    public Long saveFile(VideoFileDto fileDto) {
-        return videoFileRepo.save(fileDto.toEntity()).getId();
+    public Long saveFile(VideoFileDto videoFileDto) {
+        return videoFileRepo.save(videoFileDto.toEntity()).getId();
     }
 
     @Transactional
     public VideoFileDto getFile(Long id) {
         VideoFile file = videoFileRepo.findById(id).get();
 
-        VideoFileDto fileDto = VideoFileDto.builder()
-                .id(id)
-                .origFilename(file.getOrigFilename())
-                .filename(file.getFilename())
-                .filePath(file.getFilePath())
-                .build();
-        return fileDto;
+        VideoFileDto videoFileDto = VideoFileDto.builder()
+                                    .id(id)
+                                    .origFilename(file.getOrigFilename())
+                                    .filename(file.getFilename())
+                                    .filePath(file.getFilePath())
+                                    .build();
+        return videoFileDto;
     }
 }
