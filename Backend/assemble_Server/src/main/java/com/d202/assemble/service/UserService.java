@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,7 +40,7 @@ public class UserService {
 		return userRepo.findByEmail(email);
 	}
 	
-	//naver 회원가입
+	//naver 회원정보 받기
 	public Map<String, Object> getNaverUserInfo(String token) {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -56,7 +59,7 @@ public class UserService {
 		return null;
 	}
 
-	//kakao 회원가입
+	//kakao 회원정보 받기
 	public Map<String, Object> getKakaoUserInfo(String token) {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -72,10 +75,18 @@ public class UserService {
 				String.class
 				);
 		
-		Map<String, Object> test = new HashMap<>();
-		test.put("email", res.getBody());
-		System.out.println("body"+res.getBody());
+		//결과 parsing
+		Map<String, Object> userInfo = null;
+		JSONParser jsonParser = new JSONParser();
+		try {
+			JSONObject jsonObj = (JSONObject)jsonParser.parse(res.getBody());
+			userInfo = new HashMap<>();
+			userInfo.put("email", jsonObj.get("email"));
+			System.out.println(jsonObj.get("email"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
-		return test;
+		return userInfo;
 	}
 }

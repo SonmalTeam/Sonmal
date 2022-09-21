@@ -41,19 +41,24 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-	@ApiOperation(value="카카오 회원가입")
-	@PostMapping("/kakao/join")
-	public ResponseEntity<?> kakaoJoin(@RequestBody String token){
-		//token = "FOP0N5Z6cfTh54e6z70uzNWJm29F8T2Je8KUg7GBCilv1QAAAYNfP0t-";
+	@ApiOperation(value="카카오 로그인")
+	@PostMapping("/kakao/login")
+	public ResponseEntity<?> kakaoLogin(@RequestBody String token){
 		Map<String, Object> userInfo = userService.getKakaoUserInfo(token);
 		if(userInfo!=null) {
-			User user = new User();
-			user.setEmail(userInfo.get("email").toString());
-			//test
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-//			if(userService.insertUser(user)) {
-//				return new ResponseEntity<Void>(HttpStatus.OK);
-//			}
+			String email = userInfo.get("email").toString();
+			//가입된 유저인지 확인
+			Optional<User> userOp = userService.getUser(email);
+			if(userOp.isPresent()) {
+				return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
+			}
+			else {//가입 = DB save
+				User user = new User();
+				user.setEmail(userInfo.get("email").toString());
+				if(userService.insertUser(user)) {
+					return new ResponseEntity<User>(user, HttpStatus.OK);
+				}
+			}	
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
