@@ -1,6 +1,7 @@
 package com.d202.assemble.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,12 @@ public class UserController {
 	@PostMapping("/naver/join")
 	public ResponseEntity<?> naverJoin(@RequestBody String token){
 		Map<String, Object> userInfo = userService.getUserInfo(token);
-		User user = new User();
-		user.setEmail(userInfo.get("email").toString());
-		if(userService.insertUser(user)) {
-			return new ResponseEntity<Void>(HttpStatus.OK);
+		if(userInfo!=null) {
+			User user = new User();
+			user.setEmail(userInfo.get("email").toString());
+			if(userService.insertUser(user)) {
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
 		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
@@ -39,6 +42,13 @@ public class UserController {
 	@ApiOperation(value="네이버 로그인")
 	@PostMapping("/naver/login")
 	public ResponseEntity<?> naverLogin(@RequestBody String token){
+		Map<String, Object> userInfo = userService.getUserInfo(token);
+		if(userInfo!=null) {
+			Optional<User> res = userService.getUser((String)userInfo.get("email"));
+			if(res.isPresent()) {
+				return new ResponseEntity<User>(res.get(), HttpStatus.OK);
+			}
+		}
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }

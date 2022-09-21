@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -46,8 +47,12 @@ public class UserServiceImpl implements UserService {
 				);
 		System.out.println(res.getBody());
 		
-		
 		return null;
+	}
+
+	@Override
+	public Optional<User> getUser(String email) {
+		return userRepo.findByEmail(email);
 	}
 
 	
