@@ -43,6 +43,9 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 	implementation "io.springfox:springfox-boot-starter:3.0.0"
 
+	// firebase
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
+
 }
 
 tasks.named('test') {
