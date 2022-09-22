@@ -47,7 +47,7 @@ public class SignMacroController {
         try {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-            String savePath = System.getProperty("user.dir") + "\\files";
+            String savePath = "/files";
             if (!new File(savePath).exists()) {
                 try{
                     new File(savePath).mkdir();
