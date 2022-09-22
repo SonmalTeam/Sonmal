@@ -1,6 +1,6 @@
-# 🤝 I'm Your BF (Best Friend & Barrier Free)
+# 🤝 Sonmal (손말: 수어 통역 서비스)
 
-![img](BF_Barrier_Free_Project.assets/logo_bf2.png)
+[로고이미지]
 
 ---
 
