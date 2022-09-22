@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
@@ -26,6 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -111,6 +115,17 @@ public class SignMacroController {
     @PutMapping("/{signMacroSeq}")
     public void updateSignMacro(@PathVariable Long signMacroSeq, @RequestParam Long categorySeq) {
         signMacroService.updateSignMacro(signMacroSeq, categorySeq);
+    }
+
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<Resource> fileDownload(@PathVariable("fileId") Long fileId) throws IOException {
+        VideoFileDto videoFileDto = videoFileService.getFile(fileId);
+        Path path = Paths.get(videoFileDto.getFilePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + videoFileDto.getOrigFilename() + "\"")
+                .body(resource);
     }
 
     @RequestMapping(value = "/api/region", method = RequestMethod.GET)
