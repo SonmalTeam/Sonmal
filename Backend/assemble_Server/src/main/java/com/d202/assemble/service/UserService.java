@@ -35,8 +35,12 @@ public class UserService {
 		User result = userRepo.save(user);
 		return (result!=null);
 	}
+	
+	public Optional<User> findUserBySeq(int seq){
+		return userRepo.findById(seq);
+	}
 
-	public Optional<User> getUser(String email) {
+	public Optional<User> findUserByEmail(String email) {
 		return userRepo.findByEmail(email);
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,16 @@ public class UserController {
 	
 	private final UserService userService;
 	
+	@ApiOperation(value="회원정보 상세 조회")
+	@GetMapping("/{seq}")
+	public ResponseEntity<?> getUserDetail(@PathVariable int seq){
+		Optional<User> userOp = userService.findUserBySeq(seq);
+		if(userOp.isPresent()) {
+			return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	@ApiOperation(value="네이버 로그인")
 	@PostMapping("/naver/login")
 	public ResponseEntity<?> naverLogin(@RequestBody String token){
@@ -36,7 +47,7 @@ public class UserController {
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
-			Optional<User> userOp = userService.getUser(email);
+			Optional<User> userOp = userService.findUserByEmail(email);
 			if(userOp.isPresent()) {
 				return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
 			}
@@ -58,7 +69,7 @@ public class UserController {
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
-			Optional<User> userOp = userService.getUser(email);
+			Optional<User> userOp = userService.findUserByEmail(email);
 			if(userOp.isPresent()) {
 				return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
 			}
