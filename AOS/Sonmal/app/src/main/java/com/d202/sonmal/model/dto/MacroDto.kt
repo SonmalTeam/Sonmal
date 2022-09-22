@@ -8,6 +8,7 @@ data class MacroDto(
     var macroCategory: String,
     var signSrc: String,
     var icon: String,
-    var count: Int = 0
+    var count: Int = 0,
+    var videoFileId: Int = 0
     ) {
 }

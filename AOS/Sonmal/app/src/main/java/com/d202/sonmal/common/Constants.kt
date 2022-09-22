@@ -1,7 +1,7 @@
 package com.d202.sonmal.common
 
 
-const val SERVER_URL = "https://d202.kro.kr/api" //
+const val SERVER_URL = "https://d202.kro.kr/api/" //
 const val SERVER_URL1 = "http://d202.kro.kr:8090/" //
 
 const val OPENVIDU_URL = "https://d202.kro.kr:5443"

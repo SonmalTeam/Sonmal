@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
@@ -28,7 +29,7 @@ import com.navercorp.nid.profile.data.NidProfileResponse
 private const val TAG = "LoginFragment"
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
-    private val signViewModel: SignViewModel by viewModels()
+    private val signViewModel: SignViewModel by activityViewModels()
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -73,9 +74,16 @@ class LoginFragment : Fragment() {
             if(it) {
                 Toast.makeText(requireContext(), "로그인 진행 $it", Toast.LENGTH_SHORT).show()
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
+                signViewModel.refresh()
             } else {
                 Toast.makeText(requireContext(), "isjoin? $it", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        signViewModel.jwtToken.observe(viewLifecycleOwner) {
+            Log.d("jwt", "it $it")
+            Log.d("jwt", "sign jwt ${signViewModel.jwtToken.value!!}")
+
         }
     }
 
@@ -166,7 +174,7 @@ class LoginFragment : Fragment() {
         val profileCallback = object : NidProfileCallback<NidProfileResponse> {
             override fun onSuccess(response: NidProfileResponse) {
                 val userId = response.profile?.id
-                Toast.makeText(requireContext(), "네이버 아이디 로그인 성공! $userId", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "네이버 아이디 로그인 성공! $userId", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "naver login 성공 $response")
             }
             override fun onFailure(httpStatus: Int, message: String) {

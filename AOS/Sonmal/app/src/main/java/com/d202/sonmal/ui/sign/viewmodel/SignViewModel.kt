@@ -34,7 +34,9 @@ class SignViewModel: ViewModel() {
     val isJoinSucced: LiveData<Boolean>
         get() = _isJoinSucced
 
-
+    fun refresh() {
+        _isJoinSucced.value = false
+    }
 
     fun joinWithKaKao(token: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -46,7 +48,7 @@ class SignViewModel: ViewModel() {
                         _isJoinSucced.postValue(true)
                         Log.d(TAG, "_jwtToken1 ${it.body()!!.seq}")
                         _jwtToken.postValue(it.body()!!.seq)
-                        Log.d(TAG, "_jwtToken2 ${_jwtToken.value}")
+                        Log.d(TAG, "_jwtToken2 ${jwtToken.value}")
                     }
                     else {
                         Log.d(TAG, "joinWithKaKao api 통신 실패 ${it.body()}")

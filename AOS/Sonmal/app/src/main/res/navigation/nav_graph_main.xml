@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainFragment_to_callFragment"
             app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
     </fragment>
 
     <fragment
@@ -62,4 +65,8 @@
         android:id="@+id/callFragment"
         android:name="com.d202.sonmal.ui.call.CallFragment"
         android:label="CallFragment" />
+    <fragment
+        android:id="@+id/macroVideoFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
+        android:label="MacroVideoFragment" />
 </navigation>
