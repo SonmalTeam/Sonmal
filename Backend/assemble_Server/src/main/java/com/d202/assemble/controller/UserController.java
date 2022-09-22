@@ -103,14 +103,14 @@ public class UserController {
 	
 	//-------------------------------------------------
 	//user정보넣기
-	@ApiOperation(value="user Post테스트")
-	@PostMapping("/jwt/user")
-	public ResponseEntity<?> insert(@RequestBody String email){
-		User user = new User();
-		user.setEmail(email);
-		userService.insertUser(user);
-		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
+//	@ApiOperation(value="user Post테스트")
+//	@PostMapping("/jwt/user")
+//	public ResponseEntity<?> insert(@RequestBody String email){
+//		User user = new User();
+//		user.setEmail(email);
+//		userService.insertUser(user);
+//		return new ResponseEntity<Void>(HttpStatus.OK);
+//	}
 	
 	//seq아니면 email 중에 뭐로 jwt발급할지
 	@ApiOperation(value="jwt발급 테스트")
@@ -128,7 +128,7 @@ public class UserController {
 	@PostMapping("/jwt")
 	public ResponseEntity<?> validateToken(@RequestBody String jwt){
 		//prefix제거
-		String token = jwt.replace(JwtProperties.TOKEN_PREFIX, "");
+		String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
 		if(JwtUtils.validateToken(token)) {
 			System.out.println("인증완료");
 			System.out.println(JwtUtils.getUserSeq(token));
