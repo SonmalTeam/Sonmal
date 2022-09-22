@@ -69,7 +69,7 @@ public class SignMacroController {
                     e.getStackTrace();
                 }
             }
-            String filePath = savePath + "/" + filename;
+            String filePath = savePath + "/" + filename + ".mp4";
             file.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
@@ -130,7 +130,7 @@ public class SignMacroController {
 
     @RequestMapping(value = "/api/region", method = RequestMethod.GET)
     public ResponseEntity<ResourceRegion> videoRegion(@RequestHeader HttpHeaders headers) throws Exception {
-        String path = "/files" + "/0412c29576c708cf0155e8de242169b1.jpg";
+        String path =  "/files" + "/de6c13be7a6d8b9f1607055b4a54b671.mp4";
         Resource resource = new FileSystemResource(path);
 
         long chunkSize = 1024 * 1024;
