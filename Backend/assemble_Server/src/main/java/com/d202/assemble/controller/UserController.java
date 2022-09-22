@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d202.assemble.dto.User;
+import com.d202.assemble.jwt.JwtUtils;
 import com.d202.assemble.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -96,4 +97,14 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	@ApiOperation(value="jwt발급 테스트")
+	@GetMapping()
+	public ResponseEntity<?> getToken(){
+		Optional<User> userOp = userService.findUserByEmail("testemail");
+		if(userOp.isPresent()) {
+			String token = JwtUtils.createToken(userOp.get());
+			return new ResponseEntity<String>(token, HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }
