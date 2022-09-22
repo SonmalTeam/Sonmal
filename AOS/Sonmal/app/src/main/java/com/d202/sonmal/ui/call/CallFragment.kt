@@ -22,12 +22,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
+import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
+import com.google.mediapipe.components.CameraHelper
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -39,7 +41,7 @@ import org.webrtc.EglBase
 import java.io.IOException
 
 private const val TAG = "CallFragment"
-private const val REQUEST_CODE_PERMISSIONS = 10
+private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
 
 class CallFragment : Fragment() {
     private lateinit var binding: FragmentCallBinding
@@ -112,6 +114,7 @@ class CallFragment : Fragment() {
                 binding.ivTest.setImageBitmap(it)
             }
             getFrames()
+
         }
 
     }
