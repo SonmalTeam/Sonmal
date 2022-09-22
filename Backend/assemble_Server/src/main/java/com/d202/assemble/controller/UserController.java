@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d202.assemble.dto.User;
+import com.d202.assemble.jwt.JwtProperties;
+import com.d202.assemble.jwt.JwtRequestFilter;
 import com.d202.assemble.jwt.JwtUtils;
 import com.d202.assemble.service.UserService;
 
@@ -97,8 +99,9 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	//seq아니면 email 중에 뭐로 jwt발급할지
 	@ApiOperation(value="jwt발급 테스트")
-	@GetMapping()
+	@GetMapping("/jwt")
 	public ResponseEntity<?> getToken(){
 		Optional<User> userOp = userService.findUserByEmail("testemail");
 		if(userOp.isPresent()) {
@@ -106,5 +109,18 @@ public class UserController {
 			return new ResponseEntity<String>(token, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="jwt유효성 테스트")
+	@PostMapping("/jwt")
+	public ResponseEntity<?> validateToken(@RequestBody String jwt){
+		//prefix제거
+		String token = jwt.replace(JwtProperties.TOKEN_PREFIX, "");
+		if(JwtUtils.validateToken(token)) {
+			System.out.println("인증완료");
+			System.out.println(JwtUtils.getUserSeq(token));
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 }
