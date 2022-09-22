@@ -45,46 +45,12 @@ public class SignMacroController {
     private final VideoFileRepo videoFileRepo;
     private final FireBaseService fireBaseService;
 
-    // test
-    @PostMapping("/files")
-    public String uploadFile(@RequestParam("file") MultipartFile file, String nameFile)
-        throws IOException, FirebaseAuthException {
-        if (file.isEmpty()) {
-            return "is empty";
-        }
-        return fireBaseService.uploadFiles(file, nameFile);
-    }
-
     // 매크로 등록
     @ApiOperation(value = "매크로 등록")
     @PostMapping
     public void createSignMacro(@RequestParam("file") MultipartFile file, SignMacroRequestDto request){
-        try {
-            String origFilename = file.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            String savePath = "/files";
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
-                }
-                catch(Exception e){
-                    e.getStackTrace();
-                }
-            }
-            String filePath = savePath + "/" + filename + ".mp4";
-            file.transferTo(new File(filePath));
 
-            VideoFileDto videoFileDto = new VideoFileDto();
-            videoFileDto.setOrigFilename(origFilename);
-            videoFileDto.setFilename(filename);
-            videoFileDto.setFilePath(filePath);
-
-            Long videoFileId = videoFileService.saveFile(videoFileDto);
-            request.setVideoFileId(videoFileId);
-            signMacroService.createSignMacro(new Long(1), request);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        signMacroService.createSignMacro(new Long(1), request, file);
     }
 
     // 매크로 리스트 조회
@@ -95,12 +61,12 @@ public class SignMacroController {
         return signMacroService.getSignMacroList(new Long(1), categorySeq);
     }
 
-    // 매크로 재생
-    @ApiOperation(value = "매크로 재생")
-    @ApiImplicitParam(name = "signMacroSeq", value = "매크로 PK", example = "1", required = true)
-    @GetMapping("/{signMacroSeq}")
-    public String playSignMacro(@PathVariable Long signMacroSeq){
-        return "test ~!";
+    // 매크로 사용 순 정렬
+    @ApiOperation(value = "매크로 사용 순 정렬")
+    @GetMapping("/sort/{categorySeq}")
+    public List<SignMacroResponseDto> sortSignMacroList(@PathVariable Long categorySeq){
+
+        return signMacroService.sortSignMacroList(new Long(1), categorySeq);
     }
 
     // 매크로 삭제
@@ -108,6 +74,7 @@ public class SignMacroController {
     @ApiImplicitParam(name = "signMacroSeq", value = "매크로 PK", example = "1", required = true)
     @DeleteMapping("/{signMacroSeq}")
     public void deleteSignMacro(@PathVariable Long signMacroSeq) {
+
         signMacroService.deleteSignMacro(signMacroSeq);
     }
 
@@ -116,9 +83,12 @@ public class SignMacroController {
     @ApiImplicitParam(name = "signMacroSeq", value = "매크로 PK", example = "1", required = true)
     @PutMapping("/{signMacroSeq}")
     public void updateSignMacro(@PathVariable Long signMacroSeq, @RequestParam Long categorySeq) {
+        
         signMacroService.updateSignMacro(signMacroSeq, categorySeq);
     }
 
+    // 매크로 동영상 다운로드
+    @ApiOperation(value = "매크로 동영상 다운로드")
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> fileDownload(@PathVariable("fileId") Long fileId) throws IOException {
         VideoFileDto videoFileDto = videoFileService.getFile(fileId);
@@ -164,6 +134,16 @@ public class SignMacroController {
                 .header("Accept-Ranges", "bytes")
                 .eTag(path)
                 .body(region);
+    }
 
+    // firebase test
+    @ApiOperation(value = "파이어 베이스 업로드")
+    @PostMapping("/files")
+    public String uploadFile(@RequestParam("file") MultipartFile file, String nameFile)
+            throws IOException, FirebaseAuthException {
+        if (file.isEmpty()) {
+            return "is empty";
+        }
+        return fireBaseService.uploadFiles(file, nameFile);
     }
 }
