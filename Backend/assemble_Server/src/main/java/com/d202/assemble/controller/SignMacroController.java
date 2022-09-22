@@ -4,6 +4,7 @@ import com.d202.assemble.dto.SignMacroRequestDto;
 import com.d202.assemble.dto.SignMacroResponseDto;
 import com.d202.assemble.dto.VideoFile;
 import com.d202.assemble.dto.VideoFileDto;
+import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.service.FireBaseService;
 import com.d202.assemble.service.SignMacroService;
 import com.d202.assemble.service.VideoFileService;
@@ -41,6 +42,7 @@ public class SignMacroController {
 
     private final SignMacroService signMacroService;
     private final VideoFileService videoFileService;
+    private final VideoFileRepo videoFileRepo;
     private final FireBaseService fireBaseService;
 
     // test
@@ -128,9 +130,13 @@ public class SignMacroController {
                 .body(resource);
     }
 
-    @RequestMapping(value = "/api/region", method = RequestMethod.GET)
-    public ResponseEntity<ResourceRegion> videoRegion(@RequestHeader HttpHeaders headers) throws Exception {
-        String path =  "/files" + "/de6c13be7a6d8b9f1607055b4a54b671.mp4";
+    // 동영상 재생
+    @ApiOperation(value = "매크로 동영상 재생")
+    @RequestMapping(value = "/video/{videoFileId}", method = RequestMethod.GET)
+    public ResponseEntity<ResourceRegion> videoRegion(@RequestHeader HttpHeaders headers, @PathVariable("videoFileId") long videoFileId) throws Exception {
+
+        String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
+        String path = "/files/" + fileName + ".mp4";
         Resource resource = new FileSystemResource(path);
 
         long chunkSize = 1024 * 1024;
