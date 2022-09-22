@@ -53,6 +53,14 @@ public class SignMacroController {
         signMacroService.createSignMacro(new Long(1), request, file);
     }
 
+    // 매크로 상세조회
+    @ApiOperation(value = "매크로 상세조회")
+    @GetMapping("/{signMacroSeq}")
+    public SignMacroResponseDto getSignMacro(@PathVariable Long signMacroSeq){
+
+        return signMacroService.getSignMacro(new Long(1), signMacroSeq);
+    }
+
     // 매크로 리스트 조회
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
@@ -67,6 +75,14 @@ public class SignMacroController {
     public List<SignMacroResponseDto> sortSignMacroList(@PathVariable Long categorySeq){
 
         return signMacroService.sortSignMacroList(new Long(1), categorySeq);
+    }
+
+    // 매크로 사용횟수 카운트
+    @ApiOperation(value = "매크로 사용횟수 카운트")
+    @PutMapping("/count/{signMacroSeq}")
+    public void countSignMacro(@PathVariable Long signMacroSeq){
+
+        signMacroService.countSignMacro(new Long(1), signMacroSeq);
     }
 
     // 매크로 삭제
