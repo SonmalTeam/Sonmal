@@ -63,6 +63,16 @@ public class SignMacroService {
         signMacroRepo.save(signMacro);
     }
 
+    // 매크로 상세 조회
+    @Transactional
+    public SignMacroResponseDto getSignMacro(long userSeq, long signMacroSeq) {
+
+        SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
+        SignMacroResponseDto result = new SignMacroResponseDto(signMacro);
+
+        return result;
+    }
+
     // 매크로 리스트 조회
     @Transactional
     public List<SignMacroResponseDto> getSignMacroList(long userSeq, long categorySeq) {
@@ -89,6 +99,15 @@ public class SignMacroService {
         }
 
         return result;
+    }
+
+    // 매크로 사용횟수 카운트
+    @Transactional
+    public void countSignMacro(long userSeq, long signMacroSeq) {
+
+        SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
+        signMacro.setCount(signMacro.getCount() + 1);
+
     }
 
     // 매크로 삭제
