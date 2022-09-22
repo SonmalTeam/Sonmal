@@ -15,9 +15,9 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 
 
+<br/>
 
 ---
-
 
 # 🧷 링크
 
@@ -65,6 +65,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 2. 수어를 제1국어로 사용하지만 한국어를 어느 정도 아는 사람
 3. 수어를 모르고 한국어 텍스트의 음성 번역을 필요로 하는 사람
 
+<br/>
 
 ## 2️⃣ 프로젝트 소개
 
@@ -79,7 +80,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 
 
-👩  설명
+🔈  설명
 
 
 
@@ -91,7 +92,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 [완성이미지]
 
 
-👩 설명
+🔈 설명
 
 
 
@@ -103,10 +104,10 @@ The project was carried out with the aim of expanding the right to interpret sig
 [이미지]
 
 
-:woman: 설명
+🔈 설명
 
 
-
+<br/>
 
 ## :three: 개발 환경
 
@@ -156,6 +157,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 | mariadb             | 3306      |
 
 
+<br/>
 
 ## :four: 설계
 
@@ -163,15 +165,20 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 [시스템 아키텍처]
 
+<br/>
 
 ## :five: ERD
 
 [ERD 이미지와 설명]
 
+
+<br/>
+
 ## :six: 와이어프레임
 
 [와이어프레임 이미지와 설명]
 
+<br/>
 
 ---
 
@@ -229,6 +236,7 @@ feat: 회원관리 | 네이버 로그인 기능 추가
 
 [Jira 이슈 번호]
 
+<br/>
 
 ---
 
