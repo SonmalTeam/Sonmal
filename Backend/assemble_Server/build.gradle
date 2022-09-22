@@ -48,9 +48,15 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	//security
 	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.3'
+	implementation group: 'org.springframework.security', name: 'spring-security-config', version: '5.7.3'
+	implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.7.3'
+	//java 11 error
+	//implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+	//implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '3.0.2'
+	//implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.0'
 	
-
 }
 
 tasks.named('test') {

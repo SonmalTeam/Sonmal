@@ -3,19 +3,35 @@ package com.d202.assemble.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.d202.assemble.jwt.JwtProperties;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Server;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Collections;
 
 //http://localhost:8090/swagger-ui/index.html#/
+@OpenAPIDefinition(
+        info = @Info(title = "API 명세서",
+                description = "API 명세서 테스트 입니다.",
+                version = "v1"))
 @Configuration
+@RequiredArgsConstructor
 public class SwaggerConfig {
 	@Bean
 	public Docket api() {
@@ -31,13 +47,31 @@ public class SwaggerConfig {
 		Server serverLocal = new Server("local", "http://localhost:8090", "for local usages", Collections.emptyList(), Collections.emptyList());
 		Server testServer = new Server("test", "https://d202.kro.kr/api", "for testing", Collections.emptyList(), Collections.emptyList());
 //		return new Docket(DocumentationType.SWAGGER_2)
-		return new Docket(DocumentationType.OAS_30)
+		//return new Docket(DocumentationType.OAS_30)
+		return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo)
+				.securityContexts(Arrays.asList(securityContext()))
+				.securitySchemes(Arrays.asList(apiKey()))
 				.servers(serverLocal, testServer)
-				.apiInfo(apiInfo)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.d202.assemble.controller"))
 				.paths(PathSelectors.ant("/**"))
 				.build();
 	}
+	
+	private ApiKey apiKey() {
+		return new ApiKey(JwtProperties.JWT_ACCESS_NAME, JwtProperties.JWT_ACCESS_NAME, "header");
+	}
+
+	private SecurityContext securityContext() {
+		return SecurityContext.builder().securityReferences(defaultAuth()).build();
+	}
+
+	private List<SecurityReference> defaultAuth() {
+		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = authorizationScope;
+		return Arrays.asList(new SecurityReference(JwtProperties.JWT_ACCESS_NAME, authorizationScopes));
+	}
+	
 
 }

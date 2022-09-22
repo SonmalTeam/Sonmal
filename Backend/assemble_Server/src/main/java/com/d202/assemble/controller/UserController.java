@@ -99,6 +99,19 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	
+	
+	//-------------------------------------------------
+	//user정보넣기
+	@ApiOperation(value="user Post테스트")
+	@PostMapping("/jwt/user")
+	public ResponseEntity<?> insert(@RequestBody String email){
+		User user = new User();
+		user.setEmail(email);
+		userService.insertUser(user);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 	//seq아니면 email 중에 뭐로 jwt발급할지
 	@ApiOperation(value="jwt발급 테스트")
 	@GetMapping("/jwt")
