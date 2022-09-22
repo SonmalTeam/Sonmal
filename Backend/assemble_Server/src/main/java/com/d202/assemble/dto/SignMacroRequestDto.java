@@ -8,7 +8,6 @@ public class SignMacroRequestDto {
 
     private String title;
     private String content;
-    private String signSrc;
     private String icon;
     private Long categorySeq;
 
@@ -18,7 +17,6 @@ public class SignMacroRequestDto {
         return SignMacro.builder()
                 .title(title)
                 .content(content)
-                .signSrc(signSrc)
                 .icon(icon)
                 .videoFileId(videoFileId)
                 .build();
