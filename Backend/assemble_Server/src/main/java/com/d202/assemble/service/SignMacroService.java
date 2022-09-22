@@ -1,11 +1,9 @@
 package com.d202.assemble.service;
 
-import com.d202.assemble.dto.Category;
-import com.d202.assemble.dto.SignMacro;
-import com.d202.assemble.dto.SignMacroRequestDto;
-import com.d202.assemble.dto.SignMacroResponseDto;
+import com.d202.assemble.dto.*;
 import com.d202.assemble.repo.CategoryRepo;
 import com.d202.assemble.repo.SignMacroRepo;
+import com.d202.assemble.repo.VideoFileRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ public class SignMacroService {
 
     private final SignMacroRepo signMacroRepo;
     private final CategoryRepo categoryRepo;
-
+    private final VideoFileRepo videoFileRepo;
 
     @Transactional
     public void createSignMacro(Long userSeq, SignMacroRequestDto request){
@@ -46,5 +44,19 @@ public class SignMacroService {
         }
 
         return result;
+    }
+
+    @Transactional
+    public void deleteSignMacro(long signMacroSeq) {
+        SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
+        videoFileRepo.deleteById(signMacro.getVideoFileId());
+        signMacroRepo.delete(signMacro);
+    }
+
+    @Transactional
+    public void updateSignMacro(long singMacroSeq, long categorySeq) {
+        SignMacro signMacro = signMacroRepo.findBySeq(singMacroSeq).get();
+        Category category = categoryRepo.findBySeq(categorySeq);
+        signMacro.setCategory(category);
     }
 }

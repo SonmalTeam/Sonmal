@@ -87,4 +87,20 @@ public class SignMacroController {
     public String playSignMacro(@PathVariable Long signMacroSeq){
         return "test ~!";
     }
+
+    // 매크로 삭제
+    @ApiOperation(value = "매크로 삭제")
+    @ApiImplicitParam(name = "signMacroSeq", value = "매크로 PK", example = "1", required = true)
+    @DeleteMapping("/{signMacroSeq}")
+    public void deleteSignMacro(@PathVariable Long signMacroSeq) {
+        signMacroService.deleteSignMacro(signMacroSeq);
+    }
+
+    // 매크로 분류 수정
+    @ApiOperation(value = "매크로 분류 수정")
+    @ApiImplicitParam(name = "signMacroSeq", value = "매크로 PK", example = "1", required = true)
+    @PutMapping("/{signMacroSeq}")
+    public void updateSignMacro(@PathVariable Long signMacroSeq, @RequestParam Long categorySeq) {
+        signMacroService.updateSignMacro(signMacroSeq, categorySeq);
+    }
 }
