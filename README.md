@@ -9,24 +9,24 @@
 수어 통역권 확장을 목표로 프로젝트를 진행하였습니다.
 
 
-Simple communication can be done with hands without an interpreter.
-The project was carried out with the aim of expanding the right to interpret sign language.
+(Simple communication can be done with hands without an interpreter.
+The project was carried out with the aim of expanding the right to interpret sign language.)
 
-(위 로고는 '친구'를 의미하는 수어입니다.)
 
 ---
 
 
+# 🧷 링크
 
-:black_large_square: 사이트 주소
+**앱스토어**
 
-https://iamyourbf.site/
+[링크]
 
 
 
-:black_large_square: UCC 영상
+**UCC 영상**
 
-[![](BF_Barrier_Free_Project.assets/unknown-16451225244061.png)](https://www.youtube.com/watch?v=foHTciLIa9U)
+[UCC 유튜브 링크]
 
 
 
