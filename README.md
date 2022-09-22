@@ -1,12 +1,14 @@
-# 🤝 Sonmal (손말: 수어 통역 서비스)
+# 🤙 Sonmal (손말: 수어 통역 서비스)
 
 [로고이미지]
 
 ---
 
-베프는 당신의 친구가 되어주고, 당신의 장애물을 허물겠습니다.
+간단한 의사소통은 통역사 없이 **손말**로 할 수 있습니다.
+수어 통역권 확장을 목표로 프로젝트를 진행하였습니다.
 
-**I'm Your Best Friend, I'm Your Barrier Free**
+Simple communication can be done with hands without an interpreter.
+The project was carried out with the aim of expanding the right to interpret sign language.
 
 (위 로고는 '친구'를 의미하는 수어입니다.)
 
