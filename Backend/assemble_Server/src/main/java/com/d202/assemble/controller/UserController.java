@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +33,8 @@ public class UserController {
 	
 	@ApiOperation(value="회원정보 상세 조회")
 	@GetMapping("/detail")
-//	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){
-	public ResponseEntity<?> getUserDetail(){
+	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){
+//	public ResponseEntity<?> getUserDetail(){
 		
 		int seq = 1;//(int)auth.getPrincipal();
 		Optional<User> userOp = userService.findUserBySeq(seq);
@@ -88,18 +88,18 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 	}
 	
-//	@ApiOperation(value="회원탈퇴")
-//	@DeleteMapping()
-//	public ResponseEntity<?> disJoin(@ApiIgnore Authentication auth){
-//		int seq = (int)auth.getPrincipal();
-//		try {
-//			userService.deleteUser(seq);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-//		}
-//		return new ResponseEntity<Void>(HttpStatus.OK);
-//	}
+	@ApiOperation(value="회원탈퇴")
+	@DeleteMapping()
+	public ResponseEntity<?> disJoin(@ApiIgnore Authentication auth){
+		int seq = (int)auth.getPrincipal();
+		try {
+			userService.deleteUser(seq);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 	
 	
 	
