@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,9 @@ public class JwtController {
 	private final UserService userService;
 	//seq아니면 email 중에 뭐로 jwt발급할지
 		@ApiOperation(value="jwt발급 테스트")
-		@GetMapping("/jwt")
-		public ResponseEntity<?> getToken(){
-			Optional<User> userOp = userService.findUserByEmail("test");
+		@GetMapping("/{email}")
+		public ResponseEntity<?> getToken(@PathVariable String email){
+			Optional<User> userOp = userService.findUserByEmail(email);
 			if(userOp.isPresent()) {
 				String token = JwtUtils.createToken(userOp.get());
 				return new ResponseEntity<String>(token, HttpStatus.OK);
@@ -38,7 +39,7 @@ public class JwtController {
 		}
 		
 		@ApiOperation(value="jwt유효성 테스트")
-		@PostMapping("/jwt")
+		@PostMapping()
 		public ResponseEntity<?> validateToken(@RequestBody String jwt){
 			//prefix제거
 			String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
