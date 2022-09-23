@@ -10,11 +10,11 @@ import retrofit2.http.Path
 interface SignApi {
 
     @POST("user/kakao/login")
-    suspend fun joinWithKakao(@Body token: String): Response<UserDto>
+    suspend fun joinWithKakao(@Body token: String): Response<String>
 
     @POST("user/naver/login")
-    suspend fun joinWithNaver(@Body token: String): Response<UserDto>
+    suspend fun joinWithNaver(@Body token: String): Response<String>
 
     @DELETE("user/{seq}")
-    suspend fun unregister(@Path("seq") seq: Int): Response<Void>
+    suspend fun unregister(): Response<Void>
 }
