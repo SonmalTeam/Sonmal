@@ -25,15 +25,16 @@ class CallViewModel: ViewModel() {
     fun setSurfaceViewRenderer(surfaceViewRenderer: SurfaceViewRenderer) {
         _surfaceViewRenderer.value = surfaceViewRenderer
     }
-    fun getFrames(){
+    fun getRemoteFrames(){
         viewModelScope.launch(Dispatchers.IO){
             while (true){
                 delay(RECOGNIZE_INTERVAL)
                 surfaceViewRenderer.value?.addFrameListener(object : FrameListener{
                     override fun onFrame(p0: Bitmap?) {
-                        _bitmap.postValue(p0)
+                        if(p0 != null) {
+                            _bitmap.postValue(p0)
+                        }
                     }
-
                 }, 1.0f)
             }
         }

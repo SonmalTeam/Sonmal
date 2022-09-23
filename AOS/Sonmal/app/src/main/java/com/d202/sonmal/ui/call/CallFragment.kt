@@ -19,17 +19,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.R
 import com.d202.sonmal.common.*
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
+import com.d202.sonmal.utils.BitmapConverter
+import com.d202.sonmal.utils.BmpProducer
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
 import com.google.mediapipe.components.CameraHelper
-import com.google.mediapipe.components.CameraXPreviewHelper
-import com.google.mediapipe.components.ExternalTextureConverter
 import com.google.mediapipe.components.FrameProcessor
 import com.google.mediapipe.formats.proto.LandmarkProto
 import com.google.mediapipe.framework.AndroidAssetUtil
@@ -60,26 +59,12 @@ class CallFragment : Fragment() {
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
 
-    // {@link SurfaceTexture} where the camera-preview frames can be accessed.
-    private var previewFrameTexture: SurfaceTexture? = null
-    // {@link SurfaceView} that displays the camera-preview frames processed by a MediaPipe graph.
     private var previewDisplayView: SurfaceView? = null
-    // Creates and manages an {@link EGLContext}.
     private var eglManager: EglManager? = null
-    // Sends camera-preview frames into a MediaPipe graph for processing, and displays the processed
-    // frames onto a {@link Surface}.
     private var processor: FrameProcessor? = null
-    // Converts the GL_TEXTURE_EXTERNAL_OES texture from Android camera into a regular texture to be
-    // consumed by {@link FrameProcessor} and the underlying MediaPipe graph.
-    private var converter: ExternalTextureConverter? = null
-    // Handles camera access via the {@link CameraX} Jetpack support library.
-    private var cameraHelper: CameraXPreviewHelper? = null
-    private val REQUIRED_PERMISSIONS =
-        mutableListOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.MODIFY_AUDIO_SETTINGS
-        ).toTypedArray()
+    private var converter: BitmapConverter? = null
+    private var bitmapProducer: BmpProducer? = null
+    private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,12 +93,8 @@ class CallFragment : Fragment() {
         AndroidAssetUtil.initializeNativeAssetManager(requireContext())
         eglManager = EglManager(null)
         processor = FrameProcessor(requireContext(), eglManager!!.nativeContext, BINARY_GRAPH_NAME, INPUT_VIDEO_STREAM_NAME, OUTPUT_VIDEO_STREAM_NAME)
-        var inputSidePackets = mutableMapOf<String, Packet>()
-        processor!!.setInputSidePackets(inputSidePackets)
-
         processor!!.videoSurfaceOutput.setFlipY(FLIP_FRAMES_VERTICALLY)
         processor!!.addPacketCallback(OUTPUT_LANDMARKS_STREAM_NAME) { packet: Packet ->
-//            Log.d(TAG, "Received multi-hand landmarks packet.")
             val multiHandLandmarks =
                 PacketGetter.getProtoVector(
                     packet,
@@ -133,22 +114,10 @@ class CallFragment : Fragment() {
         previewDisplayView!!.getHolder().addCallback(object : SurfaceHolder.Callback {
                     override fun surfaceCreated(holder: SurfaceHolder) {
                         processor!!.videoSurfaceOutput.setSurface(holder.surface)
-                        Log.d(TAG, "surfaceCreated: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${holder}")
                     }
                     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                        // (Re-)Compute the ideal size of the camera-preview display (the area that
-                        // the camera-preview frames get rendered onto, potentially with scaling and
-                        // rotation) based on the size of the SurfaceView that contains the display.
-                        Log.d(TAG, "surfaceChanged: ########################################################################${holder.surface}\n${holder.surfaceFrame}\n")
-                        val viewSize = Size(width, height)
-//                        val displaySize = cameraHelper!!.computeDisplaySizeFromViewSize(viewSize)
-                        // Connect the converter to the camera-preview frames as its input (via
-                        // previewFrameTexture), and configure the output width and height as the
-                        // computed display size.
-
-//                        converter!!.setSurfaceTextureAndAttachToGLContext(previewFrameTexture, viewSize.width, viewSize.height)
+                        bitmapProducer!!.setCustomFrameAvailableListener(converter)
                     }
-
                     override fun surfaceDestroyed(holder: SurfaceHolder) {
                         processor!!.videoSurfaceOutput.setSurface(null)
                     }
@@ -165,7 +134,6 @@ class CallFragment : Fragment() {
             }
 
             btnExit.setOnClickListener {
-                leaveSession()
                 findNavController().popBackStack()
             }
 
@@ -184,11 +152,13 @@ class CallFragment : Fragment() {
     private fun initViewModel(){
         viewModel.apply {
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
+            bitmapProducer = BmpProducer()
             bitmap.observe(viewLifecycleOwner){
                 binding.ivTest.setImageBitmap(it)
                 previewDisplayView!!.visibility = View.VISIBLE
+                bitmapProducer!!.setBmp(it)
             }
-            getFrames()
+            getRemoteFrames()
 
         }
 
@@ -199,21 +169,13 @@ class CallFragment : Fragment() {
         var height: Int
 
         if (toggle) {
-            width = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                90f, resources.displayMetrics
-            ).toInt()
-            height = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                120f, resources.displayMetrics
-            ).toInt()
-
+            width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90f, resources.displayMetrics).toInt()
+            height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
         } else {
             width = RelativeLayout.LayoutParams.MATCH_PARENT
             height = RelativeLayout.LayoutParams.MATCH_PARENT
         }
         binding.peerContainerRemote.layoutParams = RelativeLayout.LayoutParams(width, height)
-
         toggle = !toggle
     }
 
@@ -222,20 +184,13 @@ class CallFragment : Fragment() {
 
         if (allPermissionsGranted()) {
             initViews()
-            httpClient = CustomHttpClient(
-                OPENVIDU_URL, "Basic " + Base64.encodeToString(
-                    "OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT
-                ).trim()
-            )
+            httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
             Log.d(TAG, "onResume: CustomHttpClient")
-
             val sessionId = userId + "-session"
             getToken(sessionId)
-
-            converter = ExternalTextureConverter(eglManager!!.context)
-            converter!!.setFlipY(FLIP_FRAMES_VERTICALLY)
+//            converter!!.setFlipY(FLIP_FRAMES_VERTICALLY)
+            converter = BitmapConverter(eglManager!!.egl14Context)
             converter!!.setConsumer(processor)
-
 
         } else {
             ActivityCompat.requestPermissions(
@@ -246,33 +201,14 @@ class CallFragment : Fragment() {
 
     private fun getToken(sessionId: String) {
         try {
-            // Session Request
-            val sessionBody: RequestBody = RequestBody.create(
-                "application/json; charset=utf-8".toMediaTypeOrNull(),
-                "{\"customSessionId\": \"$sessionId\"}"
-            )
-            httpClient.httpCall(
-                "/openvidu/api/sessions",
-                "POST",
-                "application/json",
-                sessionBody,
-                object : Callback {
+            val sessionBody: RequestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), "{\"customSessionId\": \"$sessionId\"}")
+            httpClient.httpCall("/openvidu/api/sessions", "POST", "application/json", sessionBody, object : Callback {
                     @Throws(IOException::class)
                     override fun onResponse(call: Call, response: Response) {
                         Log.d(TAG, "responseString: " + response.body!!.string())
-
                         // Token Request
-                        val tokenBody: RequestBody =
-                            RequestBody.create(
-                                "application/json; charset=utf-8".toMediaTypeOrNull(),
-                                "{}"
-                            )
-                        httpClient.httpCall(
-                            "/openvidu/api/sessions/$sessionId/connection",
-                            "POST",
-                            "application/json",
-                            tokenBody,
-                            object : Callback {
+                        val tokenBody: RequestBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), "{}")
+                        httpClient.httpCall("/openvidu/api/sessions/$sessionId/connection", "POST", "application/json", tokenBody, object : Callback {
                                 override fun onResponse(call: Call, response: Response) {
                                     var responseString: String? = null
                                     try {
@@ -298,7 +234,6 @@ class CallFragment : Fragment() {
                                 }
                             })
                     }
-
                     override fun onFailure(call: Call, e: IOException) {
                         Log.e(TAG, "Error POST /api/sessions", e)
                         viewToDisconnectedState()
@@ -320,10 +255,7 @@ class CallFragment : Fragment() {
     }
 
     private fun getTokenSuccess(token: String, sessionId: String) {
-        // Initialize our session
         session = Session(sessionId, token, requireActivity() as AppCompatActivity, binding.viewsContainer)
-
-        // Initialize our local participant and start local camera
         val participantName: String = userName
         val localParticipant =
             LocalParticipant(
@@ -333,19 +265,14 @@ class CallFragment : Fragment() {
                 binding.localGlSurfaceView
             )
         localParticipant.startCamera()
-
-        // Initialize and connect the websocket to OpenVidu Server
         startWebSocket()
     }
-
     fun viewToDisconnectedState() {
         requireActivity().runOnUiThread {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
         }
     }
-
-
     private fun startWebSocket() {
         val webSocket = CustomWebSocket(session, OPENVIDU_URL, requireActivity() as AppCompatActivity)
         webSocket.execute()
@@ -353,9 +280,7 @@ class CallFragment : Fragment() {
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireActivity().baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(requireActivity().baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
@@ -364,13 +289,9 @@ class CallFragment : Fragment() {
     ) {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                //시작
+
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "권한 설정을 확인해주세요.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "권한 설정을 확인해주세요.", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
         }
@@ -383,12 +304,16 @@ class CallFragment : Fragment() {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
         }
-        findNavController().popBackStack()
+        converter!!.close()
+        bitmapProducer!!.interrupt()
+        bitmapProducer!!.stopThread()
+        bitmapProducer!!.setCustomFrameAvailableListener(null)
+        processor!!.close()
     }
 
     override fun onPause() {
-        leaveSession()
         super.onPause()
+        leaveSession()
     }
 
     private fun getMultiHandLandmarksDebugString(multiHandLandmarks: List<LandmarkProto.NormalizedLandmarkList>): String {
