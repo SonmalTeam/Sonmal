@@ -103,7 +103,8 @@ class Session(
 
     fun createRemotePeerConnection(connectionId: String?) {
         val iceServers: MutableList<IceServer> = java.util.ArrayList()
-        val iceServer = IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
+//        val iceServer = IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
+        val iceServer = IceServer.builder("stun:sduty.kro.kr:443").createIceServer()
         iceServers.add(iceServer)
         val rtcConfig = RTCConfiguration(iceServers)
         rtcConfig.tcpCandidatePolicy = TcpCandidatePolicy.ENABLED
