@@ -30,14 +30,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 		http.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/user/**").authenticated()
-//		.antMatchers(HttpMethod.GET).authenticated()
+		.antMatchers(HttpMethod.POST).authenticated()
+		.antMatchers(HttpMethod.GET, "/user/**").authenticated()
+		.antMatchers(HttpMethod.GET, "/**/macro/**").authenticated()
 		.antMatchers(HttpMethod.DELETE).authenticated()
 		.antMatchers(HttpMethod.PUT).authenticated(); 
 
 		
 		// login. 해당 url로 요청할 시 로그인 과정을 거치게 된다.
-		http.formLogin().loginPage("/user/**/login").defaultSuccessUrl("/").permitAll(); // 모두 허용
+		//http.formLogin().loginPage("/user/**/login").defaultSuccessUrl("/").permitAll(); // 모두 허용
 
 //		http.authorizeRequests()
 //		        .antMatchers(FRONT_URL+"/main/**")

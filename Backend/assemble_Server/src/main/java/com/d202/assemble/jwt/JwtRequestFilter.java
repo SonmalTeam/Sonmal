@@ -8,6 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -37,10 +40,14 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		
 		//prefix제거
 		String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
-		if(JwtUtils.validateToken(token)) {
+		if(JwtUtils.validateToken(token)) {//인증안되면 exception발생
 			System.out.println("인증완료");
 			System.out.println(JwtUtils.getUserSeq(token));
+			String userSeq = JwtUtils.getUserSeq(token);
+			Authentication auth = new UsernamePasswordAuthenticationToken(Integer.parseInt(userSeq), null, null);
+			SecurityContextHolder.getContext().setAuthentication(auth);
 		}
+		filterChain.doFilter(request, response);
 	}
 
 }
