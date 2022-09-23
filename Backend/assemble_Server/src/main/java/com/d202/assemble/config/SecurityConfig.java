@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,11 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 		http.authorizeRequests()
-		.antMatchers(HttpMethods.GET, "/api/swagger-ui/**").permitAll()
-		.antMatchers(HttpMethods.GET, "/swagger-ui/**").permitAll()
 		.antMatchers(HttpMethod.POST).authenticated()
 		.antMatchers(HttpMethod.GET, "/user/**").authenticated()
-		.antMatchers(HttpMethod.GET, "/api/user/**").authenticated()
 		.antMatchers(HttpMethod.GET, "/**/macro/**").authenticated()
 		.antMatchers(HttpMethod.DELETE).authenticated()
 		.antMatchers(HttpMethod.PUT).authenticated(); 
@@ -60,8 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		// 정적 리소스 spring security 대상에서 제외
 //        web.ignoring().antMatchers("/images/**", "/css/**"); // 아래 코드와 같은 코드입니다.
 		//web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-		web.ignoring().antMatchers("/api/swagger-ui/**");
+		//web.ignoring().antMatchers("/api/swagger-ui/**");
 		web.ignoring().antMatchers("/swagger-ui/**");
+		web.httpFirewall(new DefaultHttpFirewall());// '//'허용..
 	}
 
 	
