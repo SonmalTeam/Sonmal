@@ -32,11 +32,6 @@ public class SignMacro {
     @JoinColumn(name = "categorySeq")
     private Category category;
 
-    // 수어 영상주소
-    @Lob
-    @Column(name = "sign_src")
-    private String signSrc;
-
     // 아이콘
     @Lob
     @Column(name = "icon")
@@ -61,10 +56,9 @@ public class SignMacro {
     private Long videoFileId;
 
     @Builder
-    public SignMacro(String title, String content, String signSrc, String icon, Long videoFileId){
+    public SignMacro(String title, String content, String icon, Long videoFileId){
         this.title = title;
         this.content = content;
-        this.signSrc = signSrc;
         this.icon = icon;
 
         this.videoFileId = videoFileId;

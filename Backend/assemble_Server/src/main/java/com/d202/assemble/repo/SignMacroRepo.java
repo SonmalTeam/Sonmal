@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SignMacroRepo extends JpaRepository<SignMacro, Long> {
+    Optional<SignMacro> findBySeq(long seq);
 
     List<SignMacro> findAllByUserSeqAndCategorySeq(long userSeq, long categorySeq);
+    List<SignMacro> findAllByUserSeqAndCategorySeqOrderByCountDesc(long userSeq, long categorySeq);
 
     List<SignMacro> findAllByUserSeq(long userSeq);
 }

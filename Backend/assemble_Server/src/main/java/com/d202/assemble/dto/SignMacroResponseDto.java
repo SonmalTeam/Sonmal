@@ -10,7 +10,6 @@ public class SignMacroResponseDto {
     private Long seq;
     private String title;
     private String content;
-    private String signSrc;
     private String icon;
     private Long categorySeq;
     private Long count;
@@ -21,7 +20,6 @@ public class SignMacroResponseDto {
         this.seq = entity.getSeq();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.signSrc = entity.getSignSrc();
         this.icon = entity.getIcon();
         this.categorySeq = entity.getCategory().getSeq();
         this.count = entity.getCount();
