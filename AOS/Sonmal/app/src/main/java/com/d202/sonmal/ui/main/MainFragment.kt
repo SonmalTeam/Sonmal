@@ -39,7 +39,14 @@ class MainFragment : Fragment() {
             btnCall.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
             }
+            btnLogin.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+            }
+            btnVideo.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
+            }
         }
+
 
     }
 
