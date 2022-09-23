@@ -3,15 +3,14 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.SurfaceTexture
 import android.media.AudioManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.util.Size
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,9 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.common.OPENVIDU_SECRET
-import com.d202.sonmal.common.OPENVIDU_URL
-import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
+import com.d202.sonmal.R
+import com.d202.sonmal.common.*
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.webrtc.openvidu.LocalParticipant
@@ -30,6 +28,14 @@ import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
 import com.google.mediapipe.components.CameraHelper
+import com.google.mediapipe.components.CameraXPreviewHelper
+import com.google.mediapipe.components.ExternalTextureConverter
+import com.google.mediapipe.components.FrameProcessor
+import com.google.mediapipe.formats.proto.LandmarkProto
+import com.google.mediapipe.framework.AndroidAssetUtil
+import com.google.mediapipe.framework.Packet
+import com.google.mediapipe.framework.PacketGetter
+import com.google.mediapipe.glutil.EglManager
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -53,6 +59,21 @@ class CallFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
+
+    // {@link SurfaceTexture} where the camera-preview frames can be accessed.
+    private var previewFrameTexture: SurfaceTexture? = null
+    // {@link SurfaceView} that displays the camera-preview frames processed by a MediaPipe graph.
+    private var previewDisplayView: SurfaceView? = null
+    // Creates and manages an {@link EGLContext}.
+    private var eglManager: EglManager? = null
+    // Sends camera-preview frames into a MediaPipe graph for processing, and displays the processed
+    // frames onto a {@link Surface}.
+    private var processor: FrameProcessor? = null
+    // Converts the GL_TEXTURE_EXTERNAL_OES texture from Android camera into a regular texture to be
+    // consumed by {@link FrameProcessor} and the underlying MediaPipe graph.
+    private var converter: ExternalTextureConverter? = null
+    // Handles camera access via the {@link CameraX} Jetpack support library.
+    private var cameraHelper: CameraXPreviewHelper? = null
     private val REQUIRED_PERMISSIONS =
         mutableListOf(
             Manifest.permission.CAMERA,
@@ -78,7 +99,60 @@ class CallFragment : Fragment() {
 
         initView()
         initViewModel()
+        initSurface()
+    }
 
+    private fun initSurface(){
+        previewDisplayView = SurfaceView(requireContext())
+        setupPreviewDisplayView()
+        AndroidAssetUtil.initializeNativeAssetManager(requireContext())
+        eglManager = EglManager(null)
+        processor = FrameProcessor(requireContext(), eglManager!!.nativeContext, BINARY_GRAPH_NAME, INPUT_VIDEO_STREAM_NAME, OUTPUT_VIDEO_STREAM_NAME)
+        var inputSidePackets = mutableMapOf<String, Packet>()
+        processor!!.setInputSidePackets(inputSidePackets)
+
+        processor!!.videoSurfaceOutput.setFlipY(FLIP_FRAMES_VERTICALLY)
+        processor!!.addPacketCallback(OUTPUT_LANDMARKS_STREAM_NAME) { packet: Packet ->
+//            Log.d(TAG, "Received multi-hand landmarks packet.")
+            val multiHandLandmarks =
+                PacketGetter.getProtoVector(
+                    packet,
+                    LandmarkProto.NormalizedLandmarkList.parser()
+                )
+//            Log.d(TAG, "onCreate: ${PacketGetter.getFloat32Vector(packet)} ")
+//            if (!multiHandLandmarks.isEmpty())
+                Log.d(TAG, "[TS:" + packet.timestamp + "] " + getMultiHandLandmarksDebugString(multiHandLandmarks))
+//            pointToVector(multiHandLandmarks)
+        }
+    }
+
+    private fun setupPreviewDisplayView() {
+        previewDisplayView!!.visibility = View.GONE
+        val viewGroup = binding.peerContainerRemote
+        viewGroup.addView(previewDisplayView)
+        previewDisplayView!!.getHolder().addCallback(object : SurfaceHolder.Callback {
+                    override fun surfaceCreated(holder: SurfaceHolder) {
+                        processor!!.videoSurfaceOutput.setSurface(holder.surface)
+                        Log.d(TAG, "surfaceCreated: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${holder}")
+                    }
+                    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+                        // (Re-)Compute the ideal size of the camera-preview display (the area that
+                        // the camera-preview frames get rendered onto, potentially with scaling and
+                        // rotation) based on the size of the SurfaceView that contains the display.
+                        Log.d(TAG, "surfaceChanged: ########################################################################${holder.surface}\n${holder.surfaceFrame}\n")
+                        val viewSize = Size(width, height)
+//                        val displaySize = cameraHelper!!.computeDisplaySizeFromViewSize(viewSize)
+                        // Connect the converter to the camera-preview frames as its input (via
+                        // previewFrameTexture), and configure the output width and height as the
+                        // computed display size.
+
+//                        converter!!.setSurfaceTextureAndAttachToGLContext(previewFrameTexture, viewSize.width, viewSize.height)
+                    }
+
+                    override fun surfaceDestroyed(holder: SurfaceHolder) {
+                        processor!!.videoSurfaceOutput.setSurface(null)
+                    }
+                })
     }
 
     private fun initView(){
@@ -109,9 +183,10 @@ class CallFragment : Fragment() {
 
     private fun initViewModel(){
         viewModel.apply {
-            setSurfaceViewRenderer(binding.localGlSurfaceView)
+            setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             bitmap.observe(viewLifecycleOwner){
                 binding.ivTest.setImageBitmap(it)
+                previewDisplayView!!.visibility = View.VISIBLE
             }
             getFrames()
 
@@ -156,6 +231,11 @@ class CallFragment : Fragment() {
 
             val sessionId = userId + "-session"
             getToken(sessionId)
+
+            converter = ExternalTextureConverter(eglManager!!.context)
+            converter!!.setFlipY(FLIP_FRAMES_VERTICALLY)
+            converter!!.setConsumer(processor)
+
 
         } else {
             ActivityCompat.requestPermissions(
@@ -309,5 +389,26 @@ class CallFragment : Fragment() {
     override fun onPause() {
         leaveSession()
         super.onPause()
+    }
+
+    private fun getMultiHandLandmarksDebugString(multiHandLandmarks: List<LandmarkProto.NormalizedLandmarkList>): String {
+        if (multiHandLandmarks.isEmpty()) {
+            return "No hand landmarks"
+        }
+        var multiHandLandmarksStr = "Number of hands detected: " + multiHandLandmarks.size + "\n"
+        for ((handIndex, landmarks) in multiHandLandmarks.withIndex()) {
+            multiHandLandmarksStr += "\t#Hand landmarks for hand[" + handIndex + "]: " + landmarks.landmarkCount + "\n"
+            for ((landmarkIndex, landmark) in landmarks.landmarkList.withIndex()) {
+                multiHandLandmarksStr += ("\t\tLandmark [" + landmarkIndex + "]: (" + landmark.x + ", " + landmark.y + ", " + landmark.z + ")\n")
+            }
+        }
+        return multiHandLandmarksStr
+    }
+
+    companion object {
+        init {
+            System.loadLibrary("mediapipe_jni")
+            System.loadLibrary("opencv_java3")
+        }
     }
 }
