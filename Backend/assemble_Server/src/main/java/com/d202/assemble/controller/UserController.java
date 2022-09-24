@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d202.assemble.dto.JwtToken;
+import com.d202.assemble.dto.JwtTokenDto;
 import com.d202.assemble.dto.User;
 import com.d202.assemble.jwt.JwtUtils;
+import com.d202.assemble.service.JwtTokenService;
 import com.d202.assemble.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -30,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class UserController {
 	
 	private final UserService userService;
+	private final JwtTokenService jwtTokenService;
 	
 	@ApiOperation(value="회원정보 상세 조회")
 	@GetMapping("/detail")
@@ -53,13 +57,19 @@ public class UserController {
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
 			if(userOp.isPresent()) {
-				return new ResponseEntity<String>(JwtUtils.createToken(userOp.get()), HttpStatus.OK);
+				return new ResponseEntity<String>(JwtUtils.createAccessToken(userOp.get()), HttpStatus.OK);
 			}
 			else {//가입 = DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
-				if(userService.insertUser(user)) {
-					return new ResponseEntity<String>(JwtUtils.createToken(user), HttpStatus.OK);
+				User newUser = userService.insertUser(user);
+				if(newUser != null) {
+					JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
+					JwtToken jwtToken = new JwtToken();
+					jwtToken.setUserSeq(newUser.getSeq());
+					jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
+					jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
+					return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 				}
 			}	
 		}
@@ -75,13 +85,19 @@ public class UserController {
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
 			if(userOp.isPresent()) {
-				return new ResponseEntity<String>(JwtUtils.createToken(userOp.get()), HttpStatus.OK);
+				return new ResponseEntity<String>(JwtUtils.createAccessToken(userOp.get()), HttpStatus.OK);
 			}
 			else {//가입 = DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
-				if(userService.insertUser(user)) {
-					return new ResponseEntity<String>(JwtUtils.createToken(user), HttpStatus.OK);
+				User newUser = userService.insertUser(user);
+				if(newUser != null) {
+					JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
+					JwtToken jwtToken = new JwtToken();
+					jwtToken.setUserSeq(newUser.getSeq());
+					jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
+					jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
+					return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 				}
 			}	
 		}

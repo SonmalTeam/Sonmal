@@ -27,13 +27,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	
-	@Autowired
-	private UserRepo userRepo;
+	private final UserRepo userRepo;
 	
 	@Transactional
-	public boolean insertUser(User user) {
-		User result = userRepo.save(user);
-		return (result!=null);
+	public User insertUser(User user) {
+		return userRepo.save(user);
 	}
 	
 	public Optional<User> findUserBySeq(int seq){
