@@ -18,6 +18,7 @@ public class UserCategory {
     // PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seq")
     private Long seq;
 
     // 유저 FK
@@ -25,6 +26,7 @@ public class UserCategory {
     private Long userSeq;
 
     // Category list
-    @Column(name = "categories")
-    private List<Long> categories;
+    @ElementCollection
+    @Column(name = "category_list")
+    private List<Long> categoryList;
 }

@@ -23,7 +23,7 @@ public class CategoryService {
     public List<Category> getCategoryList(Long userSeq) {
 
         List<Category> result = new ArrayList<>();
-        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategories();
+        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategoryList();
 
         for(long categorySeq : userCategory) {
             result.add(categoryRepo.findBySeq(categorySeq));
@@ -38,8 +38,8 @@ public class CategoryService {
         List<Category> result = new ArrayList<>();
 
 //        List<Long> defaultList = new ArrayList<>() {1, 2, 3, 4, 5, 6};
-        userCategoryRepo.findByUserSeq(userSeq).orElseThrow().setCategories(categories);
-        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategories();
+        userCategoryRepo.findByUserSeq(userSeq).orElseThrow().setCategoryList(categories);
+        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategoryList();
 
         for(long categorySeq : userCategory) {
             result.add(categoryRepo.findBySeq(categorySeq));
