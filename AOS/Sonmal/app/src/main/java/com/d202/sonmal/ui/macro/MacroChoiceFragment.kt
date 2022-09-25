@@ -44,16 +44,16 @@ class MacroChoiceFragment: Fragment() {
             navController.navigate(R.id.action_macroChoiceFragment_to_macroHospitalFragment)
         }
 
-        binding.btnAdd.setOnClickListener {
-            findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
-        }
-
     }
 
     private fun initBtn() {
         binding.apply {
             btnMacroList.setOnClickListener {
                 moveToMacroListFragment()
+            }
+
+            btnAdd.setOnClickListener {
+                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
             }
         }
     }

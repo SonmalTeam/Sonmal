@@ -1,15 +1,20 @@
 package com.d202.sonmal.ui.macro
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,6 +23,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
@@ -29,6 +35,9 @@ import java.text.SimpleDateFormat
 class MacroAddFragment: Fragment() {
     private lateinit var binding: FragmentMacroAddBinding
     private val macroViewmodel: MacroViewModel by viewModels()
+
+    //emoji 입력
+    private var emoji = "Emoji"
 
     // 권한
     private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
@@ -56,6 +65,8 @@ class MacroAddFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initObserver()
 
         if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG)){
             checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
@@ -110,7 +121,7 @@ class MacroAddFragment: Fragment() {
             var title = "title이다."
             var content = "글자 수는?"
             var category = "cafe"
-            var emoji = "???" // todo emoji
+            var emoji = this.emoji // todo emoji
 
             // 선택
             var video: File? = videoFileSave
@@ -118,6 +129,17 @@ class MacroAddFragment: Fragment() {
             macroViewmodel.addMacro(title, content, category, emoji, video)
 
 
+        }
+
+        binding.btnAddEmoji.setOnClickListener {
+            showdialog()
+        }
+    }
+
+    private fun initObserver() {
+        macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
+            binding.tvEmoji.text = it
+            Log.d("emoji", "$it")
         }
     }
 
@@ -181,6 +203,25 @@ class MacroAddFragment: Fragment() {
                 }
             }
         }
+    }
+
+    private fun showdialog(){
+        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Title")
+
+        val input = EditText(requireContext())
+        input.setHint("Enter Text")
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            var textE = input.text.toString()
+            binding.tvEmoji.text = textE
+            this.emoji = textE
+        })
+        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+
+        builder.show()
     }
 
 }

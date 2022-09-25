@@ -19,6 +19,10 @@ class MacroViewModel: ViewModel() {
     val macroList: LiveData<MutableList<MacroDto>>
         get() = _macroList
 
+    private val _macroAddCallback = MutableLiveData<String>()
+    val macroAddCallback: LiveData<String>
+        get() = _macroAddCallback
+
     fun getMacroList(userSeq: Int, category: Int) { // 카테고리의 매크로 전체 리스트 불러오기
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -45,7 +49,7 @@ class MacroViewModel: ViewModel() {
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Retrofit.macroApi.addMacro(
+                val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
                     FormDataUtil.getBody("content", content),
                     FormDataUtil.getBody("categorySeq", category),
@@ -56,6 +60,11 @@ class MacroViewModel: ViewModel() {
                         null
                     }
                 )
+
+                if(response.isSuccessful && response.body() != null){
+                } else {
+                    _macroAddCallback.postValue(emoji)
+                }
             }catch (e: Exception) {
                 Log.d(TAG, "addMacro: ${e.message}")
             }
