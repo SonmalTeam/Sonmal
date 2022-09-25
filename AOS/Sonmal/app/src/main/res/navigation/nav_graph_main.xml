@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_macroChoiceFragment_to_macroHospitalFragment"
             app:destination="@id/macroHospitalFragment" />
+        <action
+            android:id="@+id/action_macroChoiceFragment_to_macroAddFragment"
+            app:destination="@id/macroAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/macroCafeFragment"
@@ -69,4 +72,8 @@
         android:id="@+id/macroVideoFragment"
         android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
         android:label="MacroVideoFragment" />
+    <fragment
+        android:id="@+id/macroAddFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroAddFragment"
+        android:label="MacroAddFragment" />
 </navigation>

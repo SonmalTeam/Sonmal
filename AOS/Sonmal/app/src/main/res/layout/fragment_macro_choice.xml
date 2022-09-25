@@ -50,7 +50,7 @@
             android:layout_margin="20dp"/>
 
         <Button
-            android:id="@+id/custom1"
+            android:id="@+id/btn_macro_list"
             android:text="custom1"
             android:textSize="20dp"
             android:layout_width="150dp"
@@ -61,8 +61,8 @@
             android:layout_margin="20dp"/>
 
         <Button
-            android:id="@+id/custom2"
-            android:text="custom2"
+            android:id="@+id/btn_add"
+            android:text="Add"
             android:textSize="20dp"
             android:layout_width="150dp"
             android:layout_height="60dp"
