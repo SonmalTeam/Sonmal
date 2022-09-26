@@ -84,6 +84,18 @@ class LoginFragment : Fragment() {
         signViewModel.jwtToken.observe(viewLifecycleOwner) {
             Log.d("jwt", "it $it")
             ApplicationClass.mainPref.token = it
+            Log.d("jwt manifest에 저장 ", "it $it")
+            ApplicationClass.mainPref.refreshToken = signViewModel.refreshtoken.value
+            Log.d("refresh manifest에 저장 ", "it ${signViewModel.refreshtoken.value}")
+        }
+
+        signViewModel.unregisterCallBack.observe(viewLifecycleOwner) {
+            if(it == true) {
+                ApplicationClass.mainPref.token = null
+                ApplicationClass.mainPref.refreshToken = null
+                signViewModel.refresh()
+            }
+
         }
     }
 
@@ -101,9 +113,6 @@ class LoginFragment : Fragment() {
                     Log.d(TAG, "카카오계정으로 로그인 성공 \n\n " +
                             "token: ${token.accessToken} \n\n " +
                             "me: ${user}")
-
-                    //로그인 성공 시 토큰을 저장
-                    signViewModel.setAccessToken(token.accessToken)
 
                     //로그인 성공 시 회원가입 api 호출
                     signViewModel.joinWithKaKao(token.accessToken)
@@ -132,9 +141,6 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), "카카오톡 로그인 성공", Toast.LENGTH_LONG).show()
                     Log.d(TAG, "카카오 톡으로 로그인 성공 : ${token.accessToken}")
 
-                    //로그인 성공 시 토큰을 저장
-                    signViewModel.setAccessToken(token.accessToken)
-
                     //로그인 성공 시 회원가입 api 호출
                     signViewModel.joinWithKaKao(token.accessToken)
                 }
@@ -156,6 +162,9 @@ class LoginFragment : Fragment() {
 
     private fun kakaoUnlink(){ // 카카오 회원탈퇴
         // 연결 끊기
+        Log.d(TAG, "연결 끊기. SDK에서 토큰 삭제 됨" +
+                "${signViewModel.refreshtoken.value}")
+
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.d(TAG, "연결 끊기 실패: ${error}")
@@ -164,7 +173,6 @@ class LoginFragment : Fragment() {
                 Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨") }
             Toast.makeText(requireContext(), "회원 탈퇴 성공", Toast.LENGTH_LONG).show()
             signViewModel.unregister()
-            ApplicationClass.mainPref.token = null
         }
     }
 
@@ -202,9 +210,6 @@ class LoginFragment : Fragment() {
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
 
-                //로그인 성공 시 토큰을 저장
-                signViewModel.setAccessToken(naverToken!!)
-
                 //로그인 성공 시 회원가입 api 호출
                 signViewModel.joinWithNaver(naverToken!!)
             }
@@ -235,7 +240,7 @@ class LoginFragment : Fragment() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
                 Toast.makeText(requireContext(), "네이버 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
                 signViewModel.unregister()
-                ApplicationClass.mainPref.token = null
+
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.

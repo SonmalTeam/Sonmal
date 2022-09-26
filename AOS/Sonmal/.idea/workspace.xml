@@ -13,17 +13,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="068aca4b-c0d6-49c3-bd79-dc3b95eaf111" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/MacroPost.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_macro_add.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_navercorp_nid_oauth_5_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/model/dto/TokenDto.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/common/ApplicationClass.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/common/ApplicationClass.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/model/AuthInterceptor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/model/AuthInterceptor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/model/api/SignApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/model/api/SignApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/MacroCafeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/MacroCafeFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/MacroPost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/MacroPost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/viewmodel/MacroViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/macro/viewmodel/MacroViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/main/MainFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/main/MainFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/sign/LoginFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/sign/LoginFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/sign/viewmodel/SignViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/ui/sign/viewmodel/SignViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/utils/MainSharedPreference.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/d202/sonmal/utils/MainSharedPreference.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +42,8 @@
       <list>
         <option value="navigationResourceFile" />
         <option value="resourceFile" />
-        <option value="Kotlin Class" />
         <option value="layoutResourceFile" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
