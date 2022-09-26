@@ -10,7 +10,7 @@ class AuthInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var request = chain.request().newBuilder()
-                .addHeader("JWT-AUTHENTICATION", ApplicationClass.mainPref.token ?: "A")
+                .addHeader("JWT-AUTHENTICATION", ApplicationClass.mainPref.refreshToken ?: "A")
                 .build()
 
 

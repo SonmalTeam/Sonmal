@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.d202.sonmal.adapter.MacroAdapter
@@ -68,12 +69,22 @@ class MacroCafeFragment: Fragment() {
         binding.rcyMacro.layoutManager = LinearLayoutManager(context)
         binding.rcyMacro.adapter = macroAdapter
 
-        macroAdapter.setSpeakClickListener(object: MacroAdapter.SpeakItemClickListener{
-            override fun onClick(view: View, position: Int, item: MacroDto) {
-                Toast.makeText(requireContext(), "${item.content}", Toast.LENGTH_SHORT).show()
-                speak(item.content)
-            }
-        })
+        macroAdapter.apply {
+            setSpeakClickListener(object: MacroAdapter.SpeakItemClickListener{
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    Toast.makeText(requireContext(), "${item.content}", Toast.LENGTH_SHORT).show()
+                    speak(item.content)
+                }
+            })
+
+            setVideoClickListener(object: MacroAdapter.VideoItemClickListener{
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    findNavController().navigate(MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(item.videoFileId))
+                }
+            })
+        }
+
+
 
     }
 

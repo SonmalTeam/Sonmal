@@ -23,6 +23,10 @@ class MacroAdapter(private val itemList: List<MacroDto>): RecyclerView.Adapter<M
             speakClickListener.onClick(it, position, item)
         }
 
+        holder.binding.imgThumbnail.setOnClickListener {
+            videoClickListener.onClick(it, position, item)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -37,6 +41,16 @@ class MacroAdapter(private val itemList: List<MacroDto>): RecyclerView.Adapter<M
 
     fun setSpeakClickListener(itemClickListener: SpeakItemClickListener) {
         this.speakClickListener = itemClickListener
+    }
+
+    // ItemClickListener 세팅
+    interface VideoItemClickListener { // video 재생
+        fun onClick(view: View, position: Int, item: MacroDto)
+    }
+    private lateinit var videoClickListener: VideoItemClickListener
+
+    fun setVideoClickListener(itemClickListener: VideoItemClickListener) {
+        this.videoClickListener = itemClickListener
     }
 
 }

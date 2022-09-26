@@ -45,7 +45,11 @@
     <fragment
         android:id="@+id/macroCafeFragment"
         android:name="com.d202.sonmal.ui.macro.MacroCafeFragment"
-        android:label="MacroCafeFragment" />
+        android:label="MacroCafeFragment" >
+        <action
+            android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/macroStoreFragment"
         android:name="com.d202.sonmal.ui.macro.MacroStoreFragment"
@@ -71,7 +75,12 @@
     <fragment
         android:id="@+id/macroVideoFragment"
         android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
-        android:label="MacroVideoFragment" />
+        android:label="MacroVideoFragment" >
+        <argument
+            android:name="videoSeq"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/macroAddFragment"
         android:name="com.d202.sonmal.ui.macro.MacroAddFragment"
