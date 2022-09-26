@@ -1,6 +1,12 @@
 pipeline {         
         agent none
-        stages {                
+        stages { 
+	   stage('Gradle build'){
+		agent any
+		steps{
+			sh './gradlew clean build'
+		}
+	   }             
                 stage('Docker build') {
                         agent any
                         steps {                                                     
