@@ -4,7 +4,6 @@ pipeline {
 	   stage('Gradle build'){
 		agent any
 		steps{
-			sh 'cd ./Backend/assemble_Server'
 			sh 'chmod +x ./gradlew'
 			sh './gradlew clean build'
 		}
