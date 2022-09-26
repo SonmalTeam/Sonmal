@@ -40,7 +40,7 @@ public class UserController {
 	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){
 //	public ResponseEntity<?> getUserDetail(){
 		
-		int seq = 1;//(int)auth.getPrincipal();
+		int seq = (int)auth.getPrincipal();
 		Optional<User> userOp = userService.findUserBySeq(seq);
 		if(userOp.isPresent()) {
 			return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
