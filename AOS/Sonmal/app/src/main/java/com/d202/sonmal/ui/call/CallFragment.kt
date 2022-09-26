@@ -3,14 +3,18 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.SurfaceTexture
+import android.graphics.Bitmap
 import android.media.AudioManager
 import android.os.Bundle
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Size
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,22 +23,22 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.common.*
+import com.d202.sonmal.common.OPENVIDU_SECRET
+import com.d202.sonmal.common.OPENVIDU_URL
+import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
-import com.d202.sonmal.utils.BitmapConverter
-import com.d202.sonmal.utils.BmpProducer
+import com.d202.sonmal.utils.HandsResultImageView
+import com.d202.sonmal.utils.getDeviceSize
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
 import com.google.mediapipe.components.CameraHelper
-import com.google.mediapipe.components.FrameProcessor
-import com.google.mediapipe.formats.proto.LandmarkProto
-import com.google.mediapipe.framework.AndroidAssetUtil
-import com.google.mediapipe.framework.Packet
-import com.google.mediapipe.framework.PacketGetter
-import com.google.mediapipe.glutil.EglManager
+import com.google.mediapipe.solutions.hands.HandLandmark
+import com.google.mediapipe.solutions.hands.Hands
+import com.google.mediapipe.solutions.hands.HandsOptions
+import com.google.mediapipe.solutions.hands.HandsResult
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -44,6 +48,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.EglBase
 import java.io.IOException
+
 
 private const val TAG = "CallFragment"
 private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
@@ -59,11 +64,8 @@ class CallFragment : Fragment() {
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
 
-    private var previewDisplayView: SurfaceView? = null
-    private var eglManager: EglManager? = null
-    private var processor: FrameProcessor? = null
-    private var converter: BitmapConverter? = null
-    private var bitmapProducer: BmpProducer? = null
+    private lateinit var hands: Hands
+    private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
 
     override fun onCreateView(
@@ -84,45 +86,53 @@ class CallFragment : Fragment() {
 
         initView()
         initViewModel()
-        initSurface()
     }
 
-    private fun initSurface(){
-        previewDisplayView = SurfaceView(requireContext())
-        setupPreviewDisplayView()
-        AndroidAssetUtil.initializeNativeAssetManager(requireContext())
-        eglManager = EglManager(null)
-        processor = FrameProcessor(requireContext(), eglManager!!.nativeContext, BINARY_GRAPH_NAME, INPUT_VIDEO_STREAM_NAME, OUTPUT_VIDEO_STREAM_NAME)
-        processor!!.videoSurfaceOutput.setFlipY(FLIP_FRAMES_VERTICALLY)
-        processor!!.addPacketCallback(OUTPUT_LANDMARKS_STREAM_NAME) { packet: Packet ->
-            val multiHandLandmarks =
-                PacketGetter.getProtoVector(
-                    packet,
-                    LandmarkProto.NormalizedLandmarkList.parser()
-                )
-//            Log.d(TAG, "onCreate: ${PacketGetter.getFloat32Vector(packet)} ")
-//            if (!multiHandLandmarks.isEmpty())
-                Log.d(TAG, "[TS:" + packet.timestamp + "] " + getMultiHandLandmarksDebugString(multiHandLandmarks))
-//            pointToVector(multiHandLandmarks)
+    private fun downscaleBitmap(originalBitmap: Bitmap): Bitmap? {
+        val aspectRatio = originalBitmap.width.toDouble() / originalBitmap.height
+        var width: Int = binding.peerContainerRemote.width
+        var height: Int = binding.peerContainerRemote.height
+        if (binding.peerContainerRemote.width as Double / binding.peerContainerRemote.height > aspectRatio) {
+            width = (height * aspectRatio).toInt()
+        } else {
+            height = (width / aspectRatio).toInt()
         }
+        return Bitmap.createScaledBitmap(originalBitmap, width, height, false)
     }
 
-    private fun setupPreviewDisplayView() {
-        previewDisplayView!!.visibility = View.GONE
+    private fun setupStaticImageModePipeline() {
+        // Initializes a new MediaPipe Hands solution instance in the static image mode.
+        hands = Hands(
+            requireContext(),
+            HandsOptions.builder()
+                .setStaticImageMode(true)
+                .setMaxNumHands(2)
+                .setRunOnGpu(true)
+                .build()
+        )
+
+        // Connects MediaPipe Hands solution to the user-defined HandsResultImageView.
+        hands.setResultListener { handsResult ->
+            logWristLandmark(handsResult,  /*showPixelValues=*/true)
+            imageView.setHandsResult(handsResult)
+            requireActivity().runOnUiThread(Runnable { imageView.update() })
+        }
+        hands.setErrorListener { message, e ->
+            Log.e(
+                TAG,
+                "MediaPipe Hands error:$message"
+            )
+        }
+
+        // Updates the preview layout.
         val viewGroup = binding.peerContainerRemote
-        viewGroup.addView(previewDisplayView)
-        previewDisplayView!!.getHolder().addCallback(object : SurfaceHolder.Callback {
-                    override fun surfaceCreated(holder: SurfaceHolder) {
-                        processor!!.videoSurfaceOutput.setSurface(holder.surface)
-                    }
-                    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                        bitmapProducer!!.setCustomFrameAvailableListener(converter)
-                    }
-                    override fun surfaceDestroyed(holder: SurfaceHolder) {
-                        processor!!.videoSurfaceOutput.setSurface(null)
-                    }
-                })
+//        frameLayout.removeAllViewsInLayout()
+        imageView = HandsResultImageView(requireContext())
+        imageView.setImageDrawable(null)
+        viewGroup.addView(imageView)
+        imageView.setVisibility(View.VISIBLE)
     }
+
 
     private fun initView(){
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -152,35 +162,39 @@ class CallFragment : Fragment() {
     private fun initViewModel(){
         viewModel.apply {
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
-            bitmapProducer = BmpProducer()
             bitmap.observe(viewLifecycleOwner){
-                binding.ivTest.setImageBitmap(it)
-                previewDisplayView!!.visibility = View.VISIBLE
-                bitmapProducer!!.setBmp(it)
+                hands.send(it)
             }
             getRemoteFrames()
 
         }
+        setupStaticImageModePipeline()
 
     }
 
     private fun resizeView() {
-        var width: Int
-        var height: Int
-
-        if (toggle) {
-            width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90f, resources.displayMetrics).toInt()
-            height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
-        } else {
-            width = RelativeLayout.LayoutParams.MATCH_PARENT
-            height = RelativeLayout.LayoutParams.MATCH_PARENT
-        }
-        binding.peerContainerRemote.layoutParams = RelativeLayout.LayoutParams(width, height)
-        toggle = !toggle
+//        var width: Int
+//        var height: Int
+//        val params: ViewGroup.LayoutParams? = requireActivity().window.attributes
+//        if (toggle) {
+//
+//            width = getDeviceSize(requireActivity()).x
+//            height = width
+//        } else {
+//            width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
+//            height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
+//        }
+        val displaymetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val deviceWidth = displaymetrics.widthPixels
+        val deviceHeight = deviceWidth
+        binding.peerContainerRemote.layoutParams.width = deviceWidth
+        binding.peerContainerRemote.layoutParams.height = deviceWidth
     }
 
     override fun onResume() {
         super.onResume()
+        resizeView()
 
         if (allPermissionsGranted()) {
             initViews()
@@ -189,8 +203,6 @@ class CallFragment : Fragment() {
             val sessionId = userId + "-session"
             getToken(sessionId)
 //            converter!!.setFlipY(FLIP_FRAMES_VERTICALLY)
-            converter = BitmapConverter(eglManager!!.egl14Context)
-            converter!!.setConsumer(processor)
 
         } else {
             ActivityCompat.requestPermissions(
@@ -304,11 +316,7 @@ class CallFragment : Fragment() {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
         }
-        converter!!.close()
-        bitmapProducer!!.interrupt()
-        bitmapProducer!!.stopThread()
-        bitmapProducer!!.setCustomFrameAvailableListener(null)
-        processor!!.close()
+
     }
 
     override fun onPause() {
@@ -316,24 +324,41 @@ class CallFragment : Fragment() {
         leaveSession()
     }
 
-    private fun getMultiHandLandmarksDebugString(multiHandLandmarks: List<LandmarkProto.NormalizedLandmarkList>): String {
-        if (multiHandLandmarks.isEmpty()) {
-            return "No hand landmarks"
+    private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {
+        if (result.multiHandLandmarks().isEmpty()) {
+            return
         }
-        var multiHandLandmarksStr = "Number of hands detected: " + multiHandLandmarks.size + "\n"
-        for ((handIndex, landmarks) in multiHandLandmarks.withIndex()) {
-            multiHandLandmarksStr += "\t#Hand landmarks for hand[" + handIndex + "]: " + landmarks.landmarkCount + "\n"
-            for ((landmarkIndex, landmark) in landmarks.landmarkList.withIndex()) {
-                multiHandLandmarksStr += ("\t\tLandmark [" + landmarkIndex + "]: (" + landmark.x + ", " + landmark.y + ", " + landmark.z + ")\n")
-            }
+        val wristLandmark = result.multiHandLandmarks()[0].landmarkList[HandLandmark.WRIST]
+        // For Bitmaps, show the pixel values. For texture inputs, show the normalized coordinates.
+        if (showPixelValues) {
+            val width = result.inputBitmap().width
+            val height = result.inputBitmap().height
+            Log.i(
+                TAG, String.format(
+                    "MediaPipe Hand wrist coordinates (pixel values): x=%f, y=%f",
+                    wristLandmark.x * width, wristLandmark.y * height
+                )
+            )
+        } else {
+            Log.i(
+                TAG, String.format(
+                    "MediaPipe Hand wrist normalized coordinates (value range: [0, 1]): x=%f, y=%f",
+                    wristLandmark.x, wristLandmark.y
+                )
+            )
         }
-        return multiHandLandmarksStr
+        if (result.multiHandWorldLandmarks().isEmpty()) {
+            return
+        }
+        val wristWorldLandmark =
+            result.multiHandWorldLandmarks()[0].landmarkList[HandLandmark.WRIST]
+        Log.i(
+            TAG, String.format(
+                "MediaPipe Hand wrist world coordinates (in meters with the origin at the hand's"
+                        + " approximate geometric center): x=%f m, y=%f m, z=%f m",
+                wristWorldLandmark.x, wristWorldLandmark.y, wristWorldLandmark.z
+            )
+        )
     }
 
-    companion object {
-        init {
-            System.loadLibrary("mediapipe_jni")
-            System.loadLibrary("opencv_java3")
-        }
-    }
 }
