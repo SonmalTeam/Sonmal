@@ -4,7 +4,7 @@ pipeline {
 	   stage('Gradle build'){
 		agent any
 		steps{
-			sh './gradlew clean build'
+			sh './Backend/assemble_Server/gradlew clean build'
 		}
 	   }             
                 stage('Docker build') {
