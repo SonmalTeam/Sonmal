@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 		http.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/user/**").authenticated()
+		.antMatchers(HttpMethod.POST, "/user").authenticated()
 		.antMatchers(HttpMethod.POST, "**/macro/**").authenticated()
 		.antMatchers(HttpMethod.GET, "/user/**").authenticated()
 		.antMatchers(HttpMethod.GET, "/**/macro/**").authenticated()
