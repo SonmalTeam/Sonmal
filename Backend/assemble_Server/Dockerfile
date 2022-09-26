@@ -5,7 +5,7 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-RUN ./gradlew clean build --exclude-task test -Dgradle.user.home=$HOME/.gradle
+RUN ./gradlew clean build --exclude-task bootjar
 
 FROM openjdk:11-jdk
 COPY --from=builder build/libs/*.jar app.jar
