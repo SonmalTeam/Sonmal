@@ -67,7 +67,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
     public List<SignMacroResponseDto> getSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         return signMacroService.getSignMacroList(userSeq, categorySeq);
     }
 
