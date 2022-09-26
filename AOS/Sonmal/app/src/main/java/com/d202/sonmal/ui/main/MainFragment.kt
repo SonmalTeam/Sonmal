@@ -45,6 +45,9 @@ class MainFragment : Fragment() {
             btnVideo.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
             }
+            btnAddVideo.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroPost())
+            }
         }
 
 
