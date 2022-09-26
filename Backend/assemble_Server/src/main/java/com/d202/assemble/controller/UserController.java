@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.d202.assemble.dto.JwtToken;
+import com.d202.assemble.dto.JwtTokenDto;
 import com.d202.assemble.dto.User;
 import com.d202.assemble.jwt.JwtUtils;
+import com.d202.assemble.service.JwtTokenService;
 import com.d202.assemble.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -30,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class UserController {
 	
 	private final UserService userService;
+	private final JwtTokenService jwtTokenService;
 	
 	@ApiOperation(value="회원정보 상세 조회")
 	@GetMapping("/detail")
@@ -41,7 +45,7 @@ public class UserController {
 		if(userOp.isPresent()) {
 			return new ResponseEntity<User>(userOp.get(), HttpStatus.OK);
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value="네이버 로그인")
@@ -52,18 +56,25 @@ public class UserController {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
-			if(userOp.isPresent()) {
-				return new ResponseEntity<String>(JwtUtils.createToken(userOp.get()), HttpStatus.OK);
-			}
-			else {//가입 = DB save
+			User realUser = userOp.get();
+			if(realUser==null) {//가입안 된 user면 => DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
-				if(userService.insertUser(user)) {
-					return new ResponseEntity<String>(JwtUtils.createToken(user), HttpStatus.OK);
+				realUser = userService.insertUser(user);
+				if(realUser == null) {
+					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 				}
-			}	
+			}
+			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
+			//token저장
+			JwtToken jwtToken = new JwtToken();
+			jwtToken.setUserSeq(realUser.getSeq());
+			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
+			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
+			jwtTokenService.changeToken(jwtToken);
+			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value="카카오 로그인")
@@ -74,18 +85,25 @@ public class UserController {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
-			if(userOp.isPresent()) {
-				return new ResponseEntity<String>(JwtUtils.createToken(userOp.get()), HttpStatus.OK);
-			}
-			else {//가입 = DB save
+			User realUser = userOp.get();
+			if(realUser==null) {//가입안 된 user면 => DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
-				if(userService.insertUser(user)) {
-					return new ResponseEntity<String>(JwtUtils.createToken(user), HttpStatus.OK);
+				realUser = userService.insertUser(user);
+				if(realUser == null) {
+					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 				}
-			}	
+			}
+			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
+			//token저장
+			JwtToken jwtToken = new JwtToken();
+			jwtToken.setUserSeq(realUser.getSeq());
+			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
+			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
+			jwtTokenService.changeToken(jwtToken);
+			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value="회원탈퇴")
@@ -96,7 +114,7 @@ public class UserController {
 			userService.deleteUser(seq);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
