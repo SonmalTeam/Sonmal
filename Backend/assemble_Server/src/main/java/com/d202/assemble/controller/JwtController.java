@@ -1,7 +1,5 @@
 package com.d202.assemble.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -54,7 +52,7 @@ public class JwtController {
 		}
 		//만료 안됐으면 refresh 불가
 		if(!expired) {
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		//2. refresh token 유효성 확인
@@ -62,19 +60,19 @@ public class JwtController {
 			JwtUtils.validateToken(refreshToken);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		JwtToken jwtToken = jwtTokenService.getJwtTokenByRT(refreshToken);
 		if(jwtToken==null || !accessToken.equals(jwtToken.getAccessToken())) {
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		//3. access token & refresh token 재발급 후, 저장
 		int seq = Integer.parseInt(JwtUtils.getUserSeq(refreshToken));
 		Optional<User> userOp = userService.findUserBySeq(seq);
 		if(!userOp.isPresent()) {
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		
 		User user = userOp.get();
@@ -106,7 +104,7 @@ public class JwtController {
 			jwtTokenService.changeToken(jwt);
 			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
 		
 	@ApiOperation(value="jwt유효성 테스트")
@@ -126,4 +124,10 @@ public class JwtController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+//	@ApiOperation(value="jwt무효화 테스트")
+//	@PostMapping()
+//	public ResponseEntity<?> invalidateToken(@RequestBody String jwt){
+//		
+//		return new ResponseEntity<Void>(HttpStatus.OK);
+//	}
 }

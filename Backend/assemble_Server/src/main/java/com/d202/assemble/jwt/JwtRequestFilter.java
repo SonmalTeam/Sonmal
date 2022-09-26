@@ -42,7 +42,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
 		if(JwtUtils.validateToken(token)) {//인증안되면 exception발생
 			System.out.println("인증완료");
-			System.out.println(JwtUtils.getUserSeq(token));
+			//System.out.println(JwtUtils.getUserSeq(token));
 			String userSeq = JwtUtils.getUserSeq(token);
 			Authentication auth = new UsernamePasswordAuthenticationToken(Integer.parseInt(userSeq), null, null);
 			SecurityContextHolder.getContext().setAuthentication(auth);

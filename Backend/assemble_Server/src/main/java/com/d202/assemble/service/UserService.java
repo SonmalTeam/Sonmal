@@ -42,6 +42,7 @@ public class UserService {
 		return userRepo.findByEmail(email);
 	}
 	
+	@Transactional
 	public void deleteUser(int seq) throws Exception {
 		userRepo.deleteById(seq);
 	}
