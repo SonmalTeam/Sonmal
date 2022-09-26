@@ -6,7 +6,9 @@ import com.d202.assemble.service.CategoryService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -20,15 +22,15 @@ public class CategoryController {
 
     // 카테고리 리스트 조회
     @ApiOperation(value = "카테고리 리스트 조회")
-    public List<Category> getCategoryList(){
-
-        return categoryService.getCategoryList(new Long(1));
+    public List<Category> getCategoryList(@ApiIgnore Authentication auth){
+        Long userSeq = (Long)auth.getPrincipal();
+        return categoryService.getCategoryList(userSeq);
     }
 
     // 카테고리 순서 수정
     @ApiOperation(value = "카테고리 순서 수정")
-    public List<Category> getCategoryList(@RequestParam List<Long> categories){
-
-        return categoryService.updateCategoryList(new Long(1), categories);
+    public List<Category> getCategoryList(@ApiIgnore Authentication auth, @RequestParam List<Long> categories){
+        Long userSeq = (Long)auth.getPrincipal();
+        return categoryService.updateCategoryList(userSeq, categories);
     }
 }

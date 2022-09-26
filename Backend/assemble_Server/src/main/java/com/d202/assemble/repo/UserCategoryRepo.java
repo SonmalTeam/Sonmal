@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface UserCategoryRepo extends JpaRepository<UserCategory, Long> {
 
     Optional<UserCategory> findByUserSeq(Long userSeq);
+    void deleteByUserSeq(Long userSeq);
 }
