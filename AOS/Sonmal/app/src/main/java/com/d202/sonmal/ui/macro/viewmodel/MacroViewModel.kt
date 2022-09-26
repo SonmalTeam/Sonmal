@@ -23,7 +23,7 @@ class MacroViewModel: ViewModel() {
     val macroAddCallback: LiveData<String>
         get() = _macroAddCallback
 
-    fun getMacroList(userSeq: Int, category: Int) { // 카테고리의 매크로 전체 리스트 불러오기
+    fun getMacroList(category: Int) { // 카테고리의 매크로 전체 리스트 불러오기
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //todo userSeq, category api로 보내기

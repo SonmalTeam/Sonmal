@@ -13,4 +13,10 @@ class MainSharedPreference(context: Context) {
             prefs.edit().putString("token", value).apply()
         }
 
+    var refreshToken: String?
+        get() = prefs.getString("refreshToken", null)
+        set(value) {
+            prefs.edit().putString("refreshToken", value).apply()
+        }
+
 }

@@ -47,7 +47,7 @@ class MacroCafeFragment: Fragment() {
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
         val category = 1
-        macroViewModel.getMacroList(userSeq, category)
+        macroViewModel.getMacroList(category)
 
     }
 
