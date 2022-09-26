@@ -51,7 +51,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 등록")
     @PostMapping
     public void createSignMacro(@ApiIgnore Authentication auth, @RequestParam("file") MultipartFile file, SignMacroRequestDto request){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         signMacroService.createSignMacro(userSeq, request, file);
     }
 
@@ -59,7 +59,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 상세조회")
     @GetMapping("/{signMacroSeq}")
     public SignMacroResponseDto getSignMacro(@ApiIgnore Authentication auth, @PathVariable Long signMacroSeq){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         return signMacroService.getSignMacro(userSeq, signMacroSeq);
     }
 
@@ -75,7 +75,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 사용 순 정렬")
     @GetMapping("/sort/{categorySeq}")
     public List<SignMacroResponseDto> sortSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         return signMacroService.sortSignMacroList(userSeq, categorySeq);
     }
 
@@ -83,7 +83,7 @@ public class SignMacroController {
     @ApiOperation(value = "매크로 사용횟수 카운트")
     @PutMapping("/count/{signMacroSeq}")
     public void countSignMacro(@ApiIgnore Authentication auth, @PathVariable Long signMacroSeq){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         signMacroService.countSignMacro(userSeq, signMacroSeq);
     }
 

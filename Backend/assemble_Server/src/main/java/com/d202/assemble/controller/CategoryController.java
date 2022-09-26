@@ -23,14 +23,14 @@ public class CategoryController {
     // 카테고리 리스트 조회
     @ApiOperation(value = "카테고리 리스트 조회")
     public List<Category> getCategoryList(@ApiIgnore Authentication auth){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         return categoryService.getCategoryList(userSeq);
     }
 
     // 카테고리 순서 수정
     @ApiOperation(value = "카테고리 순서 수정")
     public List<Category> getCategoryList(@ApiIgnore Authentication auth, @RequestParam List<Long> categories){
-        Long userSeq = (Long)auth.getPrincipal();
+        long userSeq = (int)auth.getPrincipal();
         return categoryService.updateCategoryList(userSeq, categories);
     }
 }
