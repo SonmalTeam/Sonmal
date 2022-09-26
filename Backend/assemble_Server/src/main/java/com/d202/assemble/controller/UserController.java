@@ -56,14 +56,17 @@ public class UserController {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
-			User realUser = userOp.get();
-			if(realUser==null) {//가입안 된 user면 => DB save
+			User realUser = null;
+			if(!userOp.isPresent()) {//가입안 된 user면 => DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
 				realUser = userService.insertUser(user);
 				if(realUser == null) {
 					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 				}
+			}
+			else {
+				realUser = userOp.get();
 			}
 			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
 			//token저장
@@ -85,14 +88,17 @@ public class UserController {
 			String email = userInfo.get("email").toString();
 			//가입된 유저인지 확인
 			Optional<User> userOp = userService.findUserByEmail(email);
-			User realUser = userOp.get();
-			if(realUser==null) {//가입안 된 user면 => DB save
+			User realUser = null;
+			if(!userOp.isPresent()) {//가입안 된 user면 => DB save
 				User user = new User();
 				user.setEmail(userInfo.get("email").toString());
 				realUser = userService.insertUser(user);
 				if(realUser == null) {
 					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 				}
+			}
+			else {
+				realUser = userOp.get();
 			}
 			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
 			//token저장
