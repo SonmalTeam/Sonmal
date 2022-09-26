@@ -17,16 +17,12 @@ class SignViewModel: ViewModel() {
     val accessToken: LiveData<String>
         get() = _accessToken
 
-    private val _jwtToken = MutableLiveData<Int>() //jwt 저장
-    val jwtToken: LiveData<Int>
+    private val _jwtToken = MutableLiveData<String>() //jwt 저장
+    val jwtToken: LiveData<String>
         get() = _jwtToken
 
     fun setAccessToken(token: String) {
         _accessToken.postValue(token)
-    }
-
-    fun setJwtToken(token: Int) {
-        _jwtToken.postValue(token)
     }
 
 
@@ -46,9 +42,8 @@ class SignViewModel: ViewModel() {
                     if(it.isSuccessful && it.body() != null){
                         Log.d(TAG, "joinwithkakao 통신 성공 ${it.body()}")
                         _isJoinSucced.postValue(true)
-                        Log.d(TAG, "_jwtToken1 ${it.body()!!.seq}")
-                        _jwtToken.postValue(it.body()!!.seq)
-                        Log.d(TAG, "_jwtToken2 ${jwtToken.value}")
+                        Log.d(TAG, "_jwtToken1 ${it.body()}")
+                        _jwtToken.postValue(it.body())
                     }
                     else {
                         Log.d(TAG, "joinWithKaKao api 통신 실패 ${it.body()}")
@@ -67,9 +62,10 @@ class SignViewModel: ViewModel() {
                 Log.d(TAG, "joinWithNaver api 시작 token : $token")
                 Retrofit.signApi.joinWithNaver(token).let {
                     if(it.isSuccessful && it.body() != null){
-                        Log.d(TAG, "joinWithNaver 통신 성공 ${it.body()}")
+                        Log.d(TAG, "joinwithNaver 통신 성공 ${it.body()}")
                         _isJoinSucced.postValue(true)
-                        _jwtToken.postValue(it.body()!!.seq)
+                        Log.d(TAG, "_jwtToken1 ${it.body()}")
+                        _jwtToken.postValue(it.body())
                     }
                     else if (it.code() == 500) {
                         Log.d(TAG, "joinWithNaver api 통신 실패")
@@ -83,11 +79,11 @@ class SignViewModel: ViewModel() {
         }
     }
 
-    fun unregister(token: Int) {
+    fun unregister() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d(TAG, "unregister api 시작 token : $token")
-                Retrofit.signApi.unregister(token).let {
+                Log.d(TAG, "unregister api 시작")
+                Retrofit.signApi.unregister().let {
                     if(it.isSuccessful){
                         Log.d(TAG, "unregister 통신 성공 ${it.body()}")
                     }

@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.d202.sonmal.R
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentLoginBinding
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
 import com.kakao.sdk.auth.model.OAuthToken
@@ -82,8 +83,7 @@ class LoginFragment : Fragment() {
 
         signViewModel.jwtToken.observe(viewLifecycleOwner) {
             Log.d("jwt", "it $it")
-            Log.d("jwt", "sign jwt ${signViewModel.jwtToken.value!!}")
-
+            ApplicationClass.mainPref.token = it
         }
     }
 
@@ -163,7 +163,8 @@ class LoginFragment : Fragment() {
             else {
                 Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨") }
             Toast.makeText(requireContext(), "회원 탈퇴 성공", Toast.LENGTH_LONG).show()
-            signViewModel.unregister(signViewModel.jwtToken.value!!)
+            signViewModel.unregister()
+            ApplicationClass.mainPref.token = null
         }
     }
 
@@ -233,7 +234,8 @@ class LoginFragment : Fragment() {
             override fun onSuccess() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
                 Toast.makeText(requireContext(), "네이버 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
-                signViewModel.unregister(signViewModel.jwtToken.value!!)
+                signViewModel.unregister()
+                ApplicationClass.mainPref.token = null
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
