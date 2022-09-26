@@ -29,4 +29,9 @@ public class UserCategory {
     @ElementCollection
     @Column(name = "category_list")
     private List<Long> categoryList;
+
+    public UserCategory(Long userSeq, List<Long> categories){
+        this.userSeq = userSeq;
+        this.categoryList = categories;
+    }
 }

@@ -19,8 +19,10 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,41 +50,41 @@ public class SignMacroController {
     // 매크로 등록
     @ApiOperation(value = "매크로 등록")
     @PostMapping
-    public void createSignMacro(@RequestParam("file") MultipartFile file, SignMacroRequestDto request){
-
-        signMacroService.createSignMacro(new Long(1), request, file);
+    public void createSignMacro(@ApiIgnore Authentication auth, @RequestParam("file") MultipartFile file, SignMacroRequestDto request){
+        Long userSeq = (Long)auth.getPrincipal();
+        signMacroService.createSignMacro(userSeq, request, file);
     }
 
     // 매크로 상세조회
     @ApiOperation(value = "매크로 상세조회")
     @GetMapping("/{signMacroSeq}")
-    public SignMacroResponseDto getSignMacro(@PathVariable Long signMacroSeq){
-
-        return signMacroService.getSignMacro(new Long(1), signMacroSeq);
+    public SignMacroResponseDto getSignMacro(@ApiIgnore Authentication auth, @PathVariable Long signMacroSeq){
+        Long userSeq = (Long)auth.getPrincipal();
+        return signMacroService.getSignMacro(userSeq, signMacroSeq);
     }
 
     // 매크로 리스트 조회
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
-    public List<SignMacroResponseDto> getSignMacroList(@PathVariable Long categorySeq){
-
-        return signMacroService.getSignMacroList(new Long(1), categorySeq);
+    public List<SignMacroResponseDto> getSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
+        Long userSeq = (Long)auth.getPrincipal();
+        return signMacroService.getSignMacroList(userSeq, categorySeq);
     }
 
     // 매크로 사용 순 정렬
     @ApiOperation(value = "매크로 사용 순 정렬")
     @GetMapping("/sort/{categorySeq}")
-    public List<SignMacroResponseDto> sortSignMacroList(@PathVariable Long categorySeq){
-
-        return signMacroService.sortSignMacroList(new Long(1), categorySeq);
+    public List<SignMacroResponseDto> sortSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
+        Long userSeq = (Long)auth.getPrincipal();
+        return signMacroService.sortSignMacroList(userSeq, categorySeq);
     }
 
     // 매크로 사용횟수 카운트
     @ApiOperation(value = "매크로 사용횟수 카운트")
     @PutMapping("/count/{signMacroSeq}")
-    public void countSignMacro(@PathVariable Long signMacroSeq){
-
-        signMacroService.countSignMacro(new Long(1), signMacroSeq);
+    public void countSignMacro(@ApiIgnore Authentication auth, @PathVariable Long signMacroSeq){
+        Long userSeq = (Long)auth.getPrincipal();
+        signMacroService.countSignMacro(userSeq, signMacroSeq);
     }
 
     // 매크로 삭제

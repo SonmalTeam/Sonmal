@@ -23,9 +23,17 @@ public class CategoryService {
     public List<Category> getCategoryList(Long userSeq) {
 
         List<Category> result = new ArrayList<>();
-        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategoryList();
 
-        for(long categorySeq : userCategory) {
+        List<Category> Categories = categoryRepo.findAll();
+        List<Long> defaultList = new ArrayList<>();
+        for(Category category : Categories) {
+            defaultList.add(category.getSeq());
+        }
+        UserCategory defaultUser = new UserCategory(new Long(0), defaultList);
+
+        UserCategory userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseGet(()->defaultUser);
+
+        for(long categorySeq : userCategory.getCategoryList()) {
             result.add(categoryRepo.findBySeq(categorySeq));
         }
 
@@ -36,12 +44,12 @@ public class CategoryService {
     public List<Category> updateCategoryList(Long userSeq, List<Long> categories) {
 
         List<Category> result = new ArrayList<>();
+        userCategoryRepo.deleteByUserSeq(userSeq);
+        UserCategory userCategory = new UserCategory(userSeq, categories);
+        userCategoryRepo.save(userCategory);
+        UserCategory CategorySeq = userCategoryRepo.findByUserSeq(userSeq).orElseThrow();
 
-//        List<Long> defaultList = new ArrayList<>() {1, 2, 3, 4, 5, 6};
-        userCategoryRepo.findByUserSeq(userSeq).orElseThrow().setCategoryList(categories);
-        List<Long> userCategory = userCategoryRepo.findByUserSeq(userSeq).orElseThrow().getCategoryList();
-
-        for(long categorySeq : userCategory) {
+        for(long categorySeq : CategorySeq.getCategoryList()) {
             result.add(categoryRepo.findBySeq(categorySeq));
         }
 
