@@ -1,15 +1,19 @@
 package com.d202.sonmal.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.R
+import com.d202.sonmal.common.ApplicationClass
+import com.d202.sonmal.common.TFLITE_PATH
 import com.d202.sonmal.databinding.FragmentMainBinding
+import org.tensorflow.lite.Interpreter
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 
 class MainFragment : Fragment() {
 
@@ -28,6 +32,8 @@ class MainFragment : Fragment() {
 
         initView()
 
+        // Interpreter 초기화
+        ApplicationClass.interpreter = Interpreter(loadModelFile(requireActivity(), TFLITE_PATH)!!)
 
     }
 
@@ -46,11 +52,21 @@ class MainFragment : Fragment() {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
             }
             btnAddVideo.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroPost())
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroPost())
             }
         }
 
 
+    }
+
+
+    private fun loadModelFile(activity: Activity, path: String): MappedByteBuffer? {
+        val fileDescriptor = activity.assets.openFd(path)
+        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+        val fileChannel = inputStream.channel
+        val startOffset = fileDescriptor.startOffset
+        val declaredLength = fileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
 
 

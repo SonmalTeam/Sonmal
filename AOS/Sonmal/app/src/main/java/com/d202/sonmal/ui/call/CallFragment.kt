@@ -9,13 +9,10 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -29,7 +26,7 @@ import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.utils.HandsResultImageView
-import com.d202.sonmal.utils.getDeviceSize
+import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
@@ -106,16 +103,19 @@ class CallFragment : Fragment() {
             requireContext(),
             HandsOptions.builder()
                 .setStaticImageMode(true)
-                .setMaxNumHands(2)
+                .setMaxNumHands(1)
                 .setRunOnGpu(true)
                 .build()
         )
 
         // Connects MediaPipe Hands solution to the user-defined HandsResultImageView.
         hands.setResultListener { handsResult ->
-            logWristLandmark(handsResult,  /*showPixelValues=*/true)
+//            logWristLandmark(handsResult,  /*showPixelValues=*/true)
             imageView.setHandsResult(handsResult)
             requireActivity().runOnUiThread(Runnable { imageView.update() })
+            if(translate(handsResult).isNotBlank()) {
+                Log.d(TAG, "setupStaticImageModePipeline: ${translate(handsResult)}")
+            }
         }
         hands.setErrorListener { message, e ->
             Log.e(
