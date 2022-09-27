@@ -4,26 +4,19 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SignMacroRequestDto {
+public class SignMacroVideoNullDto {
 
     private String title;
     private String content;
     private String icon;
     private Long categorySeq;
 
-    private Long videoFileId;
 
     public SignMacro toEntity() {
         return SignMacro.builder()
                 .title(title)
                 .content(content)
                 .icon(icon)
-                .videoFileId(videoFileId)
                 .build();
-    }
-
-    @Builder
-    public SignMacroRequestDto (Long videoFileId){
-        this.videoFileId = videoFileId;
     }
 }
