@@ -11,7 +11,7 @@ pipeline {
                 stage('Docker build') {
                         agent any
                         steps {                                                     
-                                dir('Backend/assemble_Server'){sh 'docker build -t backimg .'}
+                                sh 'docker build -t backimg ./Backend/assemble_Server'
                         }
                 }
                 stage('Docker run') {
