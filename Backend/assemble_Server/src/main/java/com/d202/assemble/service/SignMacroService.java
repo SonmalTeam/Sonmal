@@ -6,6 +6,8 @@ import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,15 +88,17 @@ public class SignMacroService {
 
     // 매크로 리스트 조회
     @Transactional
-    public List<SignMacroResponseDto> getSignMacroList(long userSeq, long categorySeq) {
+    public PagingResult<SignMacroResponseDto> getSignMacroList(Pageable pageable, long userSeq, long categorySeq) {
 
-        List<SignMacroResponseDto> result = new ArrayList<>();
-        List<SignMacro> signMacros = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq);
+        Page<SignMacro> signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq, pageable);
+        List<SignMacroResponseDto> signMacroList = new ArrayList<>();
+//        List<SignMacro> signMacros = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq);
 
-        for (SignMacro signMacro : signMacros) {
-            result.add(new SignMacroResponseDto(signMacro));
+        for (SignMacro signMacro : signMacroPage) {
+            signMacroList.add(new SignMacroResponseDto(signMacro));
         }
 
+        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages() - 1, signMacroList);
         return result;
     }
 
