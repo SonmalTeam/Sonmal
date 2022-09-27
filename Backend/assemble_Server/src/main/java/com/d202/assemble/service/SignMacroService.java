@@ -63,6 +63,17 @@ public class SignMacroService {
         signMacroRepo.save(signMacro);
     }
 
+    public void createSignMacroVideoNull(Long userSeq, SignMacroVideoNullDto request){
+        SignMacro signMacro = request.toEntity();
+
+        Category category = categoryRepo.findBySeq(request.getCategorySeq());
+        signMacro.setCategory(category);
+        signMacro.setUserSeq(userSeq);
+        signMacro.setRegDttm(LocalDateTime.now());
+        signMacro.setCount(new Long(0));
+        signMacroRepo.save(signMacro);
+    }
+
     // 매크로 상세 조회
     @Transactional
     public SignMacroResponseDto getSignMacro(long userSeq, long signMacroSeq) {

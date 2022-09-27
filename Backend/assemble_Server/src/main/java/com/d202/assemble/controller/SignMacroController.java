@@ -1,9 +1,6 @@
 package com.d202.assemble.controller;
 
-import com.d202.assemble.dto.SignMacroRequestDto;
-import com.d202.assemble.dto.SignMacroResponseDto;
-import com.d202.assemble.dto.VideoFile;
-import com.d202.assemble.dto.VideoFileDto;
+import com.d202.assemble.dto.*;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.service.FireBaseService;
 import com.d202.assemble.service.SignMacroService;
@@ -53,6 +50,14 @@ public class SignMacroController {
     public void createSignMacro(@ApiIgnore Authentication auth, @RequestParam("file") MultipartFile file, SignMacroRequestDto request){
         long userSeq = (int)auth.getPrincipal();
         signMacroService.createSignMacro(userSeq, request, file);
+    }
+
+    // 비디오 없는 매크로 등록
+    @ApiOperation(value = "Null Video 매크로 등록")
+    @PostMapping("/videoNull")
+    public void createSignMacroVideoNull(@ApiIgnore Authentication auth, SignMacroVideoNullDto request){
+        long userSeq = (int)auth.getPrincipal();
+        signMacroService.createSignMacroVideoNull(userSeq, request);
     }
 
     // 매크로 상세조회
