@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui.macro
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.MediaController
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -34,17 +36,41 @@ class MacroVideoFragment : Fragment() {
         val args: MacroVideoFragmentArgs by navArgs()
         var videoId = args.videoSeq
 
-        if(videoId != 0) {
-                binding.macroWebview.apply {
-                    webViewClient = WebViewClient()
-                    loadUr(this,"https://d202.kro.kr/api/sign/macro/video/$videoId")
-                    settings.apply {
-                        javaScriptEnabled = true
-                        pluginState = WebSettings.PluginState.ON
-                        useWideViewPort = true
-                        loadWithOverviewMode = true
-                    }
-                }
+//        if(videoId != 0) {
+//                binding.macroWebview.apply {
+//                    webViewClient = WebViewClient()
+//                    loadUrl("https://d202.kro.kr/api/sign/macro/video/20",
+//                        mapOf("JWT-AUTHENTICATION" to ApplicationClass.mainPref.token))
+////                    loadUr(this,"https://d202.kro.kr/api/sign/macro/video/16")
+//                    settings.apply {
+//                        javaScriptEnabled = true
+//                        javaScriptCanOpenWindowsAutomatically = true
+//                        domStorageEnabled = true
+//                        webViewClient = WebViewClient()
+//                        mediaPlaybackRequiresUserGesture = false
+//                        pluginState = WebSettings.PluginState.ON
+//                        allowFileAccessFromFileURLs = true
+//                        allowUniversalAccessFromFileURLs = true
+//                        useWideViewPort = true
+//                        loadWithOverviewMode = true
+//                        loadsImagesAutomatically = true
+//                        allowFileAccess = true
+//
+//                        supportMultipleWindows()
+//                    }
+//                }
+//        }
+
+        var mediaController = MediaController(requireContext())
+        mediaController.setAnchorView(binding.vv)
+
+        var video = "https://d202.kro.kr/api/sign/macro/video/20"
+        var uriVideo = Uri.parse(video)
+        binding.vv.apply {
+            setMediaController(mediaController)
+            setVideoURI(uriVideo, mapOf("JWT-AUTHENTICATION" to ApplicationClass.mainPref.refreshToken))
+            requestFocus()
+            start()
         }
     }
 

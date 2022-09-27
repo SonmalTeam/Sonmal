@@ -1,5 +1,7 @@
 package com.d202.sonmal.ui.macro
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -80,6 +83,23 @@ class MacroCafeFragment: Fragment() {
             setVideoClickListener(object: MacroAdapter.VideoItemClickListener{
                 override fun onClick(view: View, position: Int, item: MacroDto) {
                     findNavController().navigate(MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(item.videoFileId))
+                }
+            })
+
+            setTitleClickListener(object: MacroAdapter.TitleItemClickListener {
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    // 기본 형태의 다이얼로그
+                        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+                        val builder = AlertDialog.Builder(requireContext())
+                        builder.setTitle("${item.title}")
+                            .setMessage("${item.content}")
+                            .setPositiveButton("확인",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                })
+
+                        // 다이얼로그를 띄워주기
+                        builder.show()
+
                 }
             })
         }

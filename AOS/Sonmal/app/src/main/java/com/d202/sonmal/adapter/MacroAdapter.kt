@@ -19,12 +19,16 @@ class MacroAdapter(private val itemList: List<MacroDto>): RecyclerView.Adapter<M
         val item = itemList[position]
         holder.bind(item)
 
-        holder.binding.imgSpeak.setOnClickListener {
-            speakClickListener.onClick(it, position, item)
-        }
-
-        holder.binding.imgThumbnail.setOnClickListener {
-            videoClickListener.onClick(it, position, item)
+        holder.binding.apply {
+            imgSpeak.setOnClickListener {
+                speakClickListener.onClick(it, position, item)
+            }
+            tvEmoji.setOnClickListener {
+                videoClickListener.onClick(it, position, item)
+            }
+            tvTitle.setOnClickListener {
+                titleItemClickListener.onClick(it, position, item)
+            }
         }
 
     }
@@ -53,14 +57,24 @@ class MacroAdapter(private val itemList: List<MacroDto>): RecyclerView.Adapter<M
         this.videoClickListener = itemClickListener
     }
 
+    // ItemClickListener 세팅
+    interface TitleItemClickListener { // video 재생
+        fun onClick(view: View, position: Int, item: MacroDto)
+    }
+    private lateinit var titleItemClickListener: TitleItemClickListener
+
+    fun setTitleClickListener(itemClickListener: TitleItemClickListener) {
+        this.titleItemClickListener = itemClickListener
+    }
+
 }
 
 class MacroViewHolder(val binding: ItemMacroRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: MacroDto) {
         binding.tvTitle.text = item.title
-        if(item.signSrc != null) {
-//            binding.imgThumbnail = item.icon
+        if(item.icon != null) {
+            binding.tvEmoji.text = item.icon
         }else {
 //            binding.imgThumbnail = item.signSrc
         }

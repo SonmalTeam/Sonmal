@@ -13,12 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_thumbnail"
+        <TextView
+            android:id="@+id/tv_emoji"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:src="@drawable/check"/>
+            android:gravity="center"
+            android:text="E"
+            android:textSize="40dp"/>
 
         <TextView
             android:id="@+id/tv_title"

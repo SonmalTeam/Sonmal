@@ -85,8 +85,12 @@ class LoginFragment : Fragment() {
             Log.d("jwt", "it $it")
             ApplicationClass.mainPref.token = it
             Log.d("jwt manifest에 저장 ", "it $it")
+        }
+
+        signViewModel.refreshtoken.observe(viewLifecycleOwner) {
+            Log.d("refreshtoken", "it $it")
             ApplicationClass.mainPref.refreshToken = signViewModel.refreshtoken.value
-            Log.d("refresh manifest에 저장 ", "it ${signViewModel.refreshtoken.value}")
+            Log.d("refreshtoken manifest에 저장 ", "it ${signViewModel.refreshtoken.value}")
         }
 
         signViewModel.unregisterCallBack.observe(viewLifecycleOwner) {

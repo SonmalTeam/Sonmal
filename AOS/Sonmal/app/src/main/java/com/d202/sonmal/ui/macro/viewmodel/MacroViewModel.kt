@@ -10,8 +10,12 @@ import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
 import com.d202.sonmal.utils.FormDataUtil
+import com.kakao.sdk.common.KakaoSdk.type
+import com.navercorp.nid.oauth.NidOAuthPreferencesManager.refreshToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -36,12 +40,30 @@ class MacroViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //todo userSeq, category api로 보내기
+                Log.d(TAG, "getMacroList token: ${ApplicationClass.mainPref.token}")
                 val response = Retrofit.macroApi.getMacroList(category)
-                Log.d(TAG, "response: ${response.body()}")
+                Log.d(TAG, "getMacroList response: ${response.body()}")
                 if(response.isSuccessful && response.body() != null){
                     _macroList.postValue(response.body() as MutableList<MacroDto>)
                 } else if(response.code() == 500) {
+                    runBlocking {
+                        try {
+                            Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                Log.d(TAG, "refreshToken sucess ${response.body()}")
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                getMacroList(category)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
 
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
                 } else {
                     //todo 지우기 test 용
                     val temp = mutableListOf<MacroDto>(
@@ -52,13 +74,14 @@ class MacroViewModel: ViewModel() {
                 }
 
             }catch (e: Exception){
-                Log.d(TAG, "getList: ${e.message}")
+                Log.d(TAG, "getList error: ${e.message}")
             }
         }
     }
 
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "macro add start $title $emoji")
             try {
                 val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
@@ -77,15 +100,37 @@ class MacroViewModel: ViewModel() {
                 )
 
                 if(response.isSuccessful && response.body() != null){
+                    Log.d(TAG, "macro add success")
                     _macroAddCallback.postValue(200)
+
                 } else if(response.code() == 500) {
-                    Log.d(TAG, "addMacro 500 : ${response.code()}")
+                    Log.d(TAG, "refresh")
+
+                    runBlocking {
+                        try {
+                            Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                Log.d(TAG, "refreshToken sucess ${response.body()}")
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                addMacro(title, content, category, emoji, video)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
+//                    refreshToken("getMacroList", category)
                 } else {
+                    Log.d(TAG, "addMacro fail : ${response.code()}")
                     _macroAddCallback.postValue(400)
-                    Log.d(TAG, "addMacro error : ${response.code()}")
                 }
             }catch (e: Exception) {
-                Log.d(TAG, "addMacro: ${e.message}")
+                Log.d(TAG, "addMacro error: ${e.message}")
             }
         }
 
@@ -102,13 +147,58 @@ class MacroViewModel: ViewModel() {
                 if(response.isSuccessful && response.body() != null) {
                     Log.d(TAG, "getVideo success: ${response.body()}")
                     _getVideoCallback.postValue(response.body())
+                } else if(response.code() == 500) {
+                    runBlocking {
+                        try {
+                            Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                Log.d(TAG, "refreshToken sucess ${response.body()}")
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                getVideo(videoId)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
+//                    refreshToken("getMacroList", category)
                 } else {
                     Log.d(TAG, "getVideo fail: ${response.code()}")
                 }
 
             } catch (e: Exception) {
-                Log.d(TAG, "getVideo: ${e.message}")
+                Log.d(TAG, "getVideo err: ${e.message}")
 
+            }
+        }
+    }
+
+    fun refreshToken(type: String, value: Any){
+        Log.d(TAG, "refreshToken")
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "refreshToken viewModelScope")
+            try {
+                Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
+                var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                val response = Retrofit.tokenApi.refreshToken(tokens)
+                if(response.isSuccessful && response.body() != null) {
+                    Log.d(TAG, "refreshToken sucess ${response.body()}")
+                    ApplicationClass.mainPref.token = response.body()!!.accessToken
+                    ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                    if(type == "getMacroList") {
+                        getMacroList(value as Int)
+                    }
+                } else {
+                    Log.d(TAG, "refreshToken err ${response.code()}")
+                }
+
+            } catch (e: Exception) {
+                Log.d(TAG, "e: ${e.message}")
             }
         }
     }
