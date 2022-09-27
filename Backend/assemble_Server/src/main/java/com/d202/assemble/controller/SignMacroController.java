@@ -15,6 +15,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -71,17 +73,23 @@ public class SignMacroController {
     // 매크로 리스트 조회
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
-    public List<SignMacroResponseDto> getSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
+    public ResponseEntity<?> getSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq, @PageableDefault Pageable pageable){
         long userSeq = (int)auth.getPrincipal();
-        return signMacroService.getSignMacroList(userSeq, categorySeq);
+
+        PagingResult result = signMacroService.getSignMacroList(pageable, userSeq, categorySeq);
+
+        return new ResponseEntity<PagingResult<SignMacroResponseDto>>(result, HttpStatus.OK);
     }
 
     // 매크로 사용 순 정렬
     @ApiOperation(value = "매크로 사용 순 정렬")
     @GetMapping("/sort/{categorySeq}")
-    public List<SignMacroResponseDto> sortSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq){
+    public ResponseEntity<?> sortSignMacroList(@ApiIgnore Authentication auth, @PathVariable Long categorySeq, @PageableDefault Pageable pageable){
         long userSeq = (int)auth.getPrincipal();
-        return signMacroService.sortSignMacroList(userSeq, categorySeq);
+
+        PagingResult result = signMacroService.sortSignMacroList(pageable, userSeq, categorySeq);
+
+        return new ResponseEntity<PagingResult<SignMacroResponseDto>>(result, HttpStatus.OK);
     }
 
     // 매크로 사용횟수 카운트

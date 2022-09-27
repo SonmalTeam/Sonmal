@@ -1,5 +1,10 @@
 package com.d202.assemble.config;
 
+import com.fasterxml.classmate.TypeResolver;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,9 +13,13 @@ import com.d202.assemble.jwt.JwtProperties;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -33,6 +42,9 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
+
+	private final TypeResolver typeResolver;
+
 	@Bean
 	public Docket api() {
 		final ApiInfo apiInfo = new ApiInfoBuilder()
@@ -49,6 +61,8 @@ public class SwaggerConfig {
 //		return new Docket(DocumentationType.SWAGGER_2)
 		//return new Docket(DocumentationType.OAS_30)
 		return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo)
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(Page.class)))
 				.securityContexts(Arrays.asList(securityContext()))
 				.securitySchemes(Arrays.asList(apiKey()))
 				.servers(serverLocal, testServer)
@@ -72,6 +86,14 @@ public class SwaggerConfig {
 		authorizationScopes[0] = authorizationScope;
 		return Arrays.asList(new SecurityReference(JwtProperties.JWT_ACCESS_NAME, authorizationScopes));
 	}
-	
 
+	@Getter @Setter
+	@ApiModel
+	static class Page {
+		@ApiModelProperty(value = "페이지 번호(0..N)")
+		private Integer page;
+
+		@ApiModelProperty(value = "페이지 크기", allowableValues="range[0, 100]")
+		private Integer size;
+	}
 }
