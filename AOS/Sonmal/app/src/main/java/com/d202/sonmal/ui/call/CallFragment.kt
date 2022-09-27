@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.d202.sonmal.adapter.CallMacroAdapter
+import com.d202.sonmal.adapter.MacroAdapter
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
@@ -53,6 +56,7 @@ private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
 class CallFragment : Fragment() {
     private lateinit var binding: FragmentCallBinding
     private val viewModel: CallViewModel by viewModels()
+    private lateinit var macroAdapter: CallMacroAdapter
 
     private lateinit var session: Session
     private lateinit var httpClient: CustomHttpClient
@@ -113,8 +117,9 @@ class CallFragment : Fragment() {
 //            logWristLandmark(handsResult,  /*showPixelValues=*/true)
             imageView.setHandsResult(handsResult)
             requireActivity().runOnUiThread(Runnable { imageView.update() })
-            if(translate(handsResult).isNotBlank()) {
-                Log.d(TAG, "setupStaticImageModePipeline: ${translate(handsResult)}")
+            val result = translate(handsResult)
+            if(result.isNotEmpty()) {
+                viewModel.setTranslateText(result)
             }
         }
         hands.setErrorListener { message, e ->
@@ -130,6 +135,7 @@ class CallFragment : Fragment() {
         imageView = HandsResultImageView(requireContext())
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
+        binding.tvTranslateText.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
@@ -137,24 +143,33 @@ class CallFragment : Fragment() {
     private fun initView(){
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
+        macroAdapter = CallMacroAdapter()
 
         binding.apply {
-            btnSwitchCamera.setOnClickListener {
+            lifecycleOwner = this@CallFragment
+            vm = viewModel
+
+            ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
 
-            btnExit.setOnClickListener {
+            ivCallEnd.setOnClickListener {
                 findNavController().popBackStack()
             }
 
             viewsContainer.setOnClickListener {
                 resizeView()
             }
-            btnSpeakerMode.isActivated = false
+            ivSpeakerOn.isActivated = false
 
-            btnSpeakerMode.setOnClickListener {
+            ivSpeakerOn.setOnClickListener {
                 it.isActivated = !it.isActivated
                 audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
+            }
+
+            recyclerMacro.apply {
+                adapter = macroAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }
     }

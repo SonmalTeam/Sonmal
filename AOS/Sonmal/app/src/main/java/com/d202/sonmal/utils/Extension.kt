@@ -128,10 +128,10 @@ fun translate(result : HandsResult): String{
     for(i in 1..26) {
         outputs.add(outputsFloatBuffer.get())
     }
-    Log.d(TAG, "outputs : $outputs")
+//    Log.d(TAG, "outputs : $outputs")
     val sortedOutput = outputs.sortedDescending()
     val index = outputs.indexOf(sortedOutput[0])
-    Log.d(TAG, "translate: ${classes[index]}")
+//    Log.d(TAG, "translate: ${classes[index]}")
     return classes[index]
 }
 

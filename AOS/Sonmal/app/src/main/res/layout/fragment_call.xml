@@ -1,11 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.d202.sonmal.ui.call.viewmodel.CallViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.call.CallFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/common_top"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_call_end"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_call_end"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="사용자"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_call_end"
+                android:gravity="center"
+                android:layout_marginStart="16dp"/>
+
+
+            <ImageView
+                android:id="@+id/iv_camera_switch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_camera_switch"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:padding="8dp"/>
+
+            <ImageView
+                android:id="@+id/iv_camera_off"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/selector_btn_camera"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_camera_switch"
+                android:padding="8dp" />
+
+            <ImageView
+                android:id="@+id/iv_speaker_on"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/selector_btn_speaker"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_camera_off"
+                android:padding="8dp"/>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <RelativeLayout
         android:id="@+id/views_container"
@@ -15,7 +80,7 @@
         app:layout_constraintBottom_toTopOf="@id/peer_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/common_top">
 
         <FrameLayout
             android:id="@+id/peer_container_remote"
@@ -29,6 +94,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_translate_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="안녕하세요"
+                android:text="@{vm.translateText}"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:background="@color/black"
+                android:layout_gravity="top|center"
+                android:layout_marginVertical="16dp"/>
         </FrameLayout>
 
 
@@ -41,7 +118,7 @@
             android:layout_height="200dp"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/local_gl_surface_view"
@@ -50,57 +127,24 @@
                 android:visibility="visible" />
         </FrameLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:padding="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/peer_container"
+            app:layout_constraintStart_toEndOf="@id/peer_container"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/peer_container"
-            app:layout_constraintBottom_toTopOf="@id/btn_speaker_mode">
-
-            <FrameLayout
-                android:id="@+id/iv_test"
-                android:layout_width="120dp"
-                android:layout_height="160dp"/>
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/btn_switch_camera"
-            android:layout_width="45dp"
-            android:layout_height="38dp"
-            android:layout_margin="8dp"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_speaker_mode"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="8dp"
+            >
 
-        <ImageButton
-            android:id="@+id/btn_speaker_mode"
-            android:layout_width="45dp"
-            android:layout_height="38dp"
-            android:layout_margin="8dp"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_exit"
-            app:layout_constraintStart_toEndOf="@id/btn_switch_camera" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_macro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
-        <ImageButton
-            android:id="@+id/btn_exit"
-            android:layout_width="45dp"
-            android:layout_height="38dp"
-            android:layout_margin="8dp"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/peer_container"
-            app:layout_constraintStart_toEndOf="@id/btn_speaker_mode"
-            />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
