@@ -5,7 +5,7 @@ pipeline {
 		agent any
 		steps{
 			dir('Backend/assemble_Server') {sh 'chmod +x ./gradlew'}
-			dir('Backend/assemble_Server') {sh './gradlew clean build'}
+			dir('Backend/assemble_Server') {sh './gradlew clean build --parallel'}
 		}
 	   }             
                 stage('Docker build') {
