@@ -136,6 +136,10 @@ class MacroAddFragment: Fragment() {
             // 선택
             var video: File? = videoFileSave
 
+
+            if(video == null) {
+
+            }
             macroViewmodel.addMacro(title, content, category, emoji, video)
 
 

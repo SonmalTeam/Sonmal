@@ -91,6 +91,10 @@ class MacroViewModel: ViewModel() {
 
     }
 
+    fun addMacroNull() {
+
+    }
+
     fun getVideo(videoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

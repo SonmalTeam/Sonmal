@@ -24,6 +24,9 @@ interface MacroApi {
 //        @PartMap data: HashMap<String, RequestBody>
     ): Response<Void>
 
+    @POST("sign/macro/videoNull")
+    suspend fun addMacroNull(@Body newMacro: MacroDto): Response<Void>
+
     @GET("sign/macro/video/{videoFileId}")
     suspend fun getVideo(@Path("videoFileId") videoFileId: Int): Response<String>
 
