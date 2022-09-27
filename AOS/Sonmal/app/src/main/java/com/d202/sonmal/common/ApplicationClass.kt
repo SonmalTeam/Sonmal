@@ -4,11 +4,11 @@ import android.app.Application
 import android.util.Log
 import com.d202.sonmal.model.AuthInterceptor
 import com.d202.sonmal.utils.MainSharedPreference
-import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
 import com.navercorp.nid.NaverIdLoginSDK
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.tensorflow.lite.Interpreter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,6 +18,10 @@ class ApplicationClass: Application() {
         lateinit var retrofit: Retrofit
         lateinit var mainPref: MainSharedPreference
         var jwtFlag : Boolean = true
+        lateinit var interpreter: Interpreter
+        val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
+            "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "ㅏ", "ㅐ",
+            "ㅑ", "ㅓ", "ㅔ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ")
     }
 
     override fun onCreate() {

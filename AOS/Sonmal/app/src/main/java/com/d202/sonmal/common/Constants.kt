@@ -25,6 +25,7 @@ const val naverClientId = "6YTJHyFRc4FLZnSainAW"
 const val naverClientSecret = "8OdCC5Xr_Z"
 const val naverClientName = "Sonmal"
 
+const val TFLITE_PATH = "converted_model.tflite"
 
 
 
