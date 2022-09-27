@@ -37,11 +37,11 @@ class MacroChoiceFragment: Fragment() {
         }
 
         binding.btnStore.setOnClickListener{ // store macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroStoreFragment)
+            moveToMacroListFragment()
         }
 
         binding.btnHospital.setOnClickListener{ // hospital macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroHospitalFragment)
+            moveToMacroListFragment()
         }
 
     }

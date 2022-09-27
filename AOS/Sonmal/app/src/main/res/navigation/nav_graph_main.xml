@@ -30,14 +30,8 @@
         tools:layout="@layout/fragment_macro_choice"
         android:label="MacroChoiceFragment" >
         <action
-            android:id="@+id/action_macroChoiceFragment_to_macroStoreFragment"
-            app:destination="@id/macroStoreFragment" />
-        <action
             android:id="@+id/action_macroChoiceFragment_to_macroCafeFragment"
             app:destination="@id/macroCafeFragment" />
-        <action
-            android:id="@+id/action_macroChoiceFragment_to_macroHospitalFragment"
-            app:destination="@id/macroHospitalFragment" />
         <action
             android:id="@+id/action_macroChoiceFragment_to_macroAddFragment"
             app:destination="@id/macroAddFragment" />
@@ -50,14 +44,6 @@
             android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
             app:destination="@id/macroVideoFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/macroStoreFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroStoreFragment"
-        android:label="MacroStoreFragment" />
-    <fragment
-        android:id="@+id/macroHospitalFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroHospitalFragment"
-        android:label="MacroHospitalFragment" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d202.sonmal.ui.sign.LoginFragment"
