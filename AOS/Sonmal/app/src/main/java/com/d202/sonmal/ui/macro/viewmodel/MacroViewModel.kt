@@ -1,12 +1,14 @@
 package com.d202.sonmal.ui.macro.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.dto.MacroDto
+import com.d202.sonmal.model.paging.MacroDataSource
 import com.d202.sonmal.utils.FormDataUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +16,20 @@ import java.io.File
 
 private val TAG = "MacroViewModel"
 class MacroViewModel: ViewModel() {
+
+    private val macroListPage = MutableLiveData<Int>()
+    val pagingMacroList = macroListPage.switchMap {
+        getPagingMacroList(it).cachedIn(viewModelScope)
+    }
+
+    private fun getPagingMacroList(userSeq: Int) = Pager(
+        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {MacroDataSource(Retrofit.macroApi, userSeq)}
+    ).liveData
+
+    fun getPagingMacroListValue(userSeq: Int){
+        getPagingMacroList(userSeq)
+    }
 
     private val _macroList = MutableLiveData<MutableList<MacroDto>>()
     val macroList: LiveData<MutableList<MacroDto>>

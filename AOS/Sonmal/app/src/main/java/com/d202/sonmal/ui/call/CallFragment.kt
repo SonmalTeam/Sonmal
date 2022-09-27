@@ -22,7 +22,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroAdapter
-import com.d202.sonmal.adapter.MacroAdapter
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
