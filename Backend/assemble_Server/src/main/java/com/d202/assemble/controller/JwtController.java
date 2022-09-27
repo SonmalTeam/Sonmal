@@ -97,7 +97,7 @@ public class JwtController {
 		if(userOp.isPresent()) {
 			User user = userOp.get();
 			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
-			JwtToken jwt = new JwtToken();
+			JwtToken jwt = jwtTokenService.getJwtTokenByUserSeq(user.getSeq()).orElseGet(()->new JwtToken());
 			jwt.setUserSeq(user.getSeq());
 			jwt.setAccessToken(jwtTokenDto.getAccessToken());
 			jwt.setRefreshToken(jwtTokenDto.getRefreshToken());

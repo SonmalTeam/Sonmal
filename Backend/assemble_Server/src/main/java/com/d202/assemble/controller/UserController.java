@@ -70,11 +70,12 @@ public class UserController {
 			}
 			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
 			//token저장
-			JwtToken jwtToken = new JwtToken();
+			JwtToken jwtToken = jwtTokenService.getJwtTokenByUserSeq(realUser.getSeq()).orElseGet(()->new JwtToken());
 			jwtToken.setUserSeq(realUser.getSeq());
 			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
 			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
 			jwtTokenService.changeToken(jwtToken);
+			
 			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -102,7 +103,7 @@ public class UserController {
 			}
 			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
 			//token저장
-			JwtToken jwtToken = new JwtToken();
+			JwtToken jwtToken = jwtTokenService.getJwtTokenByUserSeq(realUser.getSeq()).orElseGet(()->new JwtToken());
 			jwtToken.setUserSeq(realUser.getSeq());
 			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
 			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());

@@ -17,6 +17,10 @@ public class JwtTokenService {
 	
 	private final JwtTokenRepo jwtTokenRepo;
 	
+	public Optional<JwtToken> getJwtTokenByUserSeq(Integer userSeq) {
+		return jwtTokenRepo.findByUserSeq(userSeq);
+	}
+	
 	public JwtToken getJwtTokenByRT(String refreshToken){
 		Optional<JwtToken> token = jwtTokenRepo.findByRefreshToken(refreshToken);
 		if(token.isPresent()) {
@@ -27,6 +31,7 @@ public class JwtTokenService {
 	
 	@Transactional
 	public JwtToken changeToken(JwtToken jwt) {
+		System.out.println(jwt);
 		return jwtTokenRepo.save(jwt);
 	}
 }
