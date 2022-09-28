@@ -61,13 +61,13 @@ public class SignMacroService {
             String filePath = savePath + "/" + filename + ".mp4";
             file.transferTo(new File(filePath));
 
-            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
-            try {
-                Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
-            }
+//            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
+//            try {
+//                Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
+//            }
 
 //            try {
 //                Files.copy(Path.of(filePath), Paths.get(resourcePath + filename));
@@ -79,7 +79,8 @@ public class SignMacroService {
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
             videoFileDto.setFilename(filename);
-            videoFileDto.setFilePath(uploadURL + filename + ".mp4");
+//            videoFileDto.setFilePath(uploadURL + filename + ".mp4");
+            videoFileDto.setFilePath(filePath);
 
             Long videoFileId = videoFileService.saveFile(videoFileDto);
             request.setVideoFileId(videoFileId);
