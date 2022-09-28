@@ -56,8 +56,13 @@ public class SignMacroService {
 //                }
 //            }
 
-            String filePath = resourcePath + filename + ".mp4";
-            file.transferTo(new File(filePath));
+            String filePathSt = resourcePath + filename + ".mp4";
+            Path filePath = Paths.get(filePathSt);
+            try {
+                file.transferTo(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 //            Path fileResource = Paths.get(resourcePath + filename + ".mp4");
 //            try {
