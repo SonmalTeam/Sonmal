@@ -25,6 +25,10 @@
         <action
             android:id="@+id/action_mainFragment_to_signLangFragment"
             app:destination="@id/signLangFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_voiceFragment"
+            app:destination="@id/voiceFragment" />
+
     </fragment>
 
     <fragment
@@ -79,6 +83,12 @@
         android:id="@+id/signLangFragment"
         android:name="com.d202.sonmal.ui.signlang.SignLangFragment"
         android:label="SignLangFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/voiceFragment"
+        android:name="com.d202.sonmal.ui.voice.VoiceFragment"
+        android:label="VoiceFragment">
 
     </fragment>
 </navigation>
