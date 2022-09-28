@@ -32,7 +32,7 @@ public class SignMacroService {
 
     @Value("${resource.path}")
     private String resourcePath;
-    private final String uploadURL = "/home/ubuntu/docker-volume/jenkins/workspace/files/";
+    private final String uploadURL = "/home/ubuntu/files/";
 
     // video 매크로 등록
     @Transactional
