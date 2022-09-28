@@ -61,7 +61,7 @@ public class SignMacroService {
             String filePath = savePath + "/" + filename + ".mp4";
             file.transferTo(new File(filePath));
 
-            Path copyOfLocation = Paths.get(uploadURL + file.getOriginalFilename() + ".mp4");
+            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
             try {
                 Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
