@@ -75,7 +75,7 @@ public class SignMacroService {
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
             videoFileDto.setFilename(filename);
-            videoFileDto.setFilePath(filePath);
+            videoFileDto.setFilePath(filePathSt);
 
             Long videoFileId = videoFileService.saveFile(videoFileDto);
             request.setVideoFileId(videoFileId);
