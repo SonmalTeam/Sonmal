@@ -31,7 +31,7 @@ public class SignMacroService {
     private final VideoFileService videoFileService;
 
     @Value("${resource.path}")
-    private final String resourcePath;
+    private String resourcePath;
 
     // video 매크로 등록
     @Transactional
