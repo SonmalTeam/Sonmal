@@ -35,8 +35,8 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    @Value("${resource.path}")
-    private String resourcePath;
+//    @Value("${resource.path}")
+//    private String resourcePath;
 
     private final String uploadURL = "/home/ubuntu/files/";
 
@@ -58,10 +58,10 @@ public class SignMacroService {
                 }
             }
 
-            String filePath = savePath + "/" + filename;
+            String filePath = savePath + "/" + filename + ".mp4";
             file.transferTo(new File(filePath));
 
-            Path copyOfLocation = Paths.get(resourcePath + file.getOriginalFilename());
+            Path copyOfLocation = Paths.get(uploadURL + file.getOriginalFilename() + ".mp4");
             try {
                 Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
@@ -79,7 +79,7 @@ public class SignMacroService {
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
             videoFileDto.setFilename(filename);
-            videoFileDto.setFilePath(resourcePath + filename);
+            videoFileDto.setFilePath(uploadURL + filename + ".mp4");
 
             Long videoFileId = videoFileService.saveFile(videoFileDto);
             request.setVideoFileId(videoFileId);
@@ -99,7 +99,7 @@ public class SignMacroService {
     // 비디오 재생
     public String videoRegion(long videoFileId) {
         String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
-        String path = resourcePath + fileName + ".mp4";
+        String path = uploadURL + fileName + ".mp4";
 
         return path;
     }
