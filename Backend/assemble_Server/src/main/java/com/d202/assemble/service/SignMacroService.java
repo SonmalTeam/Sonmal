@@ -6,8 +6,11 @@ import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,13 +30,17 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    // 매크로 등록
+    @Value("${resource.path}")
+    private String resourcePath;
+
+    // video 매크로 등록
     @Transactional
     public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile file){
         try {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-            String savePath = "/files";
+            String savePath = resourcePath + "/files";
+
             if (!new File(savePath).exists()) {
                 try{
                     new File(savePath).mkdir();
@@ -65,6 +72,15 @@ public class SignMacroService {
         signMacroRepo.save(signMacro);
     }
 
+    // 비디오 재생
+    public String videoRegion(long videoFileId) {
+        String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
+        String path = resourcePath + "/files/" + fileName + ".mp4";
+
+        return path;
+    }
+
+    // 매크로 등록
     public void createSignMacroVideoNull(Long userSeq, SignMacroVideoNullDto request){
         SignMacro signMacro = request.toEntity();
 
