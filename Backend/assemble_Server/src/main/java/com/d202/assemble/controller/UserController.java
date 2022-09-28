@@ -21,8 +21,10 @@ import com.d202.assemble.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import springfox.documentation.annotations.ApiIgnore;
 
+@Log4j2
 @Api(value="User")
 @RestController
 @RequestMapping("/user")
@@ -35,7 +37,8 @@ public class UserController {
 	
 	@ApiOperation(value="회원정보 상세 조회")
 	@GetMapping("/detail")
-	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){	
+	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){
+		log.info("회원정보 상세조회");
 		int seq = (int)auth.getPrincipal();
 		Optional<User> userOp = userService.findUserBySeq(seq);
 		if(userOp.isPresent()) {

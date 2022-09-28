@@ -14,11 +14,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.d202.assemble.jwt.JwtRequestFilter;
+import com.d202.assemble.filter.CustomAccessDeniedHandler;
+import com.d202.assemble.filter.CustomAuthenticationEntryPoint;
+import com.d202.assemble.filter.ExceptionHandlerFilter;
+import com.d202.assemble.filter.JwtRequestFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	private final ExceptionHandlerFilter exceptionHandlerFilter;
+	private final JwtRequestFilter jwtRequestFilter;
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -27,7 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
+		http.exceptionHandling()
+		.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+//		.accessDeniedHandler(new CustomAccessDeniedHandler());
 		
 		http.authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/user").authenticated()
