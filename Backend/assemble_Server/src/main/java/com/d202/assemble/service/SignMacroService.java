@@ -63,7 +63,7 @@ public class SignMacroService {
 
 
             try {
-                Files.copy(Path.of(filePath), Path.of(resourcePath));
+                Files.copy(Path.of(filePath), Paths.get(resourcePath + filename));
             } catch (IOException e) {
                 e.printStackTrace();
             }
