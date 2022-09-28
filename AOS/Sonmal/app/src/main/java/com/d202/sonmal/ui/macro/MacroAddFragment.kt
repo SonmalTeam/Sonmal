@@ -127,20 +127,20 @@ class MacroAddFragment: Fragment() {
             }
 
             Log.d(TAG, "macro add start")
+
+
             // 필수
             var title = binding.etTitle.text.toString()
             var content = binding.etContent.text.toString()
             var category = "1"
             var emoji = this.emoji // todo emoji
 
-            // 선택
-            var video: File? = videoFileSave
+            if(videoUri != null) {
+                // 선택
+                var video: File? = videoFileSave
 
-
-            if(video == null) {
-
+                macroViewmodel.addMacro(title, content, category, emoji, video)
             }
-            macroViewmodel.addMacro(title, content, category, emoji, video)
 
 
         }

@@ -8,4 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_blue">#0000FF</color>
+
+    <!-- 손말 Color Palette -->
+    <color name="sonmal_main">#20B2AA</color>
+    <color name="sonmal_main_dark">#008478</color>
+    <color name="sonmal_main_light">#AADDDB</color>
+    <color name="sonmal_action_red">#C12A32</color>
+    <color name="sonmal_action_red_light">#EA5459</color>
+    <color name="sonmal_action_green">#6FC8C4</color>
+    <color name="sonmal_gray_800">#434343</color>
+
 </resources>

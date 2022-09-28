@@ -37,8 +37,9 @@ class ApplicationClass: Application() {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor { chain: Interceptor.Chain ->
                 val original = chain.request()
-                if (original.url.encodedPath.equals("/api/user/kakao/login", false)
+                if (original.url.encodedPath.equals("/api/user/kakao/login", true)
                     || original.url.encodedPath.equals("/api/user/naver/login", true)
+                    || original.url.encodedPath.equals("/api/jwt/refresh", true)
                 ) {
                     Log.d("jwt","jwt 없음")
                     chain.proceed(original)

@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.model.Retrofit
+import com.d202.sonmal.model.dto.TokenDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "SignViewModel"
 class SignViewModel: ViewModel() {
@@ -103,7 +105,24 @@ class SignViewModel: ViewModel() {
                         _unregisterCallBack.postValue(true)
                     }
                     else if(it.code() == 500) {
-                        Log.d(TAG, "unregister 실패 500")
+                        runBlocking {
+                            try {
+                                Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
+                                var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                                val response = Retrofit.tokenApi.refreshToken(tokens)
+                                if(response.isSuccessful && response.body() != null) {
+                                    Log.d(TAG, "refreshToken sucess ${response.body()}")
+                                    ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                    ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                    unregister()
+                                } else {
+                                    Log.d(TAG, "refreshToken err ${response.code()}")
+                                }
+
+                            } catch (e: Exception) {
+                                Log.d(TAG, "e: ${e.message}")
+                            }
+                        }
                     } else {
                         Log.d(TAG, "unregister 실패 error ${it.code()}")
 
