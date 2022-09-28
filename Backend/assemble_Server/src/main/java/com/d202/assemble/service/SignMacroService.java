@@ -32,6 +32,7 @@ public class SignMacroService {
 
     @Value("${resource.path}")
     private String resourcePath;
+    private final String uploadURL = "/home/ubuntu/docker-volume/jenkins/workspace/files/";
 
     // video 매크로 등록
     @Transactional
@@ -39,17 +40,18 @@ public class SignMacroService {
         try {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-            String savePath = resourcePath;
+//            String savePath = resourcePath;
 
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
-                }
-                catch(Exception e){
-                    e.getStackTrace();
-                }
-            }
-            String filePath = savePath + filename + ".mp4";
+//            if (!new File(savePath).exists()) {
+//                try{
+//                    new File(savePath).mkdir();
+//                }
+//                catch(Exception e){
+//                    e.getStackTrace();
+//                }
+//            }
+
+            String filePath = uploadURL + filename + ".mp4";
             file.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
