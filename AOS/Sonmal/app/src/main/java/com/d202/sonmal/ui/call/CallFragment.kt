@@ -9,13 +9,10 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -23,13 +20,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.d202.sonmal.adapter.CallMacroAdapter
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.utils.HandsResultImageView
-import com.d202.sonmal.utils.getDeviceSize
+import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
@@ -56,6 +55,7 @@ private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
 class CallFragment : Fragment() {
     private lateinit var binding: FragmentCallBinding
     private val viewModel: CallViewModel by viewModels()
+    private lateinit var macroAdapter: CallMacroAdapter
 
     private lateinit var session: Session
     private lateinit var httpClient: CustomHttpClient
@@ -106,16 +106,20 @@ class CallFragment : Fragment() {
             requireContext(),
             HandsOptions.builder()
                 .setStaticImageMode(true)
-                .setMaxNumHands(2)
+                .setMaxNumHands(1)
                 .setRunOnGpu(true)
                 .build()
         )
 
         // Connects MediaPipe Hands solution to the user-defined HandsResultImageView.
         hands.setResultListener { handsResult ->
-            logWristLandmark(handsResult,  /*showPixelValues=*/true)
+//            logWristLandmark(handsResult,  /*showPixelValues=*/true)
             imageView.setHandsResult(handsResult)
             requireActivity().runOnUiThread(Runnable { imageView.update() })
+            val result = translate(handsResult)
+            if(result.isNotEmpty()) {
+                viewModel.setTranslateText(result)
+            }
         }
         hands.setErrorListener { message, e ->
             Log.e(
@@ -130,6 +134,7 @@ class CallFragment : Fragment() {
         imageView = HandsResultImageView(requireContext())
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
+        binding.tvTranslateText.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
@@ -137,24 +142,33 @@ class CallFragment : Fragment() {
     private fun initView(){
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
+        macroAdapter = CallMacroAdapter()
 
         binding.apply {
-            btnSwitchCamera.setOnClickListener {
+            lifecycleOwner = this@CallFragment
+            vm = viewModel
+
+            ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
 
-            btnExit.setOnClickListener {
+            ivCallEnd.setOnClickListener {
                 findNavController().popBackStack()
             }
 
             viewsContainer.setOnClickListener {
                 resizeView()
             }
-            btnSpeakerMode.isActivated = false
+            ivSpeakerOn.isActivated = false
 
-            btnSpeakerMode.setOnClickListener {
+            ivSpeakerOn.setOnClickListener {
                 it.isActivated = !it.isActivated
                 audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
+            }
+
+            recyclerMacro.apply {
+                adapter = macroAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }
     }

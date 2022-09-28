@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d202.sonmal.model.dto.MacroDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,6 +15,13 @@ import org.webrtc.SurfaceViewRenderer
 private const val RECOGNIZE_INTERVAL = 100L
 private const val TAG ="CallViewModel"
 class CallViewModel: ViewModel() {
+
+    private val _macroList = MutableLiveData<List<MacroDto>>()
+    val macroList : LiveData<List<MacroDto>>
+        get() = _macroList
+    fun getMacroList(){
+
+    }
 
     private val _surfaceViewRenderer = MutableLiveData<SurfaceViewRenderer>()
     val surfaceViewRenderer: LiveData<SurfaceViewRenderer>
@@ -38,5 +46,12 @@ class CallViewModel: ViewModel() {
                 }, 1.0f)
             }
         }
+    }
+
+    private val _translateText = MutableLiveData<String>("")
+    val translateText: LiveData<String>
+        get() = _translateText
+    fun setTranslateText(text: String){
+        _translateText.postValue(text)
     }
 }
