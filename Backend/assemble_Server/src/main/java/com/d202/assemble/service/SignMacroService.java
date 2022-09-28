@@ -56,7 +56,7 @@ public class SignMacroService {
 //                }
 //            }
 
-            String filePathSt = resourcePath + filename + ".mp4";
+            String filePathSt = resourcePath + filename;
             Path filePath = Paths.get(filePathSt);
             try {
                 file.transferTo(filePath);
