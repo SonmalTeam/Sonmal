@@ -58,7 +58,7 @@ public class SignMacroService {
                 }
             }
 
-            String filePath = savePath + filename;
+            String filePath = savePath + "/" + filename;
             file.transferTo(new File(filePath));
 
 
