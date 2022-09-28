@@ -57,15 +57,15 @@ public class SignMacroService {
 //            }
 
             String filePath = resourcePath + filename + ".mp4";
-//            file.transferTo(new File(filePath));
+            file.transferTo(new File(filePath));
 
-            Path fileResource = Paths.get(resourcePath + filename + ".mp4");
-            try {
-                Files.copy(file.getInputStream(), fileResource, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
-            }
+//            Path fileResource = Paths.get(resourcePath + filename + ".mp4");
+//            try {
+//                Files.copy(file.getInputStream(), fileResource, StandardCopyOption.REPLACE_EXISTING);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
+//            }
 
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
