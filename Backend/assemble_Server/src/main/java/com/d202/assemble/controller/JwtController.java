@@ -42,49 +42,11 @@ public class JwtController {
 		if(requestToken.getAccessToken()==null || requestToken.getRefreshToken()==null) {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
-		
-		//1. access token만료 확인
-		boolean expired = false;
-		try {
-			JwtUtils.validateToken(accessToken);
-		} catch (Exception e) {//만료됨
-			expired = true;
-		}
-		//만료 안됐으면 refresh 불가
-		if(!expired) {
+		//---
+		JwtTokenDto jwtTokenDto = jwtTokenService.refreshToken(accessToken, refreshToken);
+		if(jwtTokenDto==null) {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
-		
-		//2. refresh token 유효성 확인
-		try{
-			JwtUtils.validateToken(refreshToken);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-		}
-		
-		JwtToken jwtToken = jwtTokenService.getJwtTokenByRT(refreshToken);
-		if(jwtToken==null || !accessToken.equals(jwtToken.getAccessToken())) {
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-		}
-		
-		//3. access token & refresh token 재발급 후, 저장
-		int seq = Integer.parseInt(JwtUtils.getUserSeq(refreshToken));
-		Optional<User> userOp = userService.findUserBySeq(seq);
-		if(!userOp.isPresent()) {
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-		}
-		
-		User user = userOp.get();
-		String newAt = JwtUtils.createAccessToken(user);
-		String newRt = JwtUtils.createRefreshToken(user);
-		jwtToken.setAccessToken(newAt);
-		jwtToken.setRefreshToken(newRt);
-		jwtTokenService.changeToken(jwtToken);
-		
-		//4. return
-		JwtTokenDto jwtTokenDto = new JwtTokenDto(newAt, newRt);
-		
 		return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 	}
 	

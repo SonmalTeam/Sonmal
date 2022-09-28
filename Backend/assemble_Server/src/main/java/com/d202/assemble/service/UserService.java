@@ -13,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.d202.assemble.dto.JwtToken;
+import com.d202.assemble.dto.JwtTokenDto;
 import com.d202.assemble.dto.User;
+import com.d202.assemble.jwt.JwtUtils;
+import com.d202.assemble.repo.JwtTokenRepo;
 import com.d202.assemble.repo.UserRepo;
 
 import lombok.RequiredArgsConstructor;
@@ -28,10 +33,33 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	
 	private final UserRepo userRepo;
+	private final JwtTokenRepo jwtTokenRepo;
 	
 	@Transactional
-	public User insertUser(User user) {
-		return userRepo.save(user);
+	public JwtTokenDto loginUser(String email) {
+		//가입된 유저인지 확인
+		Optional<User> userOp = userRepo.findByEmail(email);
+		User realUser = null;
+		if(!userOp.isPresent()) {//가입안 된 user면 => DB save
+			User user = new User();
+			user.setEmail(email);
+			realUser = userRepo.save(user);
+			if(realUser == null) {
+				return null;
+			}
+		}
+		else {
+			realUser = userOp.get();
+		}
+		JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
+		//token저장
+		
+		JwtToken jwtToken = jwtTokenRepo.findByUserSeq(realUser.getSeq()).orElseGet(()->new JwtToken());
+		jwtToken.setUserSeq(realUser.getSeq());
+		jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
+		jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
+		jwtTokenRepo.save(jwtToken);
+		return jwtTokenDto;
 	}
 	
 	public Optional<User> findUserBySeq(int seq){
