@@ -51,7 +51,7 @@ public class SignMacroService {
 //                }
 //            }
 
-            String filePath = uploadURL + filename + ".mp4";
+            String filePath = resourcePath + filename + ".mp4";
             file.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
