@@ -39,7 +39,7 @@ public class SignMacroService {
         try {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-            String savePath = resourcePath + "files";
+            String savePath = resourcePath;
 
             if (!new File(savePath).exists()) {
                 try{
@@ -49,7 +49,7 @@ public class SignMacroService {
                     e.getStackTrace();
                 }
             }
-            String filePath = savePath + "/" + filename + ".mp4";
+            String filePath = savePath + filename + ".mp4";
             file.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
@@ -75,7 +75,7 @@ public class SignMacroService {
     // 비디오 재생
     public String videoRegion(long videoFileId) {
         String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
-        String path = resourcePath + "files/" + fileName + ".mp4";
+        String path = resourcePath + fileName + ".mp4";
 
         return path;
     }
