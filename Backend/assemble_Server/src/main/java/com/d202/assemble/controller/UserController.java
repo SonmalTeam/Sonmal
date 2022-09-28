@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.d202.assemble.dto.JwtToken;
 import com.d202.assemble.dto.JwtTokenDto;
 import com.d202.assemble.dto.User;
-import com.d202.assemble.jwt.JwtUtils;
 import com.d202.assemble.service.JwtTokenService;
 import com.d202.assemble.service.UserService;
 
@@ -37,9 +35,7 @@ public class UserController {
 	
 	@ApiOperation(value="회원정보 상세 조회")
 	@GetMapping("/detail")
-	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){
-//	public ResponseEntity<?> getUserDetail(){
-		
+	public ResponseEntity<?> getUserDetail(@ApiIgnore Authentication auth){	
 		int seq = (int)auth.getPrincipal();
 		Optional<User> userOp = userService.findUserBySeq(seq);
 		if(userOp.isPresent()) {
@@ -54,29 +50,10 @@ public class UserController {
 		Map<String, Object> userInfo = userService.getNaverUserInfo(token);
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
-			//가입된 유저인지 확인
-			Optional<User> userOp = userService.findUserByEmail(email);
-			User realUser = null;
-			if(!userOp.isPresent()) {//가입안 된 user면 => DB save
-				User user = new User();
-				user.setEmail(userInfo.get("email").toString());
-				realUser = userService.insertUser(user);
-				if(realUser == null) {
-					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-				}
+			JwtTokenDto jwtTokenDto = userService.loginUser(email);
+			if(jwtTokenDto!=null) {
+				return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 			}
-			else {
-				realUser = userOp.get();
-			}
-			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
-			//token저장
-			JwtToken jwtToken = jwtTokenService.getJwtTokenByUserSeq(realUser.getSeq()).orElseGet(()->new JwtToken());
-			jwtToken.setUserSeq(realUser.getSeq());
-			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
-			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
-			jwtTokenService.changeToken(jwtToken);
-			
-			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
@@ -87,28 +64,10 @@ public class UserController {
 		Map<String, Object> userInfo = userService.getKakaoUserInfo(token);
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
-			//가입된 유저인지 확인
-			Optional<User> userOp = userService.findUserByEmail(email);
-			User realUser = null;
-			if(!userOp.isPresent()) {//가입안 된 user면 => DB save
-				User user = new User();
-				user.setEmail(userInfo.get("email").toString());
-				realUser = userService.insertUser(user);
-				if(realUser == null) {
-					return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-				}
+			JwtTokenDto jwtTokenDto = userService.loginUser(email);
+			if(jwtTokenDto!=null) {
+				return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 			}
-			else {
-				realUser = userOp.get();
-			}
-			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(realUser), JwtUtils.createRefreshToken(realUser));
-			//token저장
-			JwtToken jwtToken = jwtTokenService.getJwtTokenByUserSeq(realUser.getSeq()).orElseGet(()->new JwtToken());
-			jwtToken.setUserSeq(realUser.getSeq());
-			jwtToken.setAccessToken(jwtTokenDto.getAccessToken());
-			jwtToken.setRefreshToken(jwtTokenDto.getRefreshToken());
-			jwtTokenService.changeToken(jwtToken);
-			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
