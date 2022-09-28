@@ -32,6 +32,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 
 
+private val TAG = "MacroAddFragment"
 class MacroAddFragment: Fragment() {
     private lateinit var binding: FragmentMacroAddBinding
     private val macroViewmodel: MacroViewModel by viewModels()
@@ -117,16 +118,29 @@ class MacroAddFragment: Fragment() {
         }
 
         binding.btnAdd.setOnClickListener {
+
+            if(binding.etTitle.text.toString() == null ||
+                binding.etContent.text.toString() == null ||
+                binding.tvEmoji.text == null) {
+                Toast.makeText(requireContext(), "제목, 내용, 아이콘 입력 필요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            Log.d(TAG, "macro add start")
+
+
             // 필수
-            var title = "title이다."
-            var content = "글자 수는?"
-            var category = "cafe"
+            var title = binding.etTitle.text.toString()
+            var content = binding.etContent.text.toString()
+            var category = "1"
             var emoji = this.emoji // todo emoji
 
-            // 선택
-            var video: File? = videoFileSave
+            if(videoUri != null) {
+                // 선택
+                var video: File? = videoFileSave
 
-            macroViewmodel.addMacro(title, content, category, emoji, video)
+                macroViewmodel.addMacro(title, content, category, emoji, video)
+            }
 
 
         }
@@ -138,8 +152,8 @@ class MacroAddFragment: Fragment() {
 
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
-            binding.tvEmoji.text = it
-            Log.d("emoji", "$it")
+            Log.d(TAG, "macro add 결과 $it")
+//            binding.tvEmoji.text = "성공"
         }
     }
 
