@@ -16,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +57,15 @@ public class SignMacroService {
 //            }
 
             String filePath = resourcePath + filename + ".mp4";
-            file.transferTo(new File(filePath));
+//            file.transferTo(new File(filePath));
+
+            Path fileResource = Paths.get(resourcePath + filename + ".mp4");
+            try {
+                Files.copy(file.getInputStream(), fileResource, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
+            }
 
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
