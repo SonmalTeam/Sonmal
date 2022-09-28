@@ -37,6 +37,7 @@ public class SignMacroService {
 
     @Value("${resource.path}")
     private String resourcePath;
+
     private final String uploadURL = "/home/ubuntu/files/";
 
     // video 매크로 등록
@@ -45,21 +46,24 @@ public class SignMacroService {
         try {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-//            String savePath = resourcePath;
 
-//            if (!new File(savePath).exists()) {
-//                try{
-//                    new File(savePath).mkdir();
-//                }
-//                catch(Exception e){
-//                    e.getStackTrace();
-//                }
-//            }
+            String savePath = "/files";
 
-            String filePathSt = resourcePath + filename;
-            Path filePath = Paths.get(filePathSt);
+            if (!new File(savePath).exists()) {
+                try{
+                    new File(savePath).mkdir();
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
+
+            String filePath = savePath + filename;
+            file.transferTo(new File(filePath));
+
+
             try {
-                file.transferTo(filePath);
+                Files.copy(Path.of(filePath), Path.of(resourcePath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -75,7 +79,7 @@ public class SignMacroService {
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
             videoFileDto.setFilename(filename);
-            videoFileDto.setFilePath(filePathSt);
+            videoFileDto.setFilePath(resourcePath + filename);
 
             Long videoFileId = videoFileService.saveFile(videoFileDto);
             request.setVideoFileId(videoFileId);
