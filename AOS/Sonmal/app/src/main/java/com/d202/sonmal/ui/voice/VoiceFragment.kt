@@ -52,7 +52,8 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                         }
 
                     })
-                    recordingDialogFragment.show(childFragmentManager, "recording")
+                    findNavController().navigate(VoiceFragmentDirections.actionVoiceFragmentToMacroBottomSheet())
+                    //recordingDialogFragment.show(childFragmentManager, "recording")
                 }
             }
 

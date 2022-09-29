@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -89,6 +89,21 @@
         android:id="@+id/voiceFragment"
         android:name="com.d202.sonmal.ui.voice.VoiceFragment"
         android:label="VoiceFragment">
+        <action
+            android:id="@+id/action_voiceFragment_to_macroBottomSheet"
+            app:destination="@id/macroBottomSheet"
+            app:enterAnim="@anim/translate_up" />
+        <action
+            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"
+            app:destination="@id/macroCafeFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/macroBottomSheet"
+        android:name="com.d202.sonmal.ui.voice.MacroBottomSheet"
+        android:label="MacroBottomSheet">
+<!--        <action-->
+<!--            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"-->
+<!--            app:destination="@id/macroCafeFragment" />-->
     </fragment>
 </navigation>
