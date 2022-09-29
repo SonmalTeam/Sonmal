@@ -89,13 +89,7 @@ class MacroCafeFragment: Fragment() {
 
     private fun initView() {
 
-        binding.apply {
-            ivBack.setOnClickListener {
-                parentFragmentManager.beginTransaction().remove(this@MacroCafeFragment).commit()
-            }
-        }
-
-        this.pagingAdapter = MacroPagingAdapter(requireActivity())
+        this.pagingAdapter = MacroPagingAdapter()
 
 //        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
 //            override fun onClick(story: Story) {

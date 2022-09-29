@@ -72,6 +72,7 @@ class CallViewModel: ViewModel() {
     val chatList : LiveData<MutableList<Chat>>
         get() = _chatList
     fun initFirebaseDatabase(userName: String){
+        _db.removeValue()
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chattingItem = snapshot.getValue(Chat::class.java)!!
@@ -79,7 +80,6 @@ class CallViewModel: ViewModel() {
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
                     _chatList.postValue(_chatList.value)
-                    Log.d(TAG, "onChildAdded: ${chattingItem}")
                 }
             }
             @RequiresApi(Build.VERSION_CODES.N)
@@ -97,10 +97,10 @@ class CallViewModel: ViewModel() {
         _db.addChildEventListener(childEventListener)
     }
 
-    fun sendMessage(message: String){
+    fun sendMessage(message: String, userName: String){
         if(message.isNotEmpty()){
             viewModelScope.launch(Dispatchers.IO) {
-                _db.push().setValue(Chat("", "test2", message))
+                _db.push().setValue(Chat("", userName, message))
             }
         }
     }
