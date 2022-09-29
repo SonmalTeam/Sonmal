@@ -2,15 +2,13 @@ package com.d202.sonmal.ui.macro.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
-import androidx.paging.liveData
+import androidx.paging.*
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
 import com.d202.sonmal.model.paging.MacroDataSource
+import com.d202.sonmal.model.paging.PagingResult
 import com.d202.sonmal.utils.FormDataUtil
 import com.kakao.sdk.common.KakaoSdk.type
 import com.navercorp.nid.oauth.NidOAuthPreferencesManager.refreshToken
@@ -33,8 +31,20 @@ class MacroViewModel: ViewModel() {
 
     fun getPagingMacroListValue(categorySeq: Int){ // seq를 입력하면 Pager 데이터로 변환
         Log.d(TAG, "getPagingMacroListValue viewmodel getPagingMacroList 호출")
-        getPagingMacroList(categorySeq)
+        macroListPage.postValue(categorySeq)
+
     }
+
+    private fun getPagingMacroList(categorySeq: Int) =
+         Pager( // Pager로 데이터 변환
+            config = PagingConfig(pageSize = 3, maxSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = {
+                Log.d(TAG, "pagingSourceFactory")
+                MacroDataSource(Retrofit.macroApi, categorySeq)
+            }
+        ).liveData
+
+
 
     private val _macroList = MutableLiveData<MutableList<MacroDto>>()
     val macroList: LiveData<MutableList<MacroDto>>
@@ -49,13 +59,6 @@ class MacroViewModel: ViewModel() {
         get() = _getVideoCallback
 
 
-    private fun getPagingMacroList(categorySeq: Int) = Pager( // Pager로 데이터 변환
-        config = PagingConfig(pageSize = 3, maxSize = 20, enablePlaceholders = false),
-        pagingSourceFactory = {
-            Log.d(TAG, "pagingSourceFactory")
-            MacroDataSource(Retrofit.macroApi, categorySeq)
-        }
-    ).liveData
 
 
     fun getMacroList(category: Int) { // 카테고리의 매크로 전체 리스트 불러오기

@@ -14,6 +14,10 @@ import retrofit2.Response
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 1
 class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int): PagingSource<Int, MacroDto>() {
+    init {
+        Log.d(TAG, "MacroDataSource init")
+
+    }
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
             Log.d(TAG, "MacroDataSource Load1")
