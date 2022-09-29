@@ -1,29 +1,23 @@
 package com.d202.assemble.service;
 
+
 import com.d202.assemble.dto.*;
 import com.d202.assemble.repo.CategoryRepo;
 import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -39,6 +33,7 @@ public class SignMacroService {
 //    private String resourcePath;
 
     private final String uploadURL = "/home/ubuntu/files/";
+//    private final String uploadURL = "D:\\DATA\\video";
 
     // video 매크로 등록
     @Transactional
@@ -47,8 +42,7 @@ public class SignMacroService {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
 
-            String savePath = "/files";
-
+            String savePath = uploadURL;
             if (!new File(savePath).exists()) {
                 try{
                     new File(savePath).mkdir();
@@ -57,9 +51,9 @@ public class SignMacroService {
                     e.getStackTrace();
                 }
             }
-
-            String filePath = savePath + "/" + filename + ".mp4";
+            String filePath = uploadURL + "/" + filename + ".mp4";
             file.transferTo(new File(filePath));
+
 
 //            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
 //            try {
@@ -79,7 +73,6 @@ public class SignMacroService {
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
             videoFileDto.setFilename(filename);
-//            videoFileDto.setFilePath(uploadURL + filename + ".mp4");
             videoFileDto.setFilePath(filePath);
 
             Long videoFileId = videoFileService.saveFile(videoFileDto);
@@ -100,7 +93,8 @@ public class SignMacroService {
     // 비디오 재생
     public String videoRegion(long videoFileId) {
         String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
-        String path = uploadURL + fileName + ".mp4";
+        String path = uploadURL + "/" + fileName + ".mp4";
+//        String path = "/files/" + fileName + ".mp4";
 
         return path;
     }
