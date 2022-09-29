@@ -54,7 +54,9 @@ class MainFragment : Fragment() {
             btnSignLang.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
             }
-
+            btnVoiceTranslate.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
+            }
         }
     }
 
