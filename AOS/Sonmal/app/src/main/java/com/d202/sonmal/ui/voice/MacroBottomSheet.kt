@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.BottomSheetMacroLayoutBinding
 import com.d202.sonmal.ui.macro.MacroChoiceFragmentDirections
+import com.d202.sonmal.ui.macro.MacroListFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MacroBottomSheet: BottomSheetDialogFragment() {
@@ -64,7 +66,9 @@ class MacroBottomSheet: BottomSheetDialogFragment() {
     private fun moveTo(where: Place) {
         when(where) {
             Place.Cafe -> findNavController().navigate(VoiceFragmentDirections.actionMacroBottomSheetToMacroCafeFragment())
-            Place.Hospital -> {}
+            Place.Hospital -> {
+                childFragmentManager.beginTransaction().replace(R.id.container, MacroListFragment()).commit()
+            }
             Place.Public -> {}
             Place.Store -> {}
             Place.Restaurant -> {}
