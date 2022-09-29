@@ -51,8 +51,12 @@ class MainFragment : Fragment() {
             btnVideo.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
             }
-
-
+            btnSignLang.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
+            }
+            btnVoiceTranslate.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
+            }
         }
     }
 

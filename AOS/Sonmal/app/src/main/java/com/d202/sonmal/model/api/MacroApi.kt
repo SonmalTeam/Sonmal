@@ -14,8 +14,8 @@ interface MacroApi {
     @GET("sign/macro/category/{categorySeq}")
     suspend fun getMacroList(@Path("categorySeq") categorySeq: Int): Response<MutableList<MacroDto>>
 
-    @GET("sign/macro/category/{userSeq}")
-    suspend fun getPageMacroList(@Path("userSeq") userSeq: Int, @Query("page")page: Int): Response<PagingResult<MacroDto>>
+    @GET("sign/macro/category/{categorySeq}")
+    suspend fun getPageMacroList(@Path("categorySeq") categorySeq: Int, @Query("page")page: Int, @Query("size")size: Int): Response<PagingResult<MacroDto>>
 
     @Multipart
     @POST("sign/macro")

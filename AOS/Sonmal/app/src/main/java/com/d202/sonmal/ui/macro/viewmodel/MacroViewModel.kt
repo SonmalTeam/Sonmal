@@ -31,13 +31,9 @@ class MacroViewModel: ViewModel() {
         getPagingMacroList(it).cachedIn(viewModelScope)
     }
 
-    private fun getPagingMacroList(userSeq: Int) = Pager(
-        config = PagingConfig(pageSize = 1, maxSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = {MacroDataSource(Retrofit.macroApi, userSeq)}
-    ).liveData
-
-    fun getPagingMacroListValue(userSeq: Int){
-        getPagingMacroList(userSeq)
+    fun getPagingMacroListValue(categorySeq: Int){ // seq를 입력하면 Pager 데이터로 변환
+        Log.d(TAG, "getPagingMacroListValue viewmodel getPagingMacroList 호출")
+        getPagingMacroList(categorySeq)
     }
 
     private val _macroList = MutableLiveData<MutableList<MacroDto>>()
@@ -51,6 +47,16 @@ class MacroViewModel: ViewModel() {
     private val _getVideoCallback = MutableLiveData<String>()
     val getVideoCallback: LiveData<String>
         get() = _getVideoCallback
+
+
+    private fun getPagingMacroList(categorySeq: Int) = Pager( // Pager로 데이터 변환
+        config = PagingConfig(pageSize = 3, maxSize = 20, enablePlaceholders = false),
+        pagingSourceFactory = {
+            Log.d(TAG, "pagingSourceFactory")
+            MacroDataSource(Retrofit.macroApi, categorySeq)
+        }
+    ).liveData
+
 
     fun getMacroList(category: Int) { // 카테고리의 매크로 전체 리스트 불러오기
         viewModelScope.launch(Dispatchers.IO) {
@@ -68,7 +74,7 @@ class MacroViewModel: ViewModel() {
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                             val response = Retrofit.tokenApi.refreshToken(tokens)
                             if(response.isSuccessful && response.body() != null) {
-                                Log.d(TAG, "refreshToken sucess ${response.body()}")
+                                Log.d(TAG, "refreshToken success ${response.body()}")
                                 ApplicationClass.mainPref.token = response.body()!!.accessToken
                                 ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
                                 getMacroList(category)
