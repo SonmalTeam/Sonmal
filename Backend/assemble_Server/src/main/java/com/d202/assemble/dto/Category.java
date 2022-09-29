@@ -1,13 +1,11 @@
 package com.d202.assemble.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name="category")
 public class Category {
     @Id
