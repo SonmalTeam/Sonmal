@@ -48,6 +48,7 @@ class MacroCafeFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         val category = 1
+        initObseve()
         macroViewModel.getPagingMacroListValue(category)
     }
 
@@ -85,6 +86,13 @@ class MacroCafeFragment: Fragment() {
     }
 
     private fun initView() {
+
+        binding.apply {
+            ivBack.setOnClickListener {
+                parentFragmentManager.beginTransaction().remove(this@MacroCafeFragment).commit()
+            }
+        }
+
         this.pagingAdapter = MacroPagingAdapter(requireActivity())
 
 //        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{

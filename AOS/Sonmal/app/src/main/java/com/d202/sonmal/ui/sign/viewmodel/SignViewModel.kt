@@ -104,7 +104,7 @@ class SignViewModel: ViewModel() {
                         Log.d(TAG, "unregister 통신 성공 ${it.body()}")
                         _unregisterCallBack.postValue(true)
                     }
-                    else if(it.code() == 500) {
+                    else if(it.code() == 401) {
                         runBlocking {
                             try {
                                 Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
