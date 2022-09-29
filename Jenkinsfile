@@ -23,7 +23,7 @@ pipeline {
                                 sh 'docker container ls -a -f name=back -q \
                                         | xargs -r docker container rm'
 
-                                sh 'docker run -v /home/ubuntu/docker-volume/files:/home -d --name back -p 8090:8090 backimg'
+                                sh 'docker run -v /home:/home -d --name back -p 8090:8090 backimg'
                         }
                 }
         }
