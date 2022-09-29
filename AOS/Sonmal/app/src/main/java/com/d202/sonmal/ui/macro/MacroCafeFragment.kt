@@ -59,7 +59,7 @@ class MacroCafeFragment: Fragment() {
         macroViewModel.getPagingMacroListValue(category)
         Log.d(TAG, "getPagingMacroList api End on Fragment")
 
-    }
+    }+
 
     private fun initObseve() {
         macroViewModel.macroList.observe(viewLifecycleOwner) {
