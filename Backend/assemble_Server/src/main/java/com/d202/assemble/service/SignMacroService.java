@@ -29,7 +29,7 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    private final String uploadURL = "///files/";
+    private final String uploadURL = "///files";
 //    private final String uploadURL = "D:\\DATA\\video";
 
     // video 매크로 등록
