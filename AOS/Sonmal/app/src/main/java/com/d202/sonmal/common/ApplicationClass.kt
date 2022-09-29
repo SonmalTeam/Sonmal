@@ -1,6 +1,7 @@
 package com.d202.sonmal.common
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.util.Log
 import com.d202.sonmal.model.AuthInterceptor
 import com.d202.sonmal.utils.MainSharedPreference
@@ -22,10 +23,15 @@ class ApplicationClass: Application() {
         val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
             "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "ㅏ", "ㅐ",
             "ㅑ", "ㅓ", "ㅔ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ")
+
+        lateinit var firstRunCheck: SharedPreferences
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        // 첫 실행 체크
+        firstRunCheck = getSharedPreferences("FirstRun", MODE_PRIVATE)
 
         // Preference 초기화
         mainPref = MainSharedPreference(applicationContext)

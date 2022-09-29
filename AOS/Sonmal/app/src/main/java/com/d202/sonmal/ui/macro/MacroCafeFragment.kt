@@ -1,6 +1,7 @@
 package com.d202.sonmal.ui.macro
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
@@ -41,15 +42,22 @@ class MacroCafeFragment: Fragment() {
     ): View? {
 
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
+        initObseve()
+        initView()
+        initTTS()
 
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initObseve()
-        initView()
+
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
@@ -73,12 +81,20 @@ class MacroCafeFragment: Fragment() {
         }
         macroViewModel.pagingMacroList.observe(viewLifecycleOwner) {
             Log.d(TAG, "pagingMacroList in viewmoel $it")
+
             pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
 
         }
     }
 
     private fun initView() {
+
+        binding.apply {
+            ivBack.setOnClickListener {
+                parentFragmentManager.beginTransaction().remove(this@MacroCafeFragment).commit()
+            }
+        }
+
         this.pagingAdapter = MacroPagingAdapter(requireActivity())
 
 //        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
@@ -90,6 +106,38 @@ class MacroCafeFragment: Fragment() {
         binding.rcyMacro.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = pagingAdapter
+        }
+
+        pagingAdapter.apply {
+            setSpeakClickListener(object: MacroPagingAdapter.SpeakItemClickListener{
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    Toast.makeText(requireContext(), "${item.content}", Toast.LENGTH_SHORT).show()
+                    speak(item.content)
+                }
+            })
+
+            setVideoClickListener(object: MacroPagingAdapter.VideoItemClickListener{
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    findNavController().navigate(MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(item.videoFileId))
+                }
+            })
+
+            setTitleClickListener(object: MacroPagingAdapter.TitleItemClickListener {
+                override fun onClick(view: View, position: Int, item: MacroDto) {
+                    // 기본 형태의 다이얼로그
+                    // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("${item.title}")
+                        .setMessage("${item.content}")
+                        .setPositiveButton("확인",
+                            DialogInterface.OnClickListener { dialog, id ->
+                            })
+
+                    // 다이얼로그를 띄워주기
+                    builder.show()
+
+                }
+            })
         }
     }
 

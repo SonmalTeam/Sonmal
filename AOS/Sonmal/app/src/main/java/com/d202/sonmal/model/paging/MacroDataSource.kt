@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 private const val TAG ="MacroDataSource"
-private const val START_PAGE_INDEX = 1
+private const val START_PAGE_INDEX = 0
 class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int): PagingSource<Int, MacroDto>() {
     init {
         Log.d(TAG, "MacroDataSource init")
@@ -20,11 +20,11 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
     }
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
-            Log.d(TAG, "MacroDataSource Load1")
+            Log.d(TAG, "MacroDataSource Load1 ${params.key}")
             val page = params.key?: START_PAGE_INDEX
             var response: Response<PagingResult<MacroDto>>?
             Log.d(TAG, "getPageMacroList start 값들 $categorySeq, $page, ${params.loadSize}")
-            response = macroApi.getPageMacroList(categorySeq, page, params.loadSize)
+            response = macroApi.getPageMacroList(categorySeq, page, 7)
             var body = response.body()
             Log.d(TAG, "getPageMacroList end $body")
             if(response.isSuccessful && body != null){
@@ -34,7 +34,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                     prevKey = if(page == 0) null else page -1,
                     nextKey = if(page == body.totalPage) null else page +1
                 )
-            } else if (response.code() == 500) {
+            } else if (response.code() == 401) {
                 runBlocking {
                     try {
                         Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
@@ -44,7 +44,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                             Log.d(TAG, "refreshToken success ${response.body()}")
                             ApplicationClass.mainPref.token = response.body()!!.accessToken
                             ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
-                            body = macroApi.getPageMacroList(categorySeq, page, params.loadSize).body()
+                            body = macroApi.getPageMacroList(categorySeq, page, 7).body()
                         } else {
                             Log.d(TAG, "refreshToken err ${response.code()}")
                         }
@@ -54,12 +54,12 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                     }
                     LoadResult.Page(
                         data = body!!.result,
-                        prevKey = null,
-                        nextKey = null
+                        prevKey = if(page == 0) null else page -1,
+                        nextKey = if(page == body!!.totalPage) null else page +1
                     )
                 }
             } else {
-                Log.d(TAG, "getPageMacroList fail $body")
+                Log.d(TAG, "getPageMacroList fail ${response.code()}")
                 LoadResult.Page(
                     data = body!!.result,
                     prevKey = null,
@@ -67,7 +67,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                 )
             }
         }catch (e: java.lang.Exception){
-            Log.d(TAG, "load: ${e.message}")
+            Log.d(TAG, "load error: ${e.message}")
             LoadResult.Error(e)
         }
 

@@ -37,7 +37,7 @@ class MacroViewModel: ViewModel() {
 
     private fun getPagingMacroList(categorySeq: Int) =
          Pager( // Pager로 데이터 변환
-            config = PagingConfig(pageSize = 3, maxSize = 20, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 1, maxSize = 9, enablePlaceholders = false),
             pagingSourceFactory = {
                 Log.d(TAG, "pagingSourceFactory")
                 MacroDataSource(Retrofit.macroApi, categorySeq)
@@ -70,7 +70,7 @@ class MacroViewModel: ViewModel() {
                 Log.d(TAG, "getMacroList response: ${response.body()}")
                 if(response.isSuccessful && response.body() != null){
                     _macroList.postValue(response.body() as MutableList<MacroDto>)
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     runBlocking {
                         try {
                             Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
@@ -124,11 +124,11 @@ class MacroViewModel: ViewModel() {
                     }
                 )
 
-                if(response.isSuccessful && response.body() != null){
+                if(response.isSuccessful){
                     Log.d(TAG, "macro add success")
                     _macroAddCallback.postValue(200)
 
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     Log.d(TAG, "refresh")
 
                     runBlocking {
@@ -172,7 +172,7 @@ class MacroViewModel: ViewModel() {
                 if(response.isSuccessful && response.body() != null) {
                     Log.d(TAG, "getVideo success: ${response.body()}")
                     _getVideoCallback.postValue(response.body())
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     runBlocking {
                         try {
                             Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
