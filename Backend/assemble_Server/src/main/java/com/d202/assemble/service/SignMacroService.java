@@ -29,7 +29,7 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    private final String uploadURL = "file:///files";
+    private final String uploadURL = "file:///files/";
 //    private final String uploadURL = "D:\\DATA\\video";
 
     // video 매크로 등록
@@ -48,7 +48,7 @@ public class SignMacroService {
                     e.getStackTrace();
                 }
             }
-            String filePath = uploadURL + "/" + filename + ".mp4";
+            String filePath = uploadURL + "/" + filename + ".mp4/";
             multipartFile.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
