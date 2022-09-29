@@ -32,7 +32,7 @@ public class SignMacroService {
 //    @Value("${resource.path}")
 //    private String resourcePath;
 
-    private final String uploadURL = "/files";
+    private final String uploadURL = "/../files";
 //    private final String uploadURL = "D:\\DATA\\video";
 
     // video 매크로 등록
