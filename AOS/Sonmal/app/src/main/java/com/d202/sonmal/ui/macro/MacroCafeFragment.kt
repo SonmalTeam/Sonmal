@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.d202.sonmal.adapter.MacroAdapter
+import com.d202.sonmal.adapter.MacroPagingAdapter
 import com.d202.sonmal.databinding.FragmentMacroCafeBinding
 import com.d202.sonmal.databinding.FragmentMacroChoiceBinding
 import com.d202.sonmal.model.dto.MacroDto
@@ -31,6 +32,7 @@ class MacroCafeFragment: Fragment() {
     private val macroViewModel: MacroViewModel by viewModels()
     private lateinit var macroList: MutableList<MacroDto>
     private lateinit var tts: TextToSpeech
+    private lateinit var pagingAdapter: MacroPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +49,15 @@ class MacroCafeFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initObseve()
+        initView()
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
         val category = 1
-        macroViewModel.getMacroList(category)
+//        macroViewModel.getMacroList(category)
+        Log.d(TAG, "getPagingMacroList api start on Fragment")
+        macroViewModel.getPagingMacroListValue(category)
+        Log.d(TAG, "getPagingMacroList api End on Fragment")
 
     }
 
@@ -62,8 +68,28 @@ class MacroCafeFragment: Fragment() {
                 this.macroList = it
             }
 
-            initAdapter()
+//            initAdapter()
             initTTS()
+        }
+        macroViewModel.pagingMacroList.observe(viewLifecycleOwner) {
+            Log.d(TAG, "pagingMacroList in viewmoel $it")
+            pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
+
+        }
+    }
+
+    private fun initView() {
+        this.pagingAdapter = MacroPagingAdapter(requireActivity())
+
+//        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
+//            override fun onClick(story: Story) {
+//                findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToStoryDetailFragment(story.seq))
+//            }
+//        }
+
+        binding.rcyMacro.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = pagingAdapter
         }
     }
 
@@ -139,9 +165,13 @@ class MacroCafeFragment: Fragment() {
 
     override fun onStop() {
         super.onStop()
-        if(tts != null) {
-            tts.stop()
-            tts.shutdown()
+        try {
+            if(tts != null) {
+                tts.stop()
+                tts.shutdown()
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "${e.message}")
         }
     }
 }
