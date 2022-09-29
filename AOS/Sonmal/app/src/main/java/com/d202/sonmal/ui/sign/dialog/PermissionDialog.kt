@@ -27,6 +27,7 @@ class PermissionDialog(var mContext: Context): DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnConfirm.setOnClickListener { dismiss() }
     }
 
     override fun onResume() {
