@@ -1,6 +1,7 @@
 package com.d202.sonmal.ui.macro
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
@@ -41,27 +42,21 @@ class MacroCafeFragment: Fragment() {
     ): View? {
 
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
+        initObseve()
+        initView()
+        initTTS()
 
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val category = 1
-        initObseve()
-        initView()
-        initTTS()
-
-
-        macroViewModel.getPagingMacroListValue(category)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initObseve()
-        initView()
-        initTTS()
 
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
@@ -86,6 +81,7 @@ class MacroCafeFragment: Fragment() {
         }
         macroViewModel.pagingMacroList.observe(viewLifecycleOwner) {
             Log.d(TAG, "pagingMacroList in viewmoel $it")
+
             pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
 
         }

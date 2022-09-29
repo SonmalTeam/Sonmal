@@ -37,7 +37,7 @@ class MacroViewModel: ViewModel() {
 
     private fun getPagingMacroList(categorySeq: Int) =
          Pager( // Pager로 데이터 변환
-            config = PagingConfig(pageSize = 3, maxSize = 20, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 1, maxSize = 9, enablePlaceholders = false),
             pagingSourceFactory = {
                 Log.d(TAG, "pagingSourceFactory")
                 MacroDataSource(Retrofit.macroApi, categorySeq)
@@ -124,7 +124,7 @@ class MacroViewModel: ViewModel() {
                     }
                 )
 
-                if(response.isSuccessful && response.body() != null){
+                if(response.isSuccessful){
                     Log.d(TAG, "macro add success")
                     _macroAddCallback.postValue(200)
 
