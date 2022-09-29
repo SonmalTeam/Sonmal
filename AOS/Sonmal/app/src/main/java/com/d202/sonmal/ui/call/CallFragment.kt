@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
@@ -152,29 +153,27 @@ class CallFragment : Fragment() {
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
-
             ivCallEnd.setOnClickListener {
                 findNavController().popBackStack()
             }
-
             viewsContainer.setOnClickListener {
                 resizeView()
             }
             ivSpeakerOn.isActivated = false
-
             ivSpeakerOn.setOnClickListener {
                 it.isActivated = !it.isActivated
                 audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
             }
-
             recyclerMacro.apply {
                 adapter = macroAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
-            ivCameraOff.setOnClickListener {
-            }
             btnSend.setOnClickListener {
                 viewModel.sendMessage(etChat.text.toString(), userName)
+                etChatInput.setText("${etChatInput.text}\n${etChat.text}")
+                etChat.setText("")
+                etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
+                etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
             }
             recyclerMacro.apply {
                 adapter = macroAdapter

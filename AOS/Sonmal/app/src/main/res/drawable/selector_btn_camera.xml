@@ -5,5 +5,5 @@
         android:drawable="@drawable/ic_camera_on"/>
 
     <item
-        android:drawable="@drawable/ic_camera_on"/>
+        android:drawable="@drawable/ic_camera_off"/>
 </selector>
