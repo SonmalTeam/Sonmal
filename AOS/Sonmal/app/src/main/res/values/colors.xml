@@ -17,5 +17,6 @@
     <color name="sonmal_action_red_light">#EA5459</color>
     <color name="sonmal_action_green">#6FC8C4</color>
     <color name="sonmal_gray_800">#434343</color>
+    <color name="sonmal_gray_300">#E1E1E1</color>
 
 </resources>
