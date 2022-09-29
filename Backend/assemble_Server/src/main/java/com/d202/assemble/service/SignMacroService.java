@@ -29,9 +29,6 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-//    @Value("${resource.path}")
-//    private String resourcePath;
-
     private final String uploadURL = "/../files";
 //    private final String uploadURL = "D:\\DATA\\video";
 
@@ -53,22 +50,6 @@ public class SignMacroService {
             }
             String filePath = uploadURL + "/" + filename + ".mp4";
             multipartFile.transferTo(new File(filePath));
-
-
-//            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
-//            try {
-//                Files.copy(multipartFile.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                throw new RuntimeException("Could not store file : " + multipartFile.getOriginalFilename());
-//            }
-
-//            try {
-//                Files.copy(Path.of(filePath), Paths.get(resourcePath + filename));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
 
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
@@ -94,7 +75,6 @@ public class SignMacroService {
     public String videoRegion(long videoFileId) {
         String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
         String path = uploadURL + "/" + fileName + ".mp4";
-//        String path = uploadURL + fileName + ".mp4";
 
         return path;
     }
