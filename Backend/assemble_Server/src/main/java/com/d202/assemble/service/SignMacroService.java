@@ -44,7 +44,7 @@ public class SignMacroService {
             String savePath = uploadURL;
             if (!new File(savePath).exists()) {
                 try{
-                    log.info("파일 생성");
+                    log.info("파일 생성!!");
                     new File(savePath).mkdir();
                 }
                 catch(Exception e){
