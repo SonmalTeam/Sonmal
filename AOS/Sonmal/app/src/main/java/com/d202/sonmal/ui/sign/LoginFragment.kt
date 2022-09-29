@@ -16,7 +16,9 @@ import androidx.navigation.Navigation
 import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentLoginBinding
+import com.d202.sonmal.ui.sign.dialog.PermissionDialog
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
+import com.d202.sonmal.utils.sharedpref.SettingsPreference
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -47,24 +49,31 @@ class LoginFragment : Fragment() {
 
         navController = Navigation.findNavController(view) // navcontroller 탐색
 
-
-        binding.btnKakaoLogin.setOnClickListener { // 카카오 로그인 및 회원가입
-            kakaoLogIn()
-        }
-//        binding.btnExitKakao.setOnClickListener { // 카카오 회원 탈퇴
-//            kakaoUnlink()
-//        }
-
-        binding.btnNaverLogin.setOnClickListener { // 네이버 로그인 및 회원가입
-            naverLogIn()
-        }
-//        binding.btnExitNaver.setOnClickListener {
-//            naverUnlink()
-//        }
-
-
+        initView()
         initObserve()
+    }
 
+    private fun initView() {
+        if(SettingsPreference().getFirstRunCheck()){
+            SettingsPreference().setFirstRunCheck(false)
+            PermissionDialog(requireContext()).show(parentFragmentManager, null)
+        }
+
+        binding.apply {
+            btnKakaoLogin.setOnClickListener { // 카카오 로그인 및 회원가입
+                kakaoLogIn()
+            }
+            btnNaverLogin.setOnClickListener { // 네이버 로그인 및 회원가입
+                naverLogIn()
+            }
+
+//            btnExitKakao.setOnClickListener { // 카카오 회원 탈퇴
+//                kakaoUnlink()
+//            }
+//            btnExitNaver.setOnClickListener {
+//                naverUnlink()
+//            }
+        }
     }
 
     private fun initObserve() {
