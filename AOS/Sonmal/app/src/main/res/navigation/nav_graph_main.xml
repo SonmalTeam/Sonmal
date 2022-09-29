@@ -89,6 +89,20 @@
         android:id="@+id/voiceFragment"
         android:name="com.d202.sonmal.ui.voice.VoiceFragment"
         android:label="VoiceFragment">
+        <action
+            android:id="@+id/action_voiceFragment_to_macroBottomSheet"
+            app:destination="@id/macroBottomSheet" />
+        <action
+            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"
+            app:destination="@id/macroCafeFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/macroBottomSheet"
+        android:name="com.d202.sonmal.ui.voice.MacroBottomSheet"
+        android:label="MacroBottomSheet">
+<!--        <action-->
+<!--            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"-->
+<!--            app:destination="@id/macroCafeFragment" />-->
     </fragment>
 </navigation>

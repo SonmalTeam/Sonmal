@@ -13,12 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.VoiceAdapter
 import com.d202.sonmal.databinding.FragmentVoiceBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import java.util.*
 import kotlin.math.log
 
@@ -60,7 +60,8 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                         }
 
                     })
-                    recordingDialogFragment.show(childFragmentManager, "recording")
+                    findNavController().navigate(VoiceFragmentDirections.actionVoiceFragmentToMacroBottomSheet())
+                    //recordingDialogFragment.show(childFragmentManager, "recording")
                 }
             }
 
