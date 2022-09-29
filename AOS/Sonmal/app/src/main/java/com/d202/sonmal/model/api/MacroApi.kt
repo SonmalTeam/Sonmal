@@ -18,7 +18,7 @@ interface MacroApi {
     suspend fun getPageMacroList(@Path("categorySeq") categorySeq: Int, @Query("page")page: Int, @Query("size")size: Int): Response<PagingResult<MacroDto>>
 
     @Multipart
-    @POST("sign/macro")
+    @POST("sign/macro/video")
     suspend fun addMacro(
         @Part title: MultipartBody.Part,
         @Part content: MultipartBody.Part,
@@ -28,7 +28,7 @@ interface MacroApi {
 //        @PartMap data: HashMap<String, RequestBody>
     ): Response<Void>
 
-    @POST("sign/macro/videoNull")
+    @POST("sign/macros")
     suspend fun addMacroNull(@Body newMacro: MacroDto): Response<Void>
 
     @GET("sign/macro/video/{videoFileId}")

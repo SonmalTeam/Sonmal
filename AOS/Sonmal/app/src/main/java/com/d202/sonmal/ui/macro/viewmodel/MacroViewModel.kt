@@ -70,7 +70,7 @@ class MacroViewModel: ViewModel() {
                 Log.d(TAG, "getMacroList response: ${response.body()}")
                 if(response.isSuccessful && response.body() != null){
                     _macroList.postValue(response.body() as MutableList<MacroDto>)
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     runBlocking {
                         try {
                             Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
@@ -128,7 +128,7 @@ class MacroViewModel: ViewModel() {
                     Log.d(TAG, "macro add success")
                     _macroAddCallback.postValue(200)
 
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     Log.d(TAG, "refresh")
 
                     runBlocking {
@@ -172,7 +172,7 @@ class MacroViewModel: ViewModel() {
                 if(response.isSuccessful && response.body() != null) {
                     Log.d(TAG, "getVideo success: ${response.body()}")
                     _getVideoCallback.postValue(response.body())
-                } else if(response.code() == 500) {
+                } else if(response.code() == 401) {
                     runBlocking {
                         try {
                             Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")

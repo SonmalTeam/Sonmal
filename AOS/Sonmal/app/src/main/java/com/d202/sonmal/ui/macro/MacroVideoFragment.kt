@@ -64,7 +64,7 @@ class MacroVideoFragment : Fragment() {
         var mediaController = MediaController(requireContext())
         mediaController.setAnchorView(binding.vv)
 
-        var video = "https://d202.kro.kr/api/sign/macro/video/20"
+        var video = "https://d202.kro.kr/api/sign/macro/video/$videoId"
         var uriVideo = Uri.parse(video)
         binding.vv.apply {
             setMediaController(mediaController)
