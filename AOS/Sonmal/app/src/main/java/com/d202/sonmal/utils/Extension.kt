@@ -7,6 +7,7 @@ import android.graphics.Point
 import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.common.ApplicationClass.Companion.classes
 import com.google.mediapipe.solutions.hands.HandsResult
@@ -47,6 +48,10 @@ fun WindowManager.currentWindowMetricsPointCompat() : Point {
             defaultDisplay.getSize(this)
         }
     }
+}
+
+fun Context.showToast(text: String){
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
 fun translate(result : HandsResult): String{

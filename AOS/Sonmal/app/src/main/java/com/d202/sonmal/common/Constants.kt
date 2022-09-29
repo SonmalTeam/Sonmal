@@ -27,5 +27,5 @@ const val naverClientName = "Sonmal"
 
 const val TFLITE_PATH = "converted_model.tflite"
 
-
-
+const val FLAG_MACRO = 0
+const val FLAG_CALL = 1
