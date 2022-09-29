@@ -91,7 +91,8 @@
         android:label="VoiceFragment">
         <action
             android:id="@+id/action_voiceFragment_to_macroBottomSheet"
-            app:destination="@id/macroBottomSheet" />
+            app:destination="@id/macroBottomSheet"
+            app:enterAnim="@anim/translate_up" />
         <action
             android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"
             app:destination="@id/macroCafeFragment" />
