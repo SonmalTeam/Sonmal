@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.MacroDto
+import com.google.common.flogger.backend.LogData
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -72,17 +73,16 @@ class CallViewModel: ViewModel() {
         get() = _chatList
     fun initFirebaseDatabase(userName: String){
         val childEventListener = object : ChildEventListener {
-            // Firebase 데이터베이스에 새로운 아이템(ChattingItem)이 추가되면 콜백
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chattingItem = snapshot.getValue(Chat::class.java)!!
                 chattingItem.firebaseKey = snapshot.key ?: ""
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
+                    _chatList.postValue(_chatList.value)
+                    Log.d(TAG, "onChildAdded: ${chattingItem}")
                 }
             }
-
             @RequiresApi(Build.VERSION_CODES.N)
-            // 서버에서 기존의 아이템이 삭제될 경우 호출되는 콜백
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 _chatList.value!!.removeIf {
                     it.firebaseKey == snapshot.key
@@ -100,7 +100,7 @@ class CallViewModel: ViewModel() {
     fun sendMessage(message: String){
         if(message.isNotEmpty()){
             viewModelScope.launch(Dispatchers.IO) {
-                _db.push().setValue(Chat("", "test1", message))
+                _db.push().setValue(Chat("", "test2", message))
             }
         }
     }

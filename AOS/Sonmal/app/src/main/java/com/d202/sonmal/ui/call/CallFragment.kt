@@ -136,6 +136,8 @@ class CallFragment : Fragment() {
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
         binding.tvTranslateText.bringToFront()
+        binding.tvChatTop.bringToFront()
+        binding.tvChatBottom.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
@@ -173,7 +175,6 @@ class CallFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
             ivCameraOff.setOnClickListener {
-                session.sendTextMessage("test message$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             }
             btnSend.setOnClickListener {
                 viewModel.sendMessage(etChat.text.toString())
@@ -189,7 +190,14 @@ class CallFragment : Fragment() {
                 hands.send(it)
             }
             chatList.observe(viewLifecycleOwner){
-                chatAdapter.list = it
+                binding.apply {
+                    if(it.size > 0){
+                        tvChatBottom.text = it[it.size - 1].message
+                    }
+                    if(it.size > 1){
+                        tvChatTop.text = it[it.size - 2].message
+                    }
+                }
             }
             getRemoteFrames()
 
