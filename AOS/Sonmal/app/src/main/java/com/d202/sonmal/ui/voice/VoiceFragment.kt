@@ -53,8 +53,8 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                         }
 
                     })
-                    findNavController().navigate(VoiceFragmentDirections.actionVoiceFragmentToMacroBottomSheet())
-                    //recordingDialogFragment.show(childFragmentManager, "recording")
+                    //findNavController().navigate(VoiceFragmentDirections.actionVoiceFragmentToRecordingDialogFragment())
+                    recordingDialogFragment.show(childFragmentManager, "recording")
                 }
             }
 
@@ -69,6 +69,8 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
         }
         return binding.root
     }
+
+
 
     override fun onInit(p0: Int) {
         if(p0 == TextToSpeech.SUCCESS) {
