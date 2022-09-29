@@ -9,14 +9,13 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.FragmentSignLangBinding
-import com.d202.sonmal.utils.translate
 import com.github.kimkevin.hangulparser.HangulParser
 import com.google.mediapipe.solutioncore.CameraInput
 import com.google.mediapipe.solutioncore.SolutionGlSurfaceView

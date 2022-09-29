@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui.main
 
+import android.Manifest
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.common.TFLITE_PATH
 import com.d202.sonmal.databinding.FragmentMainBinding
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
@@ -43,7 +47,7 @@ class MainFragment : Fragment() {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroChoiceFragment())
             }
             btnCall.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+                checkPermission()
             }
 //            btnLogin.setOnClickListener {
 //                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
@@ -68,6 +72,24 @@ class MainFragment : Fragment() {
         val startOffset = fileDescriptor.startOffset
         val declaredLength = fileDescriptor.declaredLength
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
+
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                requireContext().showToast("카메라, 오디오 권한을 허용해야 이용이 가능합니다.")
+            }
+
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+            .check()
     }
 
 

@@ -3,9 +3,9 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.media.AudioManager
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
@@ -21,22 +21,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.d202.sonmal.adapter.CallMacroAdapter
-import com.d202.sonmal.adapter.ChatAdapter
+import com.d202.sonmal.adapter.CallMacroPagingAdapter
+import com.d202.sonmal.adapter.MacroPagingAdapter
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
-import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
+import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import com.d202.sonmal.utils.HandsResultImageView
+import com.d202.sonmal.utils.MainSharedPreference
 import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseReference
 import com.google.mediapipe.components.CameraHelper
 import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
@@ -60,7 +60,8 @@ class CallFragment : Fragment() {
     //View
     private lateinit var binding: FragmentCallBinding
     private val viewModel: CallViewModel by viewModels()
-    private lateinit var macroAdapter: CallMacroAdapter
+    private val macroViewModel: MacroViewModel by viewModels()
+    private lateinit var macroAdapter: CallMacroPagingAdapter
 
     //WebRTC
     private lateinit var session: Session
@@ -75,12 +76,6 @@ class CallFragment : Fragment() {
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
 
-    //FirebaseChat
-    private lateinit var db: DatabaseReference
-    private lateinit var childEventListener: ChildEventListener
-    private lateinit var chatAdapter: ChatAdapter
-    private val chatList = mutableListOf<Chat>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -94,15 +89,14 @@ class CallFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        userId = "id"
-        userName = "name"
+        userId = MainSharedPreference(requireContext()).token.toString()
+        userName = MainSharedPreference(requireContext()).token.toString()
 
         initView()
         initViewModel()
     }
 
     private fun setupStaticImageModePipeline() {
-        // Initializes a new MediaPipe Hands solution instance in the static image mode.
         hands = Hands(
             requireContext(),
             HandsOptions.builder()
@@ -129,13 +123,13 @@ class CallFragment : Fragment() {
             )
         }
 
-        // Updates the preview layout.
         val viewGroup = binding.peerContainerRemote
-//        frameLayout.removeAllViewsInLayout()
         imageView = HandsResultImageView(requireContext())
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
         binding.tvTranslateText.bringToFront()
+        binding.tvChatTop.bringToFront()
+        binding.tvChatBottom.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
@@ -143,8 +137,14 @@ class CallFragment : Fragment() {
     private fun initView(){
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
-        macroAdapter = CallMacroAdapter()
-        chatAdapter = ChatAdapter()
+        macroAdapter = CallMacroPagingAdapter()
+        macroAdapter.apply {
+            onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
+                override fun onClick(title: String) {
+                    binding.etChat.setText("${binding.etChat.text} ${title} ")
+                }
+            }
+        }
 
         binding.apply {
             lifecycleOwner = this@CallFragment
@@ -153,30 +153,31 @@ class CallFragment : Fragment() {
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
-
             ivCallEnd.setOnClickListener {
                 findNavController().popBackStack()
             }
-
             viewsContainer.setOnClickListener {
                 resizeView()
             }
             ivSpeakerOn.isActivated = false
-
             ivSpeakerOn.setOnClickListener {
                 it.isActivated = !it.isActivated
                 audioManager.isSpeakerphoneOn = !audioManager.isSpeakerphoneOn
             }
-
             recyclerMacro.apply {
                 adapter = macroAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
-            ivCameraOff.setOnClickListener {
-                session.sendTextMessage("test message$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-            }
             btnSend.setOnClickListener {
-                viewModel.sendMessage(etChat.text.toString())
+                viewModel.sendMessage(etChat.text.toString(), userName)
+                etChatInput.setText("${etChatInput.text}\n${etChat.text}")
+                etChat.setText("")
+                etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
+                etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
+            }
+            recyclerMacro.apply {
+                adapter = macroAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }
     }
@@ -189,27 +190,28 @@ class CallFragment : Fragment() {
                 hands.send(it)
             }
             chatList.observe(viewLifecycleOwner){
-                chatAdapter.list = it
+                binding.apply {
+                    if(it.size > 0){
+                        tvChatBottom.text = it[it.size - 1].message
+                    }
+                    if(it.size > 1){
+                        tvChatTop.text = it[it.size - 2].message
+                    }
+                }
             }
             getRemoteFrames()
-
+        }
+        macroViewModel.apply {
+            getPagingMacroListValue(0)
+            pagingMacroList.observe(viewLifecycleOwner){
+                macroAdapter.submitData(this@CallFragment.lifecycle, it)
+            }
         }
         setupStaticImageModePipeline()
 
     }
 
     private fun resizeView() {
-//        var width: Int
-//        var height: Int
-//        val params: ViewGroup.LayoutParams? = requireActivity().window.attributes
-//        if (toggle) {
-//
-//            width = getDeviceSize(requireActivity()).x
-//            height = width
-//        } else {
-//            width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
-//            height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, resources.displayMetrics).toInt()
-//        }
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
         val deviceWidth = displaymetrics.widthPixels
@@ -221,20 +223,12 @@ class CallFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         resizeView()
+        initViews()
 
-        if (allPermissionsGranted()) {
-            initViews()
-            httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-            Log.d(TAG, "onResume: CustomHttpClient")
-            val sessionId = userId + "-session"
-            getToken(sessionId)
-//            converter!!.setFlipY(FLIP_FRAMES_VERTICALLY)
-
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
-        }
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+        Log.d(TAG, "onResume: CustomHttpClient")
+        val sessionId = "-session"
+        getToken(sessionId)
     }
 
     private fun getToken(sessionId: String) {
