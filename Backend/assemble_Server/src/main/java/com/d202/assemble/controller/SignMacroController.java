@@ -50,8 +50,8 @@ public class SignMacroController {
     @ApiOperation(value = "Video 매크로 등록")
     @PostMapping("/video")
     public void createSignMacro(@ApiIgnore Authentication auth, @RequestParam("file") MultipartFile file, SignMacroRequestDto request){
-        long userSeq = (int)auth.getPrincipal();
-        signMacroService.createSignMacro(userSeq, request, file);
+//        long userSeq = (int)auth.getPrincipal();
+        signMacroService.createSignMacro(new Long(1), request, file);
     }
 
     // 비디오 없는 매크로 등록
