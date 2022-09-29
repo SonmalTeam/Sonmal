@@ -109,7 +109,14 @@ public class SignMacroService {
     @Transactional
     public PagingResult<SignMacroResponseDto> getSignMacroList(Pageable pageable, long userSeq, long categorySeq) {
 
-        Page<SignMacro> signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq, pageable);
+        Page<SignMacro> signMacroPage = null;
+
+        if (categorySeq == 0) {
+            signMacroPage = signMacroRepo.findAllByUserSeq(userSeq, pageable);
+        } else {
+            signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq, pageable);
+        }
+
         List<SignMacroResponseDto> signMacroList = new ArrayList<>();
 
         for (SignMacro signMacro : signMacroPage) {
@@ -124,7 +131,14 @@ public class SignMacroService {
     @Transactional
     public PagingResult<SignMacroResponseDto> sortSignMacroList(Pageable pageable, long userSeq, long categorySeq) {
 
-        Page<SignMacro> signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeqOrderByCountDesc(userSeq, categorySeq, pageable);
+        Page<SignMacro> signMacroPage = null;
+
+        if (categorySeq == 0) {
+            signMacroPage = signMacroRepo.findAllByUserSeqOrderByCountDesc(userSeq, pageable);
+        } else {
+            signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeqOrderByCountDesc(userSeq, categorySeq, pageable);
+        }
+
         List<SignMacroResponseDto> signMacroList = new ArrayList<>();
 
         for (SignMacro signMacro : signMacroPage) {

@@ -70,6 +70,7 @@ public class SignMacroController {
         return signMacroService.getSignMacro(userSeq, signMacroSeq);
     }
 
+
     // 매크로 리스트 조회
     @ApiOperation(value = "매크로 리스트 조회")
     @GetMapping("/category/{categorySeq}")
