@@ -119,9 +119,9 @@ class MacroAddFragment: Fragment() {
 
         binding.btnAdd.setOnClickListener {
 
-            if(binding.etTitle.text.toString() == null ||
-                binding.etContent.text.toString() == null ||
-                binding.tvEmoji.text == null) {
+            if(binding.etTitle.text.toString() == "" ||
+                binding.etContent.text.toString() ==  "" ||
+                binding.tvEmoji.text ==  "") {
                 Toast.makeText(requireContext(), "제목, 내용, 아이콘 입력 필요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -153,6 +153,7 @@ class MacroAddFragment: Fragment() {
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
             Log.d(TAG, "macro add 결과 $it")
+            Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
 //            binding.tvEmoji.text = "성공"
         }
     }
