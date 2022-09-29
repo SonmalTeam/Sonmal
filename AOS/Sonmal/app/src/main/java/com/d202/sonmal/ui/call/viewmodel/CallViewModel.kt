@@ -1,17 +1,25 @@
 package com.d202.sonmal.ui.call.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.MacroDto
+import com.d202.sonmal.ui.voice.RecordingDialogFragment
 import com.google.common.flogger.backend.LogData
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -120,4 +128,66 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         tts.setSpeechRate(1f)
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, "id1")
     }
+
+    // STT
+    private lateinit var translateInterface : TranslateInterface
+    interface TranslateInterface {
+        fun getResult(result: String)
+    }
+    private fun setInterface(translateInterface : TranslateInterface) {
+        this.translateInterface = translateInterface
+    }
+    fun startSTT(context: Context) {
+        setInterface(object : TranslateInterface{
+            override fun getResult(result: String) {
+                Log.d(TAG, "getResult: ${result}")
+            }
+        })
+        
+        val ii = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra("android.speech.extra.DICTATION_MODE", true)
+        }
+
+
+        SpeechRecognizer.createSpeechRecognizer(context).apply {
+            setRecognitionListener(recognitionListener(context))
+            startListening(speechRecognizerIntent)
+        }
+    }
+    private fun recognitionListener(context: Context) = object : RecognitionListener {
+
+        override fun onReadyForSpeech(params: Bundle?) {}
+
+        override fun onRmsChanged(rmsdB: Float) {}
+
+        override fun onBufferReceived(buffer: ByteArray?) {}
+
+        override fun onPartialResults(partialResults: Bundle?) {}
+
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+
+        override fun onBeginningOfSpeech() {}
+
+        override fun onEndOfSpeech() {}
+
+        override fun onError(error: Int) {
+            when (error) {
+                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
+                    context,
+                    "퍼미션 없음",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onResults(results: Bundle) {
+            translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
+            Log.d("TAG", "onResults : ${results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]}")
+        }
+    }
+
+
 }
