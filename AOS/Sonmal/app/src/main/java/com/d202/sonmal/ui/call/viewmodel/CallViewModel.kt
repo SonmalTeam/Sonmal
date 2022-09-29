@@ -1,7 +1,9 @@
 package com.d202.sonmal.ui.call.viewmodel
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
@@ -22,19 +24,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.webrtc.EglRenderer.FrameListener
 import org.webrtc.SurfaceViewRenderer
+import java.util.*
 
 private const val RECOGNIZE_INTERVAL = 100L
 private const val TAG ="CallViewModel"
-class CallViewModel: ViewModel() {
-    private var _db: DatabaseReference = Firebase.database.getReference("chat-message")
-
-    private val _macroList = MutableLiveData<List<MacroDto>>()
-    val macroList : LiveData<List<MacroDto>>
-        get() = _macroList
-    fun getMacroList(){
-
-    }
-
+class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
+    // WebRTC -> TFLite
     private val _surfaceViewRenderer = MutableLiveData<SurfaceViewRenderer>()
     val surfaceViewRenderer: LiveData<SurfaceViewRenderer>
         get() = _surfaceViewRenderer
@@ -60,6 +55,7 @@ class CallViewModel: ViewModel() {
         }
     }
 
+    // SignLanguage
     private val _translateText = MutableLiveData<String>("")
     val translateText: LiveData<String>
         get() = _translateText
@@ -67,10 +63,12 @@ class CallViewModel: ViewModel() {
         _translateText.postValue(text)
     }
 
-
+    // Firebase Chat
+    private var _db: DatabaseReference = Firebase.database.getReference("chat-message")
     private val _chatList = MutableLiveData<MutableList<Chat>>(mutableListOf())
     val chatList : LiveData<MutableList<Chat>>
         get() = _chatList
+
     fun initFirebaseDatabase(userName: String){
         _db.removeValue()
         val childEventListener = object : ChildEventListener {
@@ -80,6 +78,7 @@ class CallViewModel: ViewModel() {
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
                     _chatList.postValue(_chatList.value)
+                    speakOut(chattingItem.message)
                 }
             }
             @RequiresApi(Build.VERSION_CODES.N)
@@ -103,5 +102,22 @@ class CallViewModel: ViewModel() {
                 _db.push().setValue(Chat("", userName, message))
             }
         }
+    }
+
+    // TTS
+    private lateinit var tts: TextToSpeech
+    fun initTTS(context: Context){
+        tts = TextToSpeech(context, this)
+    }
+
+    override fun onInit(p0: Int) {
+        if(p0 == TextToSpeech.SUCCESS) {
+            tts.language = Locale.KOREAN
+        }
+    }
+    private fun speakOut(text: String){
+        tts.setPitch(1f)
+        tts.setSpeechRate(1f)
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, "id1")
     }
 }
