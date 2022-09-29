@@ -22,10 +22,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroAdapter
+import com.d202.sonmal.adapter.ChatAdapter
 import com.d202.sonmal.common.OPENVIDU_SECRET
 import com.d202.sonmal.common.OPENVIDU_URL
 import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
+import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.utils.HandsResultImageView
 import com.d202.sonmal.utils.translate
@@ -33,6 +35,8 @@ import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseReference
 import com.google.mediapipe.components.CameraHelper
 import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
@@ -53,10 +57,12 @@ private const val TAG = "CallFragment"
 private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
 
 class CallFragment : Fragment() {
+    //View
     private lateinit var binding: FragmentCallBinding
     private val viewModel: CallViewModel by viewModels()
     private lateinit var macroAdapter: CallMacroAdapter
 
+    //WebRTC
     private lateinit var session: Session
     private lateinit var httpClient: CustomHttpClient
     private var toggle = true
@@ -64,9 +70,16 @@ class CallFragment : Fragment() {
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
 
+    //MediaPipe
     private lateinit var hands: Hands
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
+
+    //FirebaseChat
+    private lateinit var db: DatabaseReference
+    private lateinit var childEventListener: ChildEventListener
+    private lateinit var chatAdapter: ChatAdapter
+    private val chatList = mutableListOf<Chat>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,18 +99,6 @@ class CallFragment : Fragment() {
 
         initView()
         initViewModel()
-    }
-
-    private fun downscaleBitmap(originalBitmap: Bitmap): Bitmap? {
-        val aspectRatio = originalBitmap.width.toDouble() / originalBitmap.height
-        var width: Int = binding.peerContainerRemote.width
-        var height: Int = binding.peerContainerRemote.height
-        if (binding.peerContainerRemote.width as Double / binding.peerContainerRemote.height > aspectRatio) {
-            width = (height * aspectRatio).toInt()
-        } else {
-            height = (width / aspectRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(originalBitmap, width, height, false)
     }
 
     private fun setupStaticImageModePipeline() {
@@ -143,6 +144,7 @@ class CallFragment : Fragment() {
         audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
         macroAdapter = CallMacroAdapter()
+        chatAdapter = ChatAdapter()
 
         binding.apply {
             lifecycleOwner = this@CallFragment
@@ -170,14 +172,24 @@ class CallFragment : Fragment() {
                 adapter = macroAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
+            ivCameraOff.setOnClickListener {
+                session.sendTextMessage("test message$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+            }
+            btnSend.setOnClickListener {
+                viewModel.sendMessage(etChat.text.toString())
+            }
         }
     }
 
     private fun initViewModel(){
         viewModel.apply {
+            initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
+            }
+            chatList.observe(viewLifecycleOwner){
+                chatAdapter.list = it
             }
             getRemoteFrames()
 

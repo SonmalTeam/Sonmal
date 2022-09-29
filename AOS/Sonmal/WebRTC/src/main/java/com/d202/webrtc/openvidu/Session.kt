@@ -47,6 +47,10 @@ class Session(
 
     }
 
+    fun sendTextMessage(message: String){
+        websocket!!.sendTextMessage(message)
+    }
+
     fun createLocalPeerConnection(): PeerConnection?{
         val iceServers = ArrayList<PeerConnection.IceServer>();
         val iceServer = PeerConnection.IceServer

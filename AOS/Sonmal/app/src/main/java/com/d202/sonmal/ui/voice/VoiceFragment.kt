@@ -1,26 +1,18 @@
 package com.d202.sonmal.ui.voice
 
-import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.VoiceAdapter
 import com.d202.sonmal.databinding.FragmentVoiceBinding
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
-import kotlin.math.log
 
 
 class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
