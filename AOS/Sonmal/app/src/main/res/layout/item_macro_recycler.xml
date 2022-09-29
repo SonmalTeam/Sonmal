@@ -20,7 +20,8 @@
             android:padding="10dp"
             android:gravity="center"
             android:text="E"
-            android:textSize="40dp"/>
+            android:textSize="40dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tv_title"
