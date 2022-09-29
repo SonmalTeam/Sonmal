@@ -1,6 +1,5 @@
 package com.d202.sonmal.adapter
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +10,12 @@ import com.d202.sonmal.databinding.ItemMacroRecyclerBinding
 import com.d202.sonmal.model.dto.MacroDto
 
 //diffCallback: DiffUtil.ItemCallback<MacroDto>
-class MacroPagingAdapter(val activity: Activity) : PagingDataAdapter<MacroDto,
+class MacroPagingAdapter() : PagingDataAdapter<MacroDto,
         MacroPagingAdapter.MPagingViewHolder>(IMAGE_COMPARATOR) {
 
     class MPagingViewHolder(val binding: ItemMacroRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MacroDto) {
-            binding.tvTitle.text = item.title
-            if(item.icon != null) {
-                binding.tvEmoji.text = item.icon
-            }else {
-
-            }
+            binding.data = item
         }
     }
 

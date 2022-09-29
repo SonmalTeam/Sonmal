@@ -85,7 +85,7 @@ class MacroCafeFragment: Fragment() {
     }
 
     private fun initView() {
-        this.pagingAdapter = MacroPagingAdapter(requireActivity())
+        this.pagingAdapter = MacroPagingAdapter()
 
 //        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
 //            override fun onClick(story: Story) {
