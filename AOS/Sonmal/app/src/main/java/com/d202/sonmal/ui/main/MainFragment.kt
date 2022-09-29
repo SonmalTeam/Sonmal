@@ -45,14 +45,18 @@ class MainFragment : Fragment() {
             btnCall.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
             }
-            btnLogin.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+//            btnLogin.setOnClickListener {
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+//            }
+//            btnVideo.setOnClickListener {
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
+//            }
+            btnSignLang.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
             }
-            btnVideo.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
+            btnVoiceTranslate.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
             }
-
-
         }
     }
 

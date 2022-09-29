@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "972002282880",
+    "firebase_url": "https://sonmal-83ef3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sonmal-83ef3",
+    "storage_bucket": "sonmal-83ef3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972002282880:android:20ea7e0aea4f4ec12a8565",
+        "android_client_info": {
+          "package_name": "com.d202.sonmal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972002282880-c9co6205i1qut5og8vpgqjcocgbdbmd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUoAYSwStfxumZcpirovPs1SE747zK3Lk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972002282880-c9co6205i1qut5og8vpgqjcocgbdbmd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

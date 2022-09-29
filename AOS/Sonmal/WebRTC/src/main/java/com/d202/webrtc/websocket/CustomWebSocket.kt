@@ -94,6 +94,7 @@ class CustomWebSocket(session: Session, openviduUrl: String, activity: AppCompat
     private fun handleServerResponse(json: JSONObject) {
         val rpcId = json.getInt(JsonConstants.ID)
         val result = JSONObject(json.getString(JsonConstants.RESULT))
+        Log.d(TAG, "handleServerResponse: $result")
         if (result.has("value") && result.getString("value") == "pong") {
             // Response to ping
             Log.i(TAG, "pong")
@@ -269,6 +270,7 @@ class CustomWebSocket(session: Session, openviduUrl: String, activity: AppCompat
                 JsonConstants.PARTICIPANT_JOINED -> participantJoinedEvent(params)
                 JsonConstants.PARTICIPANT_PUBLISHED -> participantPublishedEvent(params)
                 JsonConstants.PARTICIPANT_LEFT -> participantLeftEvent(params)
+                JsonConstants.SEND_MESSAGE -> Log.d(TAG, "handleServerEvent: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 else -> throw JSONException("Unknown method: $method")
             }
         }
@@ -276,6 +278,36 @@ class CustomWebSocket(session: Session, openviduUrl: String, activity: AppCompat
 
     fun sendJson(method: String?): Int {
         return this.sendJson(method, HashMap())
+    }
+
+    fun sendTextMessage(message: String){
+        Log.d(TAG, "sendTextMessage: ${session!!.getLocalParticipant()}")
+        val msg = JSONObject()
+        msg.put("message", message)
+        val m = msg.toString().replace("\\","")
+        val map = mapOf<String, String>("data" to m)
+        Log.d(TAG, "sendTextMessage: ${m}")
+        Log.d(TAG, "sendTextMessage: ${map}")
+
+        sendJson(JsonConstants.SENDMESSAGE_ROOM_METHOD, map)
+
+        val id = RPC_ID.get()
+        val jsonObject = JSONObject()
+        val paramsJson = JSONObject()
+        val string = """message":"{${message}}""".replace("\\","")
+        paramsJson.put("data", string)
+        try {
+            jsonObject.put("jsonrpc", JsonConstants.JSON_RPCVERSION)
+            jsonObject.put("method", SENDMESSAGE_ROOM_METHOD)
+            jsonObject.put("id", id)
+            jsonObject.put("params", paramsJson)
+        } catch (e: JSONException) {
+            Log.e(TAG, "JSONException raised on sendJson", e)
+        }
+        val msge = jsonObject.toString()
+        val test = """{"id" : "23","method":"sendMessage","params":{"message":{"message":"test###############"}},"jsonrpc":"2.0"}"""
+        websocket!!.sendText(test)
+        RPC_ID.incrementAndGet()
     }
 
     @Synchronized
@@ -295,7 +327,8 @@ class CustomWebSocket(session: Session, openviduUrl: String, activity: AppCompat
             Log.e(TAG, "JSONException raised on sendJson", e)
             return -1
         }
-        websocket!!.sendText(jsonObject.toString())
+        val msg = jsonObject.toString()
+        websocket!!.sendText(msg)
         RPC_ID.incrementAndGet()
         return id
     }

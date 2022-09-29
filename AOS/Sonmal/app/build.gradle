@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -31,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    viewBinding {
+        enabled = true
     }
     dataBinding{
         enabled = true
@@ -101,4 +105,13 @@ dependencies {
 
     // Paging 3
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.6'
+
+    // HangulParser
+    implementation 'com.github.kimkevin:hangulparser:1.0.0'
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:3.0.7'
 }

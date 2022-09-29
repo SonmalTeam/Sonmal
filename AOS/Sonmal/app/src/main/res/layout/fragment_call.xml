@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="vm"
             type="com.d202.sonmal.ui.call.viewmodel.CallViewModel" />
@@ -22,94 +24,151 @@
                 android:id="@+id/iv_call_end"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/ic_call_end"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:gravity="center"
                 android:text="사용자"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@id/iv_call_end"
-                android:gravity="center"
-                android:layout_marginStart="16dp"/>
+                app:layout_constraintStart_toEndOf="@id/iv_call_end" />
 
 
             <ImageView
                 android:id="@+id/iv_camera_switch"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_camera_switch"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:src="@drawable/ic_camera_switch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_camera_off"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:padding="8dp"
                 android:src="@drawable/selector_btn_camera"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_camera_switch"
-                android:padding="8dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_speaker_on"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:padding="8dp"
                 android:src="@drawable/selector_btn_speaker"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_camera_off"
-                android:padding="8dp"/>
-
-
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <RelativeLayout
-        android:id="@+id/views_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/peer_container"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/common_top">
-
-        <FrameLayout
-            android:id="@+id/peer_container_remote"
+            android:id="@+id/views_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@id/const_chat"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/common_top">
 
-            <org.webrtc.SurfaceViewRenderer
-                android:id="@+id/remote_gl_surface_view"
+            <FrameLayout
+                android:id="@+id/peer_container_remote"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_translate_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="안녕하세요"
-                android:text="@{vm.translateText}"
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:background="@color/black"
-                android:layout_gravity="top|center"
-                android:layout_marginVertical="16dp"/>
-        </FrameLayout>
+                <org.webrtc.SurfaceViewRenderer
+                    android:id="@+id/remote_gl_surface_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_translate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:layout_marginVertical="16dp"
+                    android:background="@color/black"
+                    android:text="@{vm.translateText}"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    tools:text="안녕하세요" />
+
+                <TextView
+                    android:id="@+id/tv_chat_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginVertical="56dp"
+                    android:background="@color/black"
+                    android:text="@{vm.chatList.size > 2 ? vm.chatList[vm.chatList.size - 2] : ``}"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    tools:text="Chat1" />
+
+                <TextView
+                    android:id="@+id/tv_chat_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginVertical="16dp"
+                    android:background="@color/black"
+                    android:text="@{vm.chatList.size > 2 ? vm.chatList[vm.chatList.size - 1] : ``}"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    tools:text="Chat2" />
+            </FrameLayout>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/const_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/peer_container"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="8dp"
+            >
+
+            <EditText
+                android:id="@+id/et_chat"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:paddingHorizontal="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Chat Message"
+                android:background="@drawable/box_white_border"
+                app:layout_constraintEnd_toStartOf="@id/btn_send"
+                />
+
+            <ImageView
+                android:id="@+id/btn_send"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_send_right"
+                android:padding="8dp"
+                android:backgroundTint="@color/main_blue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
         <FrameLayout
@@ -130,19 +189,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toEndOf="@id/peer_container"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/peer_container"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="8dp"
-            >
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/peer_container"
+            app:layout_constraintTop_toTopOf="@id/peer_container">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_macro"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
