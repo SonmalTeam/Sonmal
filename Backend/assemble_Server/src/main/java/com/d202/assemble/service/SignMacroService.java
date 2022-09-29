@@ -37,9 +37,9 @@ public class SignMacroService {
 
     // video 매크로 등록
     @Transactional
-    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile file){
+    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile multipartFile){
         try {
-            String origFilename = file.getOriginalFilename();
+            String origFilename = multipartFile.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
 
             String savePath = uploadURL;
@@ -52,15 +52,15 @@ public class SignMacroService {
                 }
             }
             String filePath = uploadURL + filename + ".mp4";
-            file.transferTo(new File(filePath));
+            multipartFile.transferTo(new File(filePath));
 
 
 //            Path copyOfLocation = Paths.get(uploadURL + origFilename + ".mp4");
 //            try {
-//                Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
+//                Files.copy(multipartFile.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
 //            } catch (IOException e) {
 //                e.printStackTrace();
-//                throw new RuntimeException("Could not store file : " + file.getOriginalFilename());
+//                throw new RuntimeException("Could not store file : " + multipartFile.getOriginalFilename());
 //            }
 
 //            try {
