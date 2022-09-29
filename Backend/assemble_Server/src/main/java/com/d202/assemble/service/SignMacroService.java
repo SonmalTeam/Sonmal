@@ -1,11 +1,13 @@
 package com.d202.assemble.service;
 
+
 import com.d202.assemble.dto.*;
 import com.d202.assemble.repo.CategoryRepo;
 import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class SignMacroService {
 
     private final SignMacroRepo signMacroRepo;
@@ -27,23 +31,29 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    // 매크로 등록
+    private final String uploadURL = "/home/files";
+//    private final String uploadURL = "D:\\DATA\\video";
+
+    // video 매크로 등록
     @Transactional
-    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile file){
+    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile multipartFile){
         try {
-            String origFilename = file.getOriginalFilename();
+            String origFilename = multipartFile.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
-            String savePath = "/files";
+
+            String savePath = uploadURL;
             if (!new File(savePath).exists()) {
                 try{
+                    log.info("파일 생성!!");
                     new File(savePath).mkdir();
                 }
                 catch(Exception e){
+                    log.info("파일 생성 에러");
                     e.getStackTrace();
                 }
             }
-            String filePath = savePath + "/" + filename + ".mp4";
-            file.transferTo(new File(filePath));
+            String filePath = uploadURL + "/" + filename + ".mp4";
+            multipartFile.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
@@ -65,6 +75,15 @@ public class SignMacroService {
         signMacroRepo.save(signMacro);
     }
 
+    // 비디오 재생
+    public String videoRegion(long videoFileId) {
+        String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
+        String path = uploadURL + "/" + fileName + ".mp4";
+
+        return path;
+    }
+
+    // 매크로 등록
     public void createSignMacroVideoNull(Long userSeq, SignMacroVideoNullDto request){
         SignMacro signMacro = request.toEntity();
 

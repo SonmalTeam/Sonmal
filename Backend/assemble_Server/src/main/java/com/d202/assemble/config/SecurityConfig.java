@@ -48,13 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers(HttpMethod.GET, "/user/**").authenticated()
 		.antMatchers(HttpMethod.GET, "/**/macro/**").authenticated()
 		.antMatchers(HttpMethod.DELETE).authenticated()
-		.antMatchers(HttpMethod.PUT).authenticated(); 
+		.antMatchers(HttpMethod.PUT).authenticated();
 
-		
 		// login. 해당 url로 요청할 시 로그인 과정을 거치게 된다.
-		//http.formLogin().loginPage("/user/**/login").defaultSuccessUrl("/").permitAll(); // 모두 허용	
+		//http.formLogin().loginPage("/user/**/login").defaultSuccessUrl("/").permitAll(); // 모두 허용
 	}
-	
+
 	@Override
 	public void configure(WebSecurity web) {
 		// 정적 리소스 spring security 대상에서 제외
@@ -62,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		web.httpFirewall(new DefaultHttpFirewall());// '//'허용..
 	}
 
-	
+
 	//CORS 해결
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
