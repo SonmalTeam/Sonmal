@@ -51,7 +51,7 @@ public class SignMacroService {
                     e.getStackTrace();
                 }
             }
-            String filePath = uploadURL + "/" + filename + ".mp4";
+            String filePath = uploadURL + filename + ".mp4";
             file.transferTo(new File(filePath));
 
 
@@ -93,8 +93,8 @@ public class SignMacroService {
     // 비디오 재생
     public String videoRegion(long videoFileId) {
         String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
-        String path = uploadURL + "/" + fileName + ".mp4";
-//        String path = "/files/" + fileName + ".mp4";
+//        String path = uploadURL + "/" + fileName + ".mp4";
+        String path = uploadURL + fileName + ".mp4";
 
         return path;
     }
