@@ -7,6 +7,7 @@ import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class SignMacroService {
 
     private final SignMacroRepo signMacroRepo;
@@ -42,9 +44,11 @@ public class SignMacroService {
             String savePath = uploadURL;
             if (!new File(savePath).exists()) {
                 try{
+                    log.info("파일 생성");
                     new File(savePath).mkdir();
                 }
                 catch(Exception e){
+                    log.info("파일 생성 에러");
                     e.getStackTrace();
                 }
             }
