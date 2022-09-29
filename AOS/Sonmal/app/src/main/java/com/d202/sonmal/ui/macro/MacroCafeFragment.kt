@@ -49,6 +49,10 @@ class MacroCafeFragment: Fragment() {
         super.onResume()
         val category = 1
         initObseve()
+        initView()
+        initTTS()
+
+
         macroViewModel.getPagingMacroListValue(category)
     }
 
@@ -57,6 +61,8 @@ class MacroCafeFragment: Fragment() {
 
         initObseve()
         initView()
+        initTTS()
+
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
