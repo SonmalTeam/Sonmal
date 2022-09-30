@@ -12,6 +12,6 @@ public class WebController {
 	@GetMapping(value="/privacy")
 	public String showPolicy() {
 		log.info("policy출력해라좀");
-		return "/WEB-INF/views/policy.jsp";
+		return "policy.html";
 	}
 }
