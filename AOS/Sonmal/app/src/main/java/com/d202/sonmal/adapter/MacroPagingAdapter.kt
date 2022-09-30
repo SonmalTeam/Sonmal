@@ -42,7 +42,7 @@ class MacroPagingAdapter() : PagingDataAdapter<MacroDto,
                 }
 
                 if(currentItem.videoFileId != 0) {
-                    tvEmoji.setBackgroundResource(R.drawable.playbutton)
+                    tvEmoji.setBackgroundResource(R.drawable.film)
                 }
             }
         }

@@ -74,7 +74,7 @@
                         android:id="@+id/btn_custom"
                         android:layout_width="180dp"
                         android:layout_height="180dp"
-                        android:src="@drawable/btn_macro_work_320px"
+                        android:src="@drawable/btn_macro_more_320px"
                         android:text="생활"
                         android:textColor="@color/white"
                         android:gravity="bottom |center_horizontal"

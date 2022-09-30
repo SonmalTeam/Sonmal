@@ -137,7 +137,6 @@ class MacroAddFragment: Fragment() {
             var category = selectedCategoty// todo categrySeq 적용
             var emoji = this.emoji // todo emoji만 입력
 
-            Toast.makeText(requireContext(), "add $category", Toast.LENGTH_SHORT).show()
             if(videoUri != null) {
                 // 선택
                 var video: File? = videoFileSave
@@ -146,6 +145,7 @@ class MacroAddFragment: Fragment() {
             } else if (videoUri == null) {
                 macroViewmodel.addMacroNull(title, content, category, emoji)
             }
+
 
 
         }
@@ -157,19 +157,15 @@ class MacroAddFragment: Fragment() {
         binding.apply {
             imgCategory1.setOnClickListener {
                 selectedCategoty = 1
-                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
             imgCategory2.setOnClickListener {
                 selectedCategoty = 2
-                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
             imgCategory3.setOnClickListener {
                 selectedCategoty = 3
-                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
             imgCategory4.setOnClickListener {
                 selectedCategoty = 4
-                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
             imgCategory5.setOnClickListener {
                 selectedCategoty = 5
@@ -184,6 +180,7 @@ class MacroAddFragment: Fragment() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
 //            binding.tvEmoji.text = "성공"
+
         }
     }
 
