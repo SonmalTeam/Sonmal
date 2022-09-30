@@ -9,10 +9,10 @@ import lombok.extern.log4j.Log4j2;
 
 @Controller
 @Log4j2
-public class MainController {
+public class WebController {
 	
 	@GetMapping(value="/")
-	public String main() {
+	public String showPolicy() {
 		log.info("policy출력해라좀");
 		return "policy";
 	}
