@@ -132,14 +132,16 @@ class MacroAddFragment: Fragment() {
             // 필수
             var title = binding.etTitle.text.toString()
             var content = binding.etContent.text.toString()
-            var category = "1"
-            var emoji = this.emoji // todo emoji
+            var category = 1 // todo categrySeq 적용
+            var emoji = this.emoji // todo emoji만 입력
 
             if(videoUri != null) {
                 // 선택
                 var video: File? = videoFileSave
 
-                macroViewmodel.addMacro(title, content, category, emoji, video)
+                macroViewmodel.addMacro(title, content, category.toString(), emoji, video)
+            } else {
+                macroViewmodel.addMacroNull(title, content, category, emoji)
             }
 
 
