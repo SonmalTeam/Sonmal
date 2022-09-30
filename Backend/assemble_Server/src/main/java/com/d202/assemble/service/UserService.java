@@ -44,6 +44,7 @@ public class UserService {
 		if(!userOp.isPresent()) {//가입안 된 user면 => DB save
 			User user = new User();
 			user.setEmail(email);
+			user.setSocialType(socialType);
 			realUser = userRepo.save(user);
 			if(realUser == null) {
 				return null;
