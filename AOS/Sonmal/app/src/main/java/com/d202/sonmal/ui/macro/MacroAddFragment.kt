@@ -154,7 +154,6 @@ class MacroAddFragment: Fragment() {
 
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
-            Log.d(TAG, "macro add 결과 $it")
             Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
 //            binding.tvEmoji.text = "성공"
         }

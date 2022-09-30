@@ -59,10 +59,7 @@ class MacroCafeFragment: Fragment() {
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
         val category = 1
-//        macroViewModel.getMacroList(category)
-        Log.d(TAG, "getPagingMacroList api start on Fragment")
         macroViewModel.getPagingMacroListValue(category)
-        Log.d(TAG, "getPagingMacroList api End on Fragment")
 
 
         binding.apply {
@@ -75,7 +72,6 @@ class MacroCafeFragment: Fragment() {
 
     private fun initObseve() {
         macroViewModel.macroList.observe(viewLifecycleOwner) {
-            Log.d(TAG, "macrolist in viewmoel $it")
             if(it != null) {
                 this.macroList = it
             }
@@ -84,7 +80,6 @@ class MacroCafeFragment: Fragment() {
             initTTS()
         }
         macroViewModel.pagingMacroList.observe(viewLifecycleOwner) {
-            Log.d(TAG, "pagingMacroList in viewmoel $it")
 
             pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
 
