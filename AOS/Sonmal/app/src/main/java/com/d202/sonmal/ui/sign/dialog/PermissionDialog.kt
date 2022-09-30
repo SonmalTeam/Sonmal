@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.d202.sonmal.databinding.DialogPermissionBinding
+import com.d202.sonmal.utils.sharedpref.SettingsPreference
 
 private const val TAG ="PermissionDialog"
 class PermissionDialog(var mContext: Context): DialogFragment() {
@@ -27,7 +28,10 @@ class PermissionDialog(var mContext: Context): DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnConfirm.setOnClickListener { dismiss() }
+        binding.btnConfirm.setOnClickListener {
+            SettingsPreference().setFirstRunCheck(false)
+            dismiss()
+        }
     }
 
     override fun onResume() {
