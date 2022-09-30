@@ -123,7 +123,7 @@ public class SignMacroService {
             signMacroList.add(new SignMacroResponseDto(signMacro));
         }
 
-        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages(), signMacroList);
+        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages() - 1, signMacroList);
         return result;
     }
 
@@ -145,7 +145,7 @@ public class SignMacroService {
             signMacroList.add(new SignMacroResponseDto(signMacro));
         }
 
-        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages(), signMacroList);
+        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages() - 1, signMacroList);
         return result;
     }
 
