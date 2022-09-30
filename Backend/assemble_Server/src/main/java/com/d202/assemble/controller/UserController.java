@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.d202.assemble.dto.JwtTokenDto;
+import com.d202.assemble.dto.SocialType;
 import com.d202.assemble.dto.User;
 import com.d202.assemble.service.JwtTokenService;
 import com.d202.assemble.service.UserService;
@@ -53,7 +54,7 @@ public class UserController {
 		Map<String, Object> userInfo = userService.getNaverUserInfo(token);
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
-			JwtTokenDto jwtTokenDto = userService.loginUser(email);
+			JwtTokenDto jwtTokenDto = userService.loginUser(email, SocialType.NAVER);
 			if(jwtTokenDto!=null) {
 				return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 			}
@@ -67,7 +68,7 @@ public class UserController {
 		Map<String, Object> userInfo = userService.getKakaoUserInfo(token);
 		if(userInfo!=null) {
 			String email = userInfo.get("email").toString();
-			JwtTokenDto jwtTokenDto = userService.loginUser(email);
+			JwtTokenDto jwtTokenDto = userService.loginUser(email, SocialType.KAKAO);
 			if(jwtTokenDto!=null) {
 				return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 			}

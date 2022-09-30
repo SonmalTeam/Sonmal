@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.d202.assemble.dto.JwtToken;
 import com.d202.assemble.dto.JwtTokenDto;
+import com.d202.assemble.dto.SocialType;
 import com.d202.assemble.dto.User;
 import com.d202.assemble.jwt.JwtUtils;
 import com.d202.assemble.repo.JwtTokenRepo;
@@ -36,9 +37,9 @@ public class UserService {
 	private final JwtTokenRepo jwtTokenRepo;
 	
 	@Transactional
-	public JwtTokenDto loginUser(String email) {
+	public JwtTokenDto loginUser(String email, SocialType socialType) {
 		//가입된 유저인지 확인
-		Optional<User> userOp = userRepo.findByEmail(email);
+		Optional<User> userOp = userRepo.findByEmailAndSocialType(email, socialType);
 		User realUser = null;
 		if(!userOp.isPresent()) {//가입안 된 user면 => DB save
 			User user = new User();
@@ -66,9 +67,9 @@ public class UserService {
 		return userRepo.findById(seq);
 	}
 
-	public Optional<User> findUserByEmail(String email) {
-		return userRepo.findByEmail(email);
-	}
+//	public Optional<User> findUserByEmail(String email) {
+//		return userRepo.findByEmail(email);
+//	}
 	
 	@Transactional
 	public void deleteUser(int seq) throws Exception {
