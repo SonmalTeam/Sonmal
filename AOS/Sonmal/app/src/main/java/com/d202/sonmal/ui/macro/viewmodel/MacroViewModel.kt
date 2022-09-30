@@ -120,14 +120,12 @@ class MacroViewModel: ViewModel() {
                     _macroAddCallback.postValue(200)
 
                 } else if(response.code() == 401) {
-                    Log.d(TAG, "refresh")
 
                     runBlocking {
                         try {
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                             val response = Retrofit.tokenApi.refreshToken(tokens)
                             if(response.isSuccessful && response.body() != null) {
-                                Log.d(TAG, "refreshToken sucess ${response.body()}")
                                 ApplicationClass.mainPref.token = response.body()!!.accessToken
                                 ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
                                 addMacro(title, content, category, emoji, video)
@@ -151,8 +149,43 @@ class MacroViewModel: ViewModel() {
 
     }
 
-    fun addMacroNull() {
+    fun addMacroNull(title: String, content: String, category: Int, emoji: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.macroApi.addMacroNull(
+                    MacroDto(0,category, title, content, category.toString(), "",emoji, 0,0)
+                )
 
+                if(response.isSuccessful){
+                    _macroAddCallback.postValue(200)
+
+                } else if(response.code() == 401) {
+
+                    runBlocking {
+                        try {
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                addMacroNull(title, content, category, emoji)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "addMacro fail : ${response.code()}")
+                    _macroAddCallback.postValue(400)
+                }
+
+            } catch (e : Exception) {
+
+            }
+        }
     }
 
     fun getVideo(videoId: Int) {
@@ -160,7 +193,6 @@ class MacroViewModel: ViewModel() {
             try {
                 val response = Retrofit.macroApi.getVideo(videoId)
                 if(response.isSuccessful && response.body() != null) {
-                    Log.d(TAG, "getVideo success: ${response.body()}")
                     _getVideoCallback.postValue(response.body())
                 } else if(response.code() == 401) {
                     runBlocking {

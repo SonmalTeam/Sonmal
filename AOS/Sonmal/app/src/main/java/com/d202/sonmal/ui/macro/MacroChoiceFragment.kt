@@ -47,15 +47,15 @@ class MacroChoiceFragment: Fragment() {
     }
 
     private fun initBtn() {
-        binding.apply {
-            btnMacroList.setOnClickListener {
-                moveToMacroListFragment()
-            }
-
-            btnAdd.setOnClickListener {
-                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
-            }
-        }
+//        binding.apply {
+//            btnMacroList.setOnClickListener {
+//                moveToMacroListFragment()
+//            }
+//
+//            btnAdd.setOnClickListener {
+//                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
+//            }
+//        }
     }
 
     private fun moveToMacroListFragment() {
