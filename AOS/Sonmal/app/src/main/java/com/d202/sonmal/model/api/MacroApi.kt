@@ -29,7 +29,7 @@ interface MacroApi {
     ): Response<Void>
 
     @POST("sign/macro")
-    suspend fun addMacroNull(@Body newMacro: MacroDto): Response<Void>
+    suspend fun addMacroNull(@Query("categorySeq")categorySeq: Int, @Query("title")title: String, @Query("content")content: String, @Query("icon")icon: String): Response<Void>
 
     @GET("sign/macro/video/{videoFileId}")
     suspend fun getVideo(@Path("videoFileId") videoFileId: Int): Response<String>

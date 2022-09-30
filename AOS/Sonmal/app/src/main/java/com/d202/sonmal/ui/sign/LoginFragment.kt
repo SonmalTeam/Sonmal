@@ -81,24 +81,17 @@ class LoginFragment : Fragment() {
         //회원 정보가 없는 경우 회원가입 진행 후 true 받아 로그인 api 호출 또는 로그인 처리
         signViewModel.isJoinSucced.observe(viewLifecycleOwner) {
             if(it) {
-                Toast.makeText(requireContext(), "로그인 진행 $it", Toast.LENGTH_SHORT).show()
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
                 signViewModel.refresh()
-            } else {
-                Toast.makeText(requireContext(), "isjoin? $it", Toast.LENGTH_SHORT).show()
             }
         }
 
         signViewModel.jwtToken.observe(viewLifecycleOwner) {
-            Log.d("jwt", "it $it")
             ApplicationClass.mainPref.token = it
-            Log.d("jwt manifest에 저장 ", "it $it")
         }
 
         signViewModel.refreshtoken.observe(viewLifecycleOwner) {
-            Log.d("refreshtoken", "it $it")
             ApplicationClass.mainPref.refreshToken = signViewModel.refreshtoken.value
-            Log.d("refreshtoken manifest에 저장 ", "it ${signViewModel.refreshtoken.value}")
         }
 
         signViewModel.unregisterCallBack.observe(viewLifecycleOwner) {
@@ -117,15 +110,9 @@ class LoginFragment : Fragment() {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 Toast.makeText(requireContext(), "카카오 계정 로그인 실패", Toast.LENGTH_LONG).show()
-                Log.d(TAG, "카카오계정으로 로그인 실패 : ${error}")
             } else if (token != null) {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
                 UserApiClient.instance.me { user, error ->
-                    Toast.makeText(requireContext(), "카카오 계정 로그인 성공", Toast.LENGTH_LONG).show()
-                    Log.d(TAG, "카카오계정으로 로그인 성공 \n\n " +
-                            "token: ${token.accessToken} \n\n " +
-                            "me: ${user}")
-
                     //로그인 성공 시 회원가입 api 호출
                     signViewModel.joinWithKaKao(token.accessToken)
 
@@ -139,7 +126,6 @@ class LoginFragment : Fragment() {
             UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
                 if (error != null) {
                     Toast.makeText(requireContext(), "카카오톡 로그인 실패", Toast.LENGTH_LONG).show()
-                    Log.d(TAG, "카카오 톡으로 로그인 실패 : ${error}")
 
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
@@ -150,9 +136,6 @@ class LoginFragment : Fragment() {
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                     UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
                 } else if (token != null) {
-                    Toast.makeText(requireContext(), "카카오톡 로그인 성공", Toast.LENGTH_LONG).show()
-                    Log.d(TAG, "카카오 톡으로 로그인 성공 : ${token.accessToken}")
-
                     //로그인 성공 시 회원가입 api 호출
                     signViewModel.joinWithKaKao(token.accessToken)
                 }
@@ -195,15 +178,10 @@ class LoginFragment : Fragment() {
         val profileCallback = object : NidProfileCallback<NidProfileResponse> {
             override fun onSuccess(response: NidProfileResponse) {
                 val userId = response.profile?.id
-//                Toast.makeText(requireContext(), "네이버 아이디 로그인 성공! $userId", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "naver login 성공 $response")
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(requireContext(), "네이버 로그인 실패", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "naver login 실패   errorCode: ${errorCode}\\n\" +\n" +
-                        "                        \"errorDescription: ${errorDescription}")
             }
             override fun onError(errorCode: Int, message: String) {
                 onFailure(errorCode, message)
