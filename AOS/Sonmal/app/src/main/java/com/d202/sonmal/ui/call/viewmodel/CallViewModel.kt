@@ -199,13 +199,11 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
         override fun onBeginningOfSpeech() {
             Log.d(TAG, "onBeginningOfSpeech: ")
-            context.showToast("onBeginningOfSpeech")
             _sttStatus.postValue("onBeginningOfSpeech")
         }
 
         override fun onEndOfSpeech() {
             Log.d(TAG, "onEndOfSpeech: ")
-            context.showToast("onEndOfSpeech")
             _sttStatus.postValue("onEndOfSpeech")
             if(FLAG_STT)
                 startSTT(context, userName)
@@ -229,8 +227,6 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
                 startSTT(context, userName)
             translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
             val result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
-            Log.d("TAG", "onResults : ${result}")
-            context.showToast(result)
             sendMessage(result, userName)
             if(result.isNotEmpty()) {
                 _sttResult.postValue(result)
