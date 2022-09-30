@@ -91,6 +91,4 @@ class MainFragment : Fragment() {
             .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
             .check()
     }
-
-
 }

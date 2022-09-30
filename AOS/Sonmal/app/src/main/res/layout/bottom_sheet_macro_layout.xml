@@ -16,60 +16,48 @@
             android:layout_height="match_parent"
             android:padding="12dp">
             <TableRow>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_hospital"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="병원"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_hospital_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_public"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="관공서"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_transport_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_restaurant"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="식당"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_offices_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
             </TableRow>
             <TableRow>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_cafe"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="카페"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_restaurant_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_store"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="마트"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_work_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
-                <TextView
+                <ImageView
                     android:id="@+id/btn_custom"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:background="@drawable/background_macro_choice"
-                    android:text="몰랑"
-                    android:textColor="@color/white"
+                    android:src="@drawable/btn_macro_more_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
             </TableRow>

@@ -82,7 +82,7 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
             }
 
             ivRecord.setOnClickListener {
-                viewModel.startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
+                //viewModel.startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
 //                if(!recordingDialogFragment.isAdded) {
 //                    recordingDialogFragment.setInterface(object : RecordingDialogFragment.TranslateInterface{
 //                        override fun getResult(result: String) {
@@ -119,6 +119,10 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
         viewModel.apply {
             sttResult.observe(viewLifecycleOwner){
                 if (it.isNotBlank()) {
+                    if(resultList.isEmpty()) {
+                        binding.ivMic.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right))
+                        binding.tvIntro.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right))
+                    }
                     resultList.add(it)
                     voiceAdapter.itemList = resultList
                 }
@@ -135,7 +139,6 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     override fun onPause() {
         super.onPause()
         viewModel.stopSTT()
-
     }
 
     override fun onInit(p0: Int) {
