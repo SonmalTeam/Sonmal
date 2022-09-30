@@ -125,6 +125,7 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                     }
                     resultList.add(it)
                     voiceAdapter.itemList = resultList
+                    binding.constImage.visibility = View.GONE
                 }
             }
 
