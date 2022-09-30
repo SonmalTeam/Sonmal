@@ -68,7 +68,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                //Toast.makeText(requireContext(), "Permission Granted!", Toast.LENGTH_SHORT).show()
                 setupStreamingModePipeline()
 
                 cameraInput = CameraInput(activity)
@@ -106,7 +105,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                     thread(start = true) {
                         while(isStarted) {
                             binding.progressBar.progress = (System.currentTimeMillis() - startTime).toInt()
-                            Log.d(TAG, "run: ${binding.progressBar.progress}")
                             Thread.sleep(1)
                         }
                         binding.progressBar.progress = 0
