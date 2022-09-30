@@ -140,7 +140,7 @@ class MacroAddFragment: Fragment() {
                 var video: File? = videoFileSave
 
                 macroViewmodel.addMacro(title, content, category.toString(), emoji, video)
-            } else {
+            } else if (videoUri == null) {
                 macroViewmodel.addMacroNull(title, content, category, emoji)
             }
 

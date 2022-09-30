@@ -62,8 +62,10 @@ class MacroViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //todo userSeq, category api로 보내기
+                Log.d(TAG, "getMacroList")
                 val response = Retrofit.macroApi.getMacroList(category)
                 if(response.isSuccessful && response.body() != null){
+                    Log.d(TAG, "getMacroList success")
                     _macroList.postValue(response.body() as MutableList<MacroDto>)
                 } else if(response.code() == 401) {
                     runBlocking {
@@ -152,13 +154,14 @@ class MacroViewModel: ViewModel() {
     fun addMacroNull(title: String, content: String, category: Int, emoji: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d(TAG, "addMacroNull")
                 val response = Retrofit.macroApi.addMacroNull(
                     MacroDto(0,category, title, content, category.toString(), "",emoji, 0,0)
                 )
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
-
+                    Log.d(TAG, "addMacroNull 성공")
                 } else if(response.code() == 401) {
 
                     runBlocking {
@@ -178,7 +181,7 @@ class MacroViewModel: ViewModel() {
                         }
                     }
                 } else {
-                    Log.d(TAG, "addMacro fail : ${response.code()}")
+                    Log.d(TAG, "addMacroNull fail : ${response.code()}")
                     _macroAddCallback.postValue(400)
                 }
 
