@@ -145,6 +145,7 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         glSurfaceView = SolutionGlSurfaceView(requireContext(), hands.glContext, hands.glMajorVersion)
         glSurfaceView.setSolutionResultRenderer(HandsResultGlRenderer())
         glSurfaceView.setRenderInputImage(true)
+
         hands.setResultListener {
             //logWristLandmark(it, false)
             translate(it)

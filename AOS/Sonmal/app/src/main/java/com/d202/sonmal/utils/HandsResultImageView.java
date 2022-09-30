@@ -17,14 +17,14 @@ import java.util.List;
 public class HandsResultImageView extends AppCompatImageView {
     private static final String TAG = "HandsResultImageView";
 
-    private static final int LEFT_HAND_CONNECTION_COLOR = Color.parseColor("#30FF30");
-    private static final int RIGHT_HAND_CONNECTION_COLOR = Color.parseColor("#FF3030");
+    private static final int LEFT_HAND_CONNECTION_COLOR = Color.parseColor("#6BB6FF");
+    private static final int RIGHT_HAND_CONNECTION_COLOR = Color.parseColor("#6BB6FF");
     private static final int CONNECTION_THICKNESS = 8; // Pixels
-    private static final int LEFT_HAND_HOLLOW_CIRCLE_COLOR = Color.parseColor("#30FF30");
-    private static final int RIGHT_HAND_HOLLOW_CIRCLE_COLOR = Color.parseColor("#FF3030");
+    private static final int LEFT_HAND_HOLLOW_CIRCLE_COLOR = Color.parseColor("#6BB6FF");
+    private static final int RIGHT_HAND_HOLLOW_CIRCLE_COLOR = Color.parseColor("#6BB6FF");
     private static final int HOLLOW_CIRCLE_WIDTH = 5; // Pixels
-    private static final int LEFT_HAND_LANDMARK_COLOR = Color.parseColor("#FF3030");
-    private static final int RIGHT_HAND_LANDMARK_COLOR = Color.parseColor("#30FF30");
+    private static final int LEFT_HAND_LANDMARK_COLOR = Color.parseColor("#A2DCFF");
+    private static final int RIGHT_HAND_LANDMARK_COLOR = Color.parseColor("#A2DCFF");
     private static final int LANDMARK_RADIUS = 10; // Pixels
     private Bitmap latest;
 
