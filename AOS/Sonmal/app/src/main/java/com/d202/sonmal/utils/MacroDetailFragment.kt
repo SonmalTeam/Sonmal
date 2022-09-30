@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.d202.sonmal.databinding.FragmentMacroDetailDialogBinding
+import com.d202.sonmal.model.dto.MacroDto
 
-class MacroDetailFragment: DialogFragment() {
+class MacroDetailFragment(var item: MacroDto): DialogFragment() {
     private lateinit var bindig: FragmentMacroDetailDialogBinding
 
     override fun onCreateView(
@@ -32,13 +33,15 @@ class MacroDetailFragment: DialogFragment() {
 
         bindig.apply {
             btnDelete.setOnClickListener {
-                buttonClickListener.onButton1Clicked()
+                buttonClickListener.onButton1Clicked(item)
                 dismiss()
             }
             btnConfirm.setOnClickListener {
                 buttonClickListener.onButton2Clicked()
                 dismiss()
             }
+            tvTitleDetail.text = item.title
+            tvContentDetail.text = item.content
 
         }
 
@@ -46,7 +49,7 @@ class MacroDetailFragment: DialogFragment() {
 
     // 인터페이스
     interface OnButtonClickListener {
-        fun onButton1Clicked() // 삭제
+        fun onButton1Clicked(item: MacroDto) // 삭제
         fun onButton2Clicked() // 확인
         fun onButton3Clicked() // 이동
     }

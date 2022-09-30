@@ -135,11 +135,11 @@ class MacroCafeFragment: Fragment() {
             setTitleClickListener(object: MacroPagingAdapter.TitleItemClickListener {
                 override fun onClick(view: View, position: Int, item: MacroDto) {
 
-                    val dialog = MacroDetailFragment()
+                    val dialog = MacroDetailFragment(item)
                     dialog.show(parentFragmentManager, "MacroDetailFragment")
 
                     dialog.setButtonClickListener(object: MacroDetailFragment.OnButtonClickListener{
-                        override fun onButton1Clicked() { // 삭제 확인
+                        override fun onButton1Clicked(item: MacroDto) { // 삭제 확인
                         // 기본 형태의 다이얼로그
                         // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
                         val builder = AlertDialog.Builder(requireContext())
