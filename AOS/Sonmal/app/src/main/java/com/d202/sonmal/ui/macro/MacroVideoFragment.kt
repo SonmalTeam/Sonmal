@@ -2,6 +2,7 @@ package com.d202.sonmal.ui.macro
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,6 +65,7 @@ class MacroVideoFragment : Fragment() {
         var mediaController = MediaController(requireContext())
         mediaController.setAnchorView(binding.vv)
 
+        Log.d(TAG, "비디오 id $videoId")
         var video = "https://d202.kro.kr/api/sign/macro/video/$videoId"
         var uriVideo = Uri.parse(video)
         binding.vv.apply {

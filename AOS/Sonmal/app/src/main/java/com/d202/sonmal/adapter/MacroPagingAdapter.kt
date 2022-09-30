@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.d202.sonmal.R
 import com.d202.sonmal.databinding.ItemMacroRecyclerBinding
 import com.d202.sonmal.model.dto.MacroDto
 
@@ -38,6 +39,10 @@ class MacroPagingAdapter() : PagingDataAdapter<MacroDto,
                 }
                 tvTitle.setOnClickListener {
                     titleItemClickListener.onClick(it, position, currentItem)
+                }
+
+                if(currentItem.videoFileId != 0) {
+                    tvEmoji.setBackgroundResource(R.drawable.playbutton)
                 }
             }
         }

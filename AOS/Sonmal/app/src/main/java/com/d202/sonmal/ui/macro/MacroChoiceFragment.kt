@@ -58,7 +58,7 @@ class MacroChoiceFragment: Fragment() {
     }
 
     private fun moveToMacroListFragment(category: Int) {
-        findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment())
+        findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment(category))
     }
 
 }

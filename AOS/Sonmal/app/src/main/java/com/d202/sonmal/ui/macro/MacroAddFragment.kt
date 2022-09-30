@@ -137,6 +137,7 @@ class MacroAddFragment: Fragment() {
             var category = selectedCategoty// todo categrySeq 적용
             var emoji = this.emoji // todo emoji만 입력
 
+            Toast.makeText(requireContext(), "add $category", Toast.LENGTH_SHORT).show()
             if(videoUri != null) {
                 // 선택
                 var video: File? = videoFileSave
@@ -156,20 +157,24 @@ class MacroAddFragment: Fragment() {
         binding.apply {
             imgCategory1.setOnClickListener {
                 selectedCategoty = 1
+                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
-            imgCategory1.setOnClickListener {
+            imgCategory2.setOnClickListener {
                 selectedCategoty = 2
+                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
-            imgCategory1.setOnClickListener {
+            imgCategory3.setOnClickListener {
                 selectedCategoty = 3
+                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
-            imgCategory1.setOnClickListener {
+            imgCategory4.setOnClickListener {
                 selectedCategoty = 4
+                Toast.makeText(requireContext(), "$selectedCategoty", Toast.LENGTH_SHORT).show()
             }
-            imgCategory1.setOnClickListener {
+            imgCategory5.setOnClickListener {
                 selectedCategoty = 5
             }
-            imgCategory1.setOnClickListener {
+            imgCategory6.setOnClickListener {
                 selectedCategoty = 6
             }
         }
