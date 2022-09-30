@@ -58,6 +58,7 @@ public class SwaggerConfig {
 
 		Server serverLocal = new Server("local", "http://localhost:8090", "for local usages", Collections.emptyList(), Collections.emptyList());
 		Server testServer = new Server("test", "https://d202.kro.kr/api", "for testing", Collections.emptyList(), Collections.emptyList());
+		Server testServer = new Server("test2", "http://j7d202.p.ssafy.io:8090", "for testing", Collections.emptyList(), Collections.emptyList());
 //		return new Docket(DocumentationType.SWAGGER_2)
 		//return new Docket(DocumentationType.OAS_30)
 		return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo)
