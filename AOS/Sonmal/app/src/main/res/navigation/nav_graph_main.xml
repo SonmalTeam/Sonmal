@@ -114,6 +114,16 @@
         <action
             android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
             app:destination="@id/macroVideoFragment" />
+        <action
+            android:id="@+id/action_voiceFragment_to_recordingDialogFragment"
+            app:destination="@id/recordingDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recordingDialogFragment"
+        android:name="com.d202.sonmal.ui.voice.RecordingDialogFragment"
+        android:label="RecordingDialogFragment">
+
     </fragment>
 
     <fragment

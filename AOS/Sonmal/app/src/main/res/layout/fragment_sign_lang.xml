@@ -30,17 +30,19 @@
             android:scaleY="2"/>
 
         <TextView
-            android:id="@+id/tv_sst_result"
+            android:id="@+id/tv_stt_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/lt_record"
-            app:layout_constraintTop_toTopOf="@id/lt_record"
-            app:layout_constraintBottom_toBottomOf="@id/lt_record"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="10dp"
             android:hint="버튼을 눌러 음성 인식을 해주세요."
+            android:scrollbars="vertical"
             android:textColor="@color/black"
             android:textSize="18dp"
-            android:layout_marginStart="10dp"/>
+            app:layout_constraintBottom_toBottomOf="@id/lt_record"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/lt_record"
+            app:layout_constraintTop_toTopOf="@id/lt_record" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,6 +53,15 @@
         app:layout_constraintTop_toBottomOf="@id/cl_voice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/cl_record">
+
+        <TextView
+            android:id="@+id/tv_live_translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textSize="26dp"
+            android:layout_gravity="bottom |center_horizontal"/>
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,36 +72,41 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:padding="8dp">
 
-        <TextView
-            android:id="@+id/tv_now_translate"
+        <EditText
+            android:id="@+id/et_now_translate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_speak"
-            app:layout_constraintTop_toTopOf="@id/iv_speak"
-            app:layout_constraintBottom_toBottomOf="@id/iv_speak"
+            app:layout_constraintEnd_toStartOf="@id/lt_speak"
+            app:layout_constraintTop_toTopOf="@id/lt_speak"
+            app:layout_constraintBottom_toBottomOf="@id/lt_speak"
             android:layout_marginEnd="8dp"
             android:hint="내용이 표시 됩니다."
             android:textSize="22dp"
             android:textColor="@color/black"
-            android:padding="6dp"/>
+            android:padding="8dp"/>
 
-        <ImageView
-            android:id="@+id/iv_speak"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lt_speak"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_speak_out"
+            app:lottie_rawRes="@raw/speaker_black"
+            app:lottie_loop="true"
+            app:lottie_repeatMode="restart"
+            app:lottie_autoPlay="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:padding="6dp"/>
+            android:scaleX="1.7"
+            android:scaleY="1.7"
+            android:padding="4dp"/>
 
         <TextView
             android:id="@+id/tv_next_translate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/tv_now_translate"
-            app:layout_constraintTop_toBottomOf="@id/tv_now_translate"
-            app:layout_constraintEnd_toEndOf="@id/tv_now_translate"
+            app:layout_constraintStart_toStartOf="@id/et_now_translate"
+            app:layout_constraintTop_toBottomOf="@id/et_now_translate"
+            app:layout_constraintEnd_toEndOf="@id/et_now_translate"
             android:textSize="22dp"
             android:textColor="@color/black"
             android:padding="6dp"
@@ -101,7 +117,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/record_start"
-            app:layout_constraintEnd_toEndOf="@id/iv_speak"
+            app:layout_constraintEnd_toEndOf="@id/lt_speak"
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="8dp"/>
 
