@@ -18,9 +18,11 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
         return try {
             val page = params.key?: START_PAGE_INDEX
             var response: Response<PagingResult<MacroDto>>?
+            Log.d(TAG, "MacroDataSource 요청 $categorySeq $page")
             response = macroApi.getPageMacroList(categorySeq, page, 7)
             var body = response.body()
             if(response.isSuccessful && body != null){
+                Log.d(TAG, "MacroDataSource ${response.body()}")
                 LoadResult.Page(
                     data = body.result,
                     prevKey = if(page == 0) null else page -1,
@@ -29,6 +31,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             } else if (response.code() == 401) {
                 runBlocking {
                     try {
+                        Log.d(TAG, "MacroDataSource  401")
                         var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                         val response = Retrofit.tokenApi.refreshToken(tokens)
                         if(response.isSuccessful && response.body() != null) {
@@ -45,14 +48,14 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                     LoadResult.Page(
                         data = body!!.result,
                         prevKey = if(page == 0) null else page -1,
-                        nextKey = if(page == body!!.totalPage) null else page +1
+                        nextKey = if(page == body!!.totalPage-1) null else page +1
                     )
                 }
             } else {
                 Log.d(TAG, "getPageMacroList fail ${response.code()}")
                 LoadResult.Page(
                     data = body!!.result,
-                    prevKey = null,
+                    prevKey = if(page == 0) null else page -1,
                     nextKey = null
                 )
             }

@@ -29,7 +29,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="제목"
+                android:text="제목 (*)"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -56,7 +56,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="내용"
+                android:text="내용 (*)"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -83,7 +83,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="아이콘"
+                android:text="아이콘 (*)"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -103,6 +103,81 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_emoji_title" />
 
             <TextView
+                android:id="@+id/tv_category"
+                app:layout_constraintTop_toBottomOf="@id/tv_emoji"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/img_category1"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="카테고리"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/img_category1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_video"
+                android:text="병원"/>
+
+            <TextView
+                android:id="@+id/img_category2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toEndOf="@id/img_category1"
+                app:layout_constraintTop_toTopOf="@id/img_category1"
+                app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                android:text="관공서"/>
+
+            <TextView
+                android:id="@+id/img_category3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toEndOf="@id/img_category2"
+                app:layout_constraintTop_toTopOf="@id/img_category1"
+                app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                android:text="교통"/>
+
+            <TextView
+                android:id="@+id/img_category4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toEndOf="@id/img_category3"
+                app:layout_constraintTop_toTopOf="@id/img_category1"
+                app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                android:text="식당"/>
+
+            <TextView
+                android:id="@+id/img_category5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toEndOf="@id/img_category4"
+                app:layout_constraintTop_toTopOf="@id/img_category1"
+                app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                android:text="업무"/>
+
+            <TextView
+                android:id="@+id/img_category6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toEndOf="@id/img_category5"
+                app:layout_constraintTop_toTopOf="@id/img_category5"
+                app:layout_constraintBottom_toBottomOf="@id/img_category5"
+                android:text="일상"/>
+
+            <TextView
                 android:id="@+id/tv_video"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -113,9 +188,8 @@
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_emoji" />
+                app:layout_constraintTop_toBottomOf="@id/img_category1" />
 
             <Button
                 android:id="@+id/btn_add_emoji"

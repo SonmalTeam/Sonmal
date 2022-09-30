@@ -36,6 +36,7 @@ private val TAG = "MacroAddFragment"
 class MacroAddFragment: Fragment() {
     private lateinit var binding: FragmentMacroAddBinding
     private val macroViewmodel: MacroViewModel by viewModels()
+    private var selectedCategoty: Int = 0
 
     //emoji 입력
     private var emoji = "Emoji"
@@ -121,8 +122,9 @@ class MacroAddFragment: Fragment() {
 
             if(binding.etTitle.text.toString() == "" ||
                 binding.etContent.text.toString() ==  "" ||
-                binding.tvEmoji.text ==  "") {
-                Toast.makeText(requireContext(), "제목, 내용, 아이콘 입력 필요", Toast.LENGTH_SHORT).show()
+                binding.tvEmoji.text ==  "" ||
+                    selectedCategoty == 0) {
+                Toast.makeText(requireContext(), "제목, 내용, 아이콘, 카테고리 입력 필요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -132,7 +134,7 @@ class MacroAddFragment: Fragment() {
             // 필수
             var title = binding.etTitle.text.toString()
             var content = binding.etContent.text.toString()
-            var category = 1 // todo categrySeq 적용
+            var category = selectedCategoty// todo categrySeq 적용
             var emoji = this.emoji // todo emoji만 입력
 
             if(videoUri != null) {
@@ -149,6 +151,27 @@ class MacroAddFragment: Fragment() {
 
         binding.btnAddEmoji.setOnClickListener {
             showdialog()
+        }
+
+        binding.apply {
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 1
+            }
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 2
+            }
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 3
+            }
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 4
+            }
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 5
+            }
+            imgCategory1.setOnClickListener {
+                selectedCategoty = 6
+            }
         }
     }
 
