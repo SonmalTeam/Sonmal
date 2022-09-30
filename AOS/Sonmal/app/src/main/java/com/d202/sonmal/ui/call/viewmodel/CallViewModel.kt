@@ -85,10 +85,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
                     _chatList.postValue(_chatList.value)
-<<<<<<< HEAD
                     speakOut(chattingItem.message)
-=======
->>>>>>> FE/feat/edit-sign-language-result
                 }
             }
             @RequiresApi(Build.VERSION_CODES.N)
