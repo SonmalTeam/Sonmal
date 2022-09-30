@@ -18,6 +18,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -39,7 +40,8 @@ public class SignMacroService {
     public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile multipartFile){
         try {
             String origFilename = multipartFile.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
+            UUID uuid = UUID.randomUUID();
+            String filename = new MD5Generator(origFilename).toString() + "_" + uuid.toString();
 
             String savePath = uploadURL;
             if (!new File(savePath).exists()) {
