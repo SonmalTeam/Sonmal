@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -14,7 +14,8 @@
                 android:padding="12dp"
                 android:background="@drawable/background_write_text"
                 >
-                <TableRow>
+                <TableRow
+                    android:gravity="center">
                     <TextView
                         android:id="@+id/btn_hospital"
                         android:layout_width="180dp"
@@ -35,7 +36,8 @@
                         android:layout_margin="4dp"/>
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:gravity="center">
                     <TextView
                         android:id="@+id/btn_restaurant"
                         android:layout_width="180dp"
@@ -46,31 +48,34 @@
                         android:gravity="bottom |center_horizontal"
                         android:layout_margin="4dp"/>
                     <TextView
-                        android:id="@+id/btn_cafe"
+                        android:id="@+id/btn_work"
                         android:layout_width="180dp"
                         android:layout_height="180dp"
                         android:background="@drawable/background_macro_choice"
-                        android:text="카페"
+                        android:text="업무"
                         android:textColor="@color/white"
                         android:gravity="bottom |center_horizontal"
                         android:layout_margin="4dp"/>
                 </TableRow>
-                <TableRow>
+                <TableRow
+                    android:gravity="center">
+
                     <TextView
                         android:id="@+id/btn_store"
                         android:layout_width="180dp"
                         android:layout_height="180dp"
+                        android:layout_margin="4dp"
                         android:background="@drawable/background_macro_choice"
-                        android:text="마트"
-                        android:textColor="@color/white"
                         android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
+                        android:text="상점"
+                        android:textColor="@color/white" />
+
                     <TextView
                         android:id="@+id/btn_custom"
                         android:layout_width="180dp"
                         android:layout_height="180dp"
                         android:background="@drawable/background_macro_choice"
-                        android:text="몰랑"
+                        android:text="생활"
                         android:textColor="@color/white"
                         android:gravity="bottom |center_horizontal"
                         android:layout_margin="4dp"/>

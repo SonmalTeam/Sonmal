@@ -188,6 +188,84 @@ class MacroViewModel: ViewModel() {
         }
     }
 
+    fun modifyCategryMacro(macroSeq: Int, categorySeq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.macroApi.modifyCategoryMAcro(
+                    macroSeq, macroSeq, categorySeq
+                )
+
+                if(response.isSuccessful){
+                    _macroAddCallback.postValue(200)
+
+                } else if(response.code() == 401) {
+
+                    runBlocking {
+                        try {
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                modifyCategryMacro(macroSeq, categorySeq)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "modifyCategryMacro fail : ${response.code()}")
+                    _macroAddCallback.postValue(400)
+                }
+
+            } catch (e : Exception) {
+
+            }
+        }
+    }
+
+    fun deleteMacro(macroSeq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = Retrofit.macroApi.deleteMacro(
+                    macroSeq
+                )
+
+                if(response.isSuccessful){
+                    _macroAddCallback.postValue(200)
+
+                } else if(response.code() == 401) {
+
+                    runBlocking {
+                        try {
+                            var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
+                            val response = Retrofit.tokenApi.refreshToken(tokens)
+                            if(response.isSuccessful && response.body() != null) {
+                                ApplicationClass.mainPref.token = response.body()!!.accessToken
+                                ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
+                                deleteMacro(macroSeq)
+                            } else {
+                                Log.d(TAG, "refreshToken err ${response.code()}")
+                            }
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, "e: ${e.message}")
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "deleteMacro fail : ${response.code()}")
+                    _macroAddCallback.postValue(400)
+                }
+
+            } catch (e : Exception) {
+
+            }
+        }
+    }
+
     fun getVideo(videoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

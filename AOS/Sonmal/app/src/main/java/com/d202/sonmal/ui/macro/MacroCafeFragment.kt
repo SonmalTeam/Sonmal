@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.MacroAdapter
@@ -31,6 +32,7 @@ class MacroCafeFragment: Fragment() {
     private lateinit var macroList: MutableList<MacroDto>
     private lateinit var tts: TextToSpeech
     private lateinit var pagingAdapter: MacroPagingAdapter
+    private val args by navArgs<MacroCafeFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +60,7 @@ class MacroCafeFragment: Fragment() {
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
+//        val category = args.category
         val category = 1
         macroViewModel.getPagingMacroListValue(category)
 
@@ -130,6 +133,7 @@ class MacroCafeFragment: Fragment() {
 
                 }
             })
+
         }
     }
 
