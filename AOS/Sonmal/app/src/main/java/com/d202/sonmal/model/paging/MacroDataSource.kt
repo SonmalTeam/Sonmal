@@ -21,7 +21,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             Log.d(TAG, "MacroDataSource 요청 $categorySeq $page")
             response = macroApi.getPageMacroList(categorySeq, page, 7)
             var body = response.body()
-            if(response.isSuccessful && body != null){
+            if(response.isSuccessful && body != null && body.totalPage > -1){
                 Log.d(TAG, "MacroDataSource ${response.body()}")
                 LoadResult.Page(
                     data = body.result,
