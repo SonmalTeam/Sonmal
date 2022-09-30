@@ -25,14 +25,27 @@
             android:textSize="24sp"
             android:layout_marginBottom="40dp"/>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/tv_app_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="앱 정보"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:paddingVertical="16dp"/>
+            android:orientation="horizontal"
+            android:paddingVertical="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="앱 정보"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_baseline_chevron_right_black_24"/>
+
+        </LinearLayout>
 
         <!-- Divider1 -->
         <LinearLayout
@@ -40,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/sonmal_gray_300"
-            android:orientation="vertical"/>
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
             android:id="@+id/tv_unregister"

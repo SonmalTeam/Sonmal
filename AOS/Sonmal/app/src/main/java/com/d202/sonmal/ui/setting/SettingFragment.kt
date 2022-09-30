@@ -46,6 +46,9 @@ class SettingFragment: Fragment(){
                 naverUnlink()
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
+            tvAppInfo.setOnClickListener {
+                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToAppInfoFragment())
+            }
         }
 
     }
