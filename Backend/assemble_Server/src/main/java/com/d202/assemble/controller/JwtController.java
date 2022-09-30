@@ -52,39 +52,39 @@ public class JwtController {
 	
 	//--------------------테스트 코드---------------------//
 	//seq아니면 email 중에 뭐로 jwt발급할지
-	@ApiOperation(value="jwt발급 테스트")
-	@GetMapping("/{email}")
-	public ResponseEntity<?> getToken(@PathVariable String email){
-		Optional<User> userOp = userService.findUserByEmail(email);
-		if(userOp.isPresent()) {
-			User user = userOp.get();
-			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
-			JwtToken jwt = jwtTokenService.getJwtTokenByUserSeq(user.getSeq()).orElseGet(()->new JwtToken());
-			jwt.setUserSeq(user.getSeq());
-			jwt.setAccessToken(jwtTokenDto.getAccessToken());
-			jwt.setRefreshToken(jwtTokenDto.getRefreshToken());
-			jwtTokenService.changeToken(jwt);
-			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
-		}
-		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-	}
-		
-	@ApiOperation(value="jwt유효성 테스트")
-	@PostMapping()
-	public ResponseEntity<?> validateToken(@RequestBody String jwt){
-		//prefix제거
-		String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
-		try {
-			JwtUtils.validateToken(token);
-		} catch (ExpiredJwtException e) {
-			//만료됨
-			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
-		} catch(JwtException e2) {
-			//유효하지 않은 토큰
-			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
-		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
+//	@ApiOperation(value="jwt발급 테스트")
+//	@GetMapping("/{email}")
+//	public ResponseEntity<?> getToken(@PathVariable String email){
+//		Optional<User> userOp = userService.findUserByEmail(email);
+//		if(userOp.isPresent()) {
+//			User user = userOp.get();
+//			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
+//			JwtToken jwt = jwtTokenService.getJwtTokenByUserSeq(user.getSeq()).orElseGet(()->new JwtToken());
+//			jwt.setUserSeq(user.getSeq());
+//			jwt.setAccessToken(jwtTokenDto.getAccessToken());
+//			jwt.setRefreshToken(jwtTokenDto.getRefreshToken());
+//			jwtTokenService.changeToken(jwt);
+//			return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+//	}
+//		
+//	@ApiOperation(value="jwt유효성 테스트")
+//	@PostMapping()
+//	public ResponseEntity<?> validateToken(@RequestBody String jwt){
+//		//prefix제거
+//		String token = jwt;//.replace(JwtProperties.TOKEN_PREFIX, "");
+//		try {
+//			JwtUtils.validateToken(token);
+//		} catch (ExpiredJwtException e) {
+//			//만료됨
+//			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+//		} catch(JwtException e2) {
+//			//유효하지 않은 토큰
+//			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+//		}
+//		return new ResponseEntity<Void>(HttpStatus.OK);
+//	}
 	
 //	@ApiOperation(value="jwt무효화 테스트")
 //	@PostMapping()
