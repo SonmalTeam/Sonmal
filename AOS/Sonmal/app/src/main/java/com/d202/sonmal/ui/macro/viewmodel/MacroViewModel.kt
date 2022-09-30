@@ -156,7 +156,7 @@ class MacroViewModel: ViewModel() {
             try {
                 Log.d(TAG, "addMacroNull")
                 val response = Retrofit.macroApi.addMacroNull(
-                    MacroDto(0,category, title, content, category.toString(), "",emoji, 0,0)
+                    category, title, content, emoji
                 )
 
                 if(response.isSuccessful){
