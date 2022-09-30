@@ -37,10 +37,10 @@ interface MacroApi {
     @POST("jwt/refresh")
     suspend fun refreshToken(@Body tokens: TokenDto) :Response<TokenDto>
 
-    @DELETE("sing/macro/{signMacroSeq")
-    suspend fun deleteMacro(@Path("signMacroSeq") macroSeq: Int): Response<Void>
+    @DELETE("sign/macro/{signMacroSeq}")
+    suspend fun deleteMacro(@Path("signMacroSeq") signMacroSeq: Int): Response<Void>
 
-    @PUT("sing/macro/{signMacroSeq")
+    @PUT("sign/macro/{signMacroSeq}")
     suspend fun modifyCategoryMAcro(@Path("signMacroSeq") macroSeq1: Int,
                                     @Query("signMacroSeq") macroSeq2: Int, @Query("categorySeq") categorySeq: Int
     ): Response<Void>

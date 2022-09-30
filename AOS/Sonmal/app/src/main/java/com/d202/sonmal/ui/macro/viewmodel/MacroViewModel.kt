@@ -55,6 +55,10 @@ class MacroViewModel: ViewModel() {
     val getVideoCallback: LiveData<String>
         get() = _getVideoCallback
 
+    private val _macroDeleteCallback = MutableLiveData<Int>()
+    val macroDeleteCallback: LiveData<Int>
+        get() = _macroDeleteCallback
+
 
 
 
@@ -233,12 +237,14 @@ class MacroViewModel: ViewModel() {
     fun deleteMacro(macroSeq: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d(TAG, "deleteMacro seq : ${macroSeq}")
                 val response = Retrofit.macroApi.deleteMacro(
                     macroSeq
                 )
 
                 if(response.isSuccessful){
-                    _macroAddCallback.postValue(200)
+                    Log.d(TAG, "deleteMacro fail : ${response.code()}")
+                    _macroDeleteCallback.postValue(200)
 
                 } else if(response.code() == 401) {
 
@@ -260,11 +266,11 @@ class MacroViewModel: ViewModel() {
                     }
                 } else {
                     Log.d(TAG, "deleteMacro fail : ${response.code()}")
-                    _macroAddCallback.postValue(400)
+
                 }
 
             } catch (e : Exception) {
-
+                Log.d(TAG, "deleteMacro error : ${e.message}")
             }
         }
     }

@@ -22,6 +22,7 @@ import com.d202.sonmal.adapter.MacroPagingAdapter
 import com.d202.sonmal.databinding.FragmentMacroCafeBinding
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.utils.MacroDetailFragment
 import java.util.*
 
 private val TAG = "MacroCafeFragment"
@@ -33,7 +34,7 @@ class MacroCafeFragment: Fragment() {
     private lateinit var tts: TextToSpeech
     private lateinit var pagingAdapter: MacroPagingAdapter
     private val args by navArgs<MacroCafeFragmentArgs>()
-
+    private var categorySeq = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,9 +61,8 @@ class MacroCafeFragment: Fragment() {
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
-//        val category = args.category
-        val category = 1
-        macroViewModel.getPagingMacroListValue(category)
+        categorySeq = args.category
+        macroViewModel.getPagingMacroListValue(categorySeq)
 
 
         binding.apply {
@@ -86,6 +86,10 @@ class MacroCafeFragment: Fragment() {
 
             pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
 
+        }
+        macroViewModel.macroDeleteCallback.observe(viewLifecycleOwner) {
+            Log.d(TAG, "deleteMacro success")
+            macroViewModel.getPagingMacroListValue(categorySeq)
         }
     }
 
@@ -117,23 +121,46 @@ class MacroCafeFragment: Fragment() {
 
             setVideoClickListener(object: MacroPagingAdapter.VideoItemClickListener{
                 override fun onClick(view: View, position: Int, item: MacroDto) {
-                    findNavController().navigate(MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(item.videoFileId))
+                    if (item.videoFileId != 0) {
+                        findNavController().navigate(
+                            MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(
+                                item.videoFileId
+                            )
+                        )
+
+                    }
                 }
             })
 
             setTitleClickListener(object: MacroPagingAdapter.TitleItemClickListener {
                 override fun onClick(view: View, position: Int, item: MacroDto) {
-                    // 기본 형태의 다이얼로그
-                    // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("${item.title}")
-                        .setMessage("${item.content}")
-                        .setPositiveButton("확인",
-                            DialogInterface.OnClickListener { dialog, id ->
-                            })
 
-                    // 다이얼로그를 띄워주기
-                    builder.show()
+                    val dialog = MacroDetailFragment()
+                    dialog.show(parentFragmentManager, "MacroDetailFragment")
+
+                    dialog.setButtonClickListener(object: MacroDetailFragment.OnButtonClickListener{
+                        override fun onButton1Clicked() { // 삭제 확인
+                        // 기본 형태의 다이얼로그
+                        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+                        val builder = AlertDialog.Builder(requireContext())
+                        builder.setTitle("${item.title}")
+                            .setMessage("정말로 삭제하시겠습니까?")
+                            .setPositiveButton("확인",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    Log.d(TAG,"item 삭제 ${item.seq}")
+                                    macroViewModel.deleteMacro(item.seq)
+                                })
+
+                        // 다이얼로그를 띄워주기
+                        builder.show()
+                        }
+
+                        override fun onButton2Clicked() { // 확인 후 종료
+                        }
+
+                        override fun onButton3Clicked() { // 카테고리 이동
+                        }
+                    })
 
                 }
             })
@@ -162,17 +189,22 @@ class MacroCafeFragment: Fragment() {
 
             setTitleClickListener(object: MacroAdapter.TitleItemClickListener {
                 override fun onClick(view: View, position: Int, item: MacroDto) {
-                    // 기본 형태의 다이얼로그
-                        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.setTitle("${item.title}")
-                            .setMessage("${item.content}")
-                            .setPositiveButton("확인",
-                                DialogInterface.OnClickListener { dialog, id ->
-                                })
 
-                        // 다이얼로그를 띄워주기
-                        builder.show()
+//                    val dialog = MacroDetailFragment()
+//                    dialog.show(parentFragmentManager, "MacroDetailFragment")
+
+
+//                    // 기본 형태의 다이얼로그
+//                        // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
+//                        val builder = AlertDialog.Builder(requireContext())
+//                        builder.setTitle("${item.title}")
+//                            .setMessage("${item.content}")
+//                            .setPositiveButton("확인",
+//                                DialogInterface.OnClickListener { dialog, id ->
+//                                })
+//
+//                        // 다이얼로그를 띄워주기
+//                        builder.show()
 
                 }
             })
