@@ -30,16 +30,13 @@ class MacroViewModel: ViewModel() {
     }
 
     fun getPagingMacroListValue(categorySeq: Int){ // seq를 입력하면 Pager 데이터로 변환
-        Log.d(TAG, "getPagingMacroListValue viewmodel getPagingMacroList 호출")
         macroListPage.postValue(categorySeq)
-
     }
 
     private fun getPagingMacroList(categorySeq: Int) =
          Pager( // Pager로 데이터 변환
             config = PagingConfig(pageSize = 1, maxSize = 9, enablePlaceholders = false),
             pagingSourceFactory = {
-                Log.d(TAG, "pagingSourceFactory")
                 MacroDataSource(Retrofit.macroApi, categorySeq)
             }
         ).liveData
@@ -65,19 +62,15 @@ class MacroViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 //todo userSeq, category api로 보내기
-                Log.d(TAG, "getMacroList token: ${ApplicationClass.mainPref.token}")
                 val response = Retrofit.macroApi.getMacroList(category)
-                Log.d(TAG, "getMacroList response: ${response.body()}")
                 if(response.isSuccessful && response.body() != null){
                     _macroList.postValue(response.body() as MutableList<MacroDto>)
                 } else if(response.code() == 401) {
                     runBlocking {
                         try {
-                            Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                             val response = Retrofit.tokenApi.refreshToken(tokens)
                             if(response.isSuccessful && response.body() != null) {
-                                Log.d(TAG, "refreshToken success ${response.body()}")
                                 ApplicationClass.mainPref.token = response.body()!!.accessToken
                                 ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
                                 getMacroList(category)
@@ -106,7 +99,6 @@ class MacroViewModel: ViewModel() {
 
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d(TAG, "macro add start $title $emoji")
             try {
                 val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
@@ -125,7 +117,6 @@ class MacroViewModel: ViewModel() {
                 )
 
                 if(response.isSuccessful){
-                    Log.d(TAG, "macro add success")
                     _macroAddCallback.postValue(200)
 
                 } else if(response.code() == 401) {
@@ -133,7 +124,6 @@ class MacroViewModel: ViewModel() {
 
                     runBlocking {
                         try {
-                            Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                             val response = Retrofit.tokenApi.refreshToken(tokens)
                             if(response.isSuccessful && response.body() != null) {

@@ -14,21 +14,13 @@ import retrofit2.Response
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 0
 class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int): PagingSource<Int, MacroDto>() {
-    init {
-        Log.d(TAG, "MacroDataSource init")
-
-    }
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
-            Log.d(TAG, "MacroDataSource Load1 ${params.key}")
             val page = params.key?: START_PAGE_INDEX
             var response: Response<PagingResult<MacroDto>>?
-            Log.d(TAG, "getPageMacroList start 값들 $categorySeq, $page, ${params.loadSize}")
             response = macroApi.getPageMacroList(categorySeq, page, 7)
             var body = response.body()
-            Log.d(TAG, "getPageMacroList end $body")
             if(response.isSuccessful && body != null){
-                Log.d(TAG, "getPageMacroList success $body")
                 LoadResult.Page(
                     data = body.result,
                     prevKey = if(page == 0) null else page -1,
@@ -37,11 +29,9 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             } else if (response.code() == 401) {
                 runBlocking {
                     try {
-                        Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
                         var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                         val response = Retrofit.tokenApi.refreshToken(tokens)
                         if(response.isSuccessful && response.body() != null) {
-                            Log.d(TAG, "refreshToken success ${response.body()}")
                             ApplicationClass.mainPref.token = response.body()!!.accessToken
                             ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
                             body = macroApi.getPageMacroList(categorySeq, page, 7).body()
