@@ -30,6 +30,5 @@ class MainActivity : AppCompatActivity() {
         //keyHash 구하기
         var keyHash = Utility.getKeyHash(this)
         Log.d("key", "해쉬 키 : ${keyHash}")
-
     }
 }
