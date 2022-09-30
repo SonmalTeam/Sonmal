@@ -164,7 +164,6 @@ public class SignMacroService {
     @Transactional
     public void deleteSignMacro(long signMacroSeq) {
         SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
-        videoFileRepo.deleteById(signMacro.getVideoFileId());
         signMacroRepo.delete(signMacro);
     }
 
