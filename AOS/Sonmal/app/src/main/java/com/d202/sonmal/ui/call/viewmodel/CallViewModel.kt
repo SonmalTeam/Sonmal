@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui.call.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -19,6 +20,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.MacroDto
+import com.d202.sonmal.ui.voice.RecordingDialogFragment
+import com.d202.sonmal.utils.MainSharedPreference
+import com.d202.sonmal.utils.showToast
 import com.google.common.flogger.backend.LogData
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -136,7 +140,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
     private fun setInterface(translateInterface : TranslateInterface) {
         this.translateInterface = translateInterface
     }
-    fun startSTT(context: Context) {
+    fun startSTT(context: Context, userName: String) {
         setInterface(object : TranslateInterface{
             override fun getResult(result: String) {
                 Log.d(TAG, "getResult: ${result}")
@@ -152,27 +156,55 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
 
         SpeechRecognizer.createSpeechRecognizer(context).apply {
-            setRecognitionListener(recognitionListener(context))
+            setRecognitionListener(recognitionListener(context, userName))
             startListening(speechRecognizerIntent)
         }
     }
-    private fun recognitionListener(context: Context) = object : RecognitionListener {
 
-        override fun onReadyForSpeech(params: Bundle?) {}
+    private val _sttStatus= MutableLiveData<String>("")
+    val sttStatus: LiveData<String>
+        get() = _sttStatus
 
-        override fun onRmsChanged(rmsdB: Float) {}
+    private val _sttResult = MutableLiveData<String>()
+    val sttResult: LiveData<String>
+        get() = sttResult
 
-        override fun onBufferReceived(buffer: ByteArray?) {}
+    private fun recognitionListener(context: Context, userName: String) = object : RecognitionListener {
 
-        override fun onPartialResults(partialResults: Bundle?) {}
+        override fun onReadyForSpeech(params: Bundle?) {
+            Log.d(TAG, "onReadyForSpeech: ")
+            _sttStatus.postValue("onReadyForSpeech")
+        }
 
-        override fun onEvent(eventType: Int, params: Bundle?) {}
+        override fun onRmsChanged(rmsdB: Float) {
+        }
 
-        override fun onBeginningOfSpeech() {}
+        override fun onBufferReceived(buffer: ByteArray?) {
+            Log.d(TAG, "onBufferReceived: ")}
 
-        override fun onEndOfSpeech() {}
+        override fun onPartialResults(partialResults: Bundle?) {
+            Log.d(TAG, "onPartialResults: ")}
+
+        override fun onEvent(eventType: Int, params: Bundle?) {
+            Log.d(TAG, "onEvent: ")
+        }
+
+        override fun onBeginningOfSpeech() {
+            Log.d(TAG, "onBeginningOfSpeech: ")
+            context.showToast("onBeginningOfSpeech")
+            _sttStatus.postValue("onBeginningOfSpeech")
+        }
+
+        override fun onEndOfSpeech() {
+            Log.d(TAG, "onEndOfSpeech: ")
+            context.showToast("onEndOfSpeech")
+            _sttStatus.postValue("onEndOfSpeech")
+            startSTT(context, userName)
+        }
+
 
         override fun onError(error: Int) {
+            startSTT(context, userName)
             when (error) {
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
                     context,
@@ -183,8 +215,13 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         }
 
         override fun onResults(results: Bundle) {
+            startSTT(context, userName)
             translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
-            Log.d("TAG", "onResults : ${results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]}")
+            val result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+            Log.d("TAG", "onResults : ${result}")
+            context.showToast(result)
+            sendMessage(result, userName)
+//            _sttResult.postValue(result)
         }
     }
 
