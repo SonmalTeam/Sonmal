@@ -1,29 +1,23 @@
 package com.d202.assemble.dto;
-import lombok.*;
 
-@Getter
-@Setter
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
-public class SignMacroRequestDto {
+public class SignMacroVideoNullDto {
 
     private String title;
     private String content;
     private String icon;
     private Long categorySeq;
 
-    private Long videoFileId;
 
     public SignMacro toEntity() {
         return SignMacro.builder()
                 .title(title)
                 .content(content)
                 .icon(icon)
-                .videoFileId(videoFileId)
                 .build();
-    }
-
-    @Builder
-    public SignMacroRequestDto (Long videoFileId){
-        this.videoFileId = videoFileId;
     }
 }

@@ -1,14 +1,7 @@
-FROM openjdk:11-jdk AS builder
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
-RUN chmod +x ./gradlew
-RUN ./gradlew bootjar
-
 FROM openjdk:11-jdk
-COPY --from=builder build/libs/*.jar app.jar
+COPY build/libs/*SNAPSHOT.jar app.jar
+
+# VOLUME ["/home/ubuntu/docker-volume/files"]
 
 EXPOSE 8090
 ENTRYPOINT ["java", "-jar", "/app.jar"]
