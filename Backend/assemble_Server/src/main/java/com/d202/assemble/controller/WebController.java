@@ -9,9 +9,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebController {
 	
-	@GetMapping(value="/*privacy")
+	@GetMapping(value="/privacy")
 	public String showPolicy() {
 		log.info("policy출력해라좀");
-		return "policy";
+		return "/WEB-INF/views/policy.jsp";
 	}
 }
