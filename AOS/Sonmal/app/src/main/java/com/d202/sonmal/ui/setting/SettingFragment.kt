@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.databinding.FragmentSettingBinding
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
@@ -48,6 +49,9 @@ class SettingFragment: Fragment(){
             }
             tvAppInfo.setOnClickListener {
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToAppInfoFragment())
+            }
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
 
