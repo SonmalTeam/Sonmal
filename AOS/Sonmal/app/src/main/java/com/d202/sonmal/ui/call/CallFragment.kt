@@ -187,7 +187,7 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
-//            startSTT(requireContext(), userName)
+            startSTT(requireContext(), userName)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }
@@ -344,6 +344,7 @@ class CallFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         leaveSession()
+        viewModel.stopSTT()
     }
 
     private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {

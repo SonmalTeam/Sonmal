@@ -126,7 +126,6 @@ class RecordingDialogFragment: DialogFragment() {
 
         override fun onResults(results: Bundle) {
             translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
-            Log.d("TAG", "onResults : ${results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]}")
             dismiss()
         }
     }
