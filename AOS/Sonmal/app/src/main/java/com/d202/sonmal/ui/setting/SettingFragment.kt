@@ -35,9 +35,9 @@ class SettingFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            tvMacroAdd.setOnClickListener {
-                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToMacroAddFragment())
-            }
+//            tvMacroAdd.setOnClickListener {
+//                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToMacroAddFragment())
+//            }
             tvMacroEdit.setOnClickListener {
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToMacroChoiceFragment())
             }
