@@ -95,6 +95,10 @@ class MacroCafeFragment: Fragment() {
 //            }
 //        }
 
+        binding.ivBack.setOnClickListener {
+            parentFragmentManager.beginTransaction().remove(this).commit()
+        }
+
         binding.rcyMacro.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = pagingAdapter

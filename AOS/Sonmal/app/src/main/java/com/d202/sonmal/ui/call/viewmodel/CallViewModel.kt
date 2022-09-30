@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.MacroDto
-import com.d202.sonmal.ui.voice.RecordingDialogFragment
 import com.google.common.flogger.backend.LogData
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -86,7 +85,10 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
                     _chatList.postValue(_chatList.value)
+<<<<<<< HEAD
                     speakOut(chattingItem.message)
+=======
+>>>>>>> FE/feat/edit-sign-language-result
                 }
             }
             @RequiresApi(Build.VERSION_CODES.N)

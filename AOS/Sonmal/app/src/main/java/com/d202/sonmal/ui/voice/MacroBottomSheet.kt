@@ -67,10 +67,8 @@ class MacroBottomSheet: BottomSheetDialogFragment() {
 
     private fun moveTo(where: Place) {
         when(where) {
-            Place.Cafe -> findNavController().navigate(VoiceFragmentDirections.actionMacroBottomSheetToMacroCafeFragment())
-            Place.Hospital -> {
-                childFragmentManager.beginTransaction().replace(R.id.container, MacroCafeFragment()).commit()
-            }
+            Place.Cafe -> childFragmentManager.beginTransaction().replace(R.id.container, MacroCafeFragment()).commit()
+            Place.Hospital -> {}
             Place.Public -> {}
             Place.Store -> {}
             Place.Restaurant -> {}
