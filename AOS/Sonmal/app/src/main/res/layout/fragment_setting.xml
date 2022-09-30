@@ -72,10 +72,10 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"/>
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_chevron_right_black_24"/>
+<!--            <ImageView-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:src="@drawable/ic_baseline_chevron_right_black_24"/>-->
 
         </LinearLayout>
 
