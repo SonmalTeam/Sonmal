@@ -11,7 +11,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MainController {
 	
-	@RequestMapping(value="/")
+	@GetMapping(value="")
 	public String main() {
 		log.info("policy출력해라좀");
 		return "policy";
