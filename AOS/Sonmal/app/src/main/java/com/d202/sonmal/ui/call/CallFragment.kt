@@ -186,6 +186,8 @@ class CallFragment : Fragment() {
         viewModel.apply {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
+            initTTS(requireContext())
+            startSTT(requireContext())
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }

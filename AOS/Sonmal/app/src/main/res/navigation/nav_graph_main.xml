@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_mainFragment_to_voiceFragment"
             app:destination="@id/voiceFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
 
     </fragment>
 
@@ -42,6 +45,10 @@
         <action
             android:id="@+id/action_macroChoiceFragment_to_macroAddFragment"
             app:destination="@id/macroAddFragment" />
+        <argument
+            android:name="category"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/macroCafeFragment"
@@ -50,6 +57,10 @@
         <action
             android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
             app:destination="@id/macroVideoFragment" />
+        <argument
+            android:name="category"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -122,5 +133,19 @@
 <!--        <action-->
 <!--            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"-->
 <!--            app:destination="@id/macroCafeFragment" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.d202.sonmal.ui.setting.SettingFragment"
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_macroChoiceFragment"
+            app:destination="@id/macroChoiceFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_macroAddFragment"
+            app:destination="@id/macroAddFragment" />
     </fragment>
 </navigation>

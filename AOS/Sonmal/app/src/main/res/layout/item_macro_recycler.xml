@@ -8,9 +8,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/background_macro_list">
 
     <LinearLayout
         android:background="@color/white"
@@ -23,7 +25,7 @@
             android:id="@+id/tv_emoji"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="5dp"
             android:gravity="center"
             android:text="@{data.icon}"
             tools:text="icon"
@@ -47,7 +49,7 @@
             android:layout_width="60dp"
             android:padding="10dp"
             android:layout_height="match_parent"
-            android:src="@drawable/btn_call_end"/>
+            android:src="@drawable/ic_speak_out"/>
 
     </LinearLayout>
 

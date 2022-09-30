@@ -11,18 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.d202.sonmal.R
 import com.d202.sonmal.adapter.MacroAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
 import com.d202.sonmal.databinding.FragmentMacroCafeBinding
-import com.d202.sonmal.databinding.FragmentMacroChoiceBinding
 import com.d202.sonmal.model.dto.MacroDto
-import com.d202.sonmal.ui.MainActivity
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import java.util.*
 
@@ -34,6 +32,7 @@ class MacroCafeFragment: Fragment() {
     private lateinit var macroList: MutableList<MacroDto>
     private lateinit var tts: TextToSpeech
     private lateinit var pagingAdapter: MacroPagingAdapter
+    private val args by navArgs<MacroCafeFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,17 +60,21 @@ class MacroCafeFragment: Fragment() {
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         val userSeq = 1
+//        val category = args.category
         val category = 1
-//        macroViewModel.getMacroList(category)
-        Log.d(TAG, "getPagingMacroList api start on Fragment")
         macroViewModel.getPagingMacroListValue(category)
-        Log.d(TAG, "getPagingMacroList api End on Fragment")
+
+
+        binding.apply {
+            ivBack.setOnClickListener {
+
+            }
+        }
 
     }
 
     private fun initObseve() {
         macroViewModel.macroList.observe(viewLifecycleOwner) {
-            Log.d(TAG, "macrolist in viewmoel $it")
             if(it != null) {
                 this.macroList = it
             }
@@ -80,7 +83,6 @@ class MacroCafeFragment: Fragment() {
             initTTS()
         }
         macroViewModel.pagingMacroList.observe(viewLifecycleOwner) {
-            Log.d(TAG, "pagingMacroList in viewmoel $it")
 
             pagingAdapter.submitData(this@MacroCafeFragment.lifecycle, it)
 
@@ -88,7 +90,6 @@ class MacroCafeFragment: Fragment() {
     }
 
     private fun initView() {
-
         this.pagingAdapter = MacroPagingAdapter()
 
 //        pagingAdapter.onClickStoryListener = object : StoryPagingAdapter.OnClickStoryListener{
@@ -136,6 +137,7 @@ class MacroCafeFragment: Fragment() {
 
                 }
             })
+
         }
     }
 

@@ -98,10 +98,8 @@ class SignViewModel: ViewModel() {
     fun unregister() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d(TAG, "unregister api 시작 token ${ApplicationClass.mainPref.token} flag ${ApplicationClass.jwtFlag}")
                 Retrofit.signApi.unregister().let {
                     if(it.isSuccessful){
-                        Log.d(TAG, "unregister 통신 성공 ${it.body()}")
                         _unregisterCallBack.postValue(true)
                     }
                     else if(it.code() == 401) {

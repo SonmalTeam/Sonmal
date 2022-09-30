@@ -47,10 +47,8 @@ class ApplicationClass: Application() {
                     || original.url.encodedPath.equals("/api/user/naver/login", true)
                     || original.url.encodedPath.equals("/api/jwt/refresh", true)
                 ) {
-                    Log.d("jwt","jwt 없음")
                     chain.proceed(original)
                 } else {
-                    Log.d("jwt","jwt 있음 ${original.url.encodedPath}")
                     chain.proceed(original.newBuilder().apply {
                         addHeader("JWT-AUTHENTICATION", ApplicationClass.mainPref.token ?: "A")
                     }.build())

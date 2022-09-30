@@ -55,7 +55,6 @@ class LoginFragment : Fragment() {
 
     private fun initView() {
         if(SettingsPreference().getFirstRunCheck()){
-            SettingsPreference().setFirstRunCheck(false)
             PermissionDialog(requireContext()).show(parentFragmentManager, null)
         }
 

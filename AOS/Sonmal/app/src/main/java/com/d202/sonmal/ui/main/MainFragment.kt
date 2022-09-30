@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
     private fun initView() {
         binding.apply {
             btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroChoiceFragment())
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
             }
             btnCall.setOnClickListener {
                 checkPermission()

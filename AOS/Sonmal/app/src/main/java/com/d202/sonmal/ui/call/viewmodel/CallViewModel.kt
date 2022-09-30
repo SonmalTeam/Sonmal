@@ -1,9 +1,18 @@
 package com.d202.sonmal.ui.call.viewmodel
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,19 +31,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.webrtc.EglRenderer.FrameListener
 import org.webrtc.SurfaceViewRenderer
+import java.util.*
 
 private const val RECOGNIZE_INTERVAL = 100L
 private const val TAG ="CallViewModel"
-class CallViewModel: ViewModel() {
-    private var _db: DatabaseReference = Firebase.database.getReference("chat-message")
-
-    private val _macroList = MutableLiveData<List<MacroDto>>()
-    val macroList : LiveData<List<MacroDto>>
-        get() = _macroList
-    fun getMacroList(){
-
-    }
-
+class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
+    // WebRTC -> TFLite
     private val _surfaceViewRenderer = MutableLiveData<SurfaceViewRenderer>()
     val surfaceViewRenderer: LiveData<SurfaceViewRenderer>
         get() = _surfaceViewRenderer
@@ -60,6 +62,7 @@ class CallViewModel: ViewModel() {
         }
     }
 
+    // SignLanguage
     private val _translateText = MutableLiveData<String>("")
     val translateText: LiveData<String>
         get() = _translateText
@@ -67,10 +70,12 @@ class CallViewModel: ViewModel() {
         _translateText.postValue(text)
     }
 
-
+    // Firebase Chat
+    private var _db: DatabaseReference = Firebase.database.getReference("chat-message")
     private val _chatList = MutableLiveData<MutableList<Chat>>(mutableListOf())
     val chatList : LiveData<MutableList<Chat>>
         get() = _chatList
+
     fun initFirebaseDatabase(userName: String){
         _db.removeValue()
         val childEventListener = object : ChildEventListener {
@@ -80,6 +85,7 @@ class CallViewModel: ViewModel() {
                 if(chattingItem.name != userName) {
                     _chatList.value!!.add(chattingItem)
                     _chatList.postValue(_chatList.value)
+                    speakOut(chattingItem.message)
                 }
             }
             @RequiresApi(Build.VERSION_CODES.N)
@@ -104,4 +110,83 @@ class CallViewModel: ViewModel() {
             }
         }
     }
+
+    // TTS
+    private lateinit var tts: TextToSpeech
+    fun initTTS(context: Context){
+        tts = TextToSpeech(context, this)
+    }
+
+    override fun onInit(p0: Int) {
+        if(p0 == TextToSpeech.SUCCESS) {
+            tts.language = Locale.KOREAN
+        }
+    }
+    private fun speakOut(text: String){
+        tts.setPitch(1f)
+        tts.setSpeechRate(1f)
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, "id1")
+    }
+
+    // STT
+    private lateinit var translateInterface : TranslateInterface
+    interface TranslateInterface {
+        fun getResult(result: String)
+    }
+    private fun setInterface(translateInterface : TranslateInterface) {
+        this.translateInterface = translateInterface
+    }
+    fun startSTT(context: Context) {
+        setInterface(object : TranslateInterface{
+            override fun getResult(result: String) {
+                Log.d(TAG, "getResult: ${result}")
+            }
+        })
+        
+        val ii = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra("android.speech.extra.DICTATION_MODE", true)
+        }
+
+
+        SpeechRecognizer.createSpeechRecognizer(context).apply {
+            setRecognitionListener(recognitionListener(context))
+            startListening(speechRecognizerIntent)
+        }
+    }
+    private fun recognitionListener(context: Context) = object : RecognitionListener {
+
+        override fun onReadyForSpeech(params: Bundle?) {}
+
+        override fun onRmsChanged(rmsdB: Float) {}
+
+        override fun onBufferReceived(buffer: ByteArray?) {}
+
+        override fun onPartialResults(partialResults: Bundle?) {}
+
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+
+        override fun onBeginningOfSpeech() {}
+
+        override fun onEndOfSpeech() {}
+
+        override fun onError(error: Int) {
+            when (error) {
+                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
+                    context,
+                    "퍼미션 없음",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onResults(results: Bundle) {
+            translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
+            Log.d("TAG", "onResults : ${results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]}")
+        }
+    }
+
+
 }

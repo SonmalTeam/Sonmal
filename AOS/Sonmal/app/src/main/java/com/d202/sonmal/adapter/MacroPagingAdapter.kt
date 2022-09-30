@@ -46,6 +46,16 @@ class MacroPagingAdapter() : PagingDataAdapter<MacroDto,
     }
 
     // ItemClickListener 세팅
+    interface LongItemClickListener { // TTS
+        fun onClick(view: View, position: Int, item: MacroDto)
+    }
+    private lateinit var longItemClickListener: LongItemClickListener
+
+    fun setLongItemClickListener(itemClickListener: LongItemClickListener) {
+        this.longItemClickListener = itemClickListener
+    }
+
+    // ItemClickListener 세팅
     interface SpeakItemClickListener { // TTS
         fun onClick(view: View, position: Int, item: MacroDto)
     }

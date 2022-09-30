@@ -28,37 +28,36 @@ class MacroChoiceFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view) // navcontroller 탐색
-
         initBtn()
 
-        binding.btnCafe.setOnClickListener{ // cafe macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroCafeFragment)
-        }
 
-        binding.btnStore.setOnClickListener{ // store macro로 이동
-            moveToMacroListFragment()
-        }
-
-        binding.btnHospital.setOnClickListener{ // hospital macro로 이동
-            moveToMacroListFragment()
-        }
 
     }
 
     private fun initBtn() {
         binding.apply {
-            btnMacroList.setOnClickListener {
-                moveToMacroListFragment()
+            btnHospital.setOnClickListener {
+                moveToMacroListFragment(1)
             }
-
-            btnAdd.setOnClickListener {
-                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
+            btnPublic.setOnClickListener {
+                moveToMacroListFragment(2)
+            }
+            btnWork.setOnClickListener {
+                moveToMacroListFragment(3)
+            }
+            btnRestaurant.setOnClickListener {
+                moveToMacroListFragment(4)
+            }
+            btnStore.setOnClickListener {
+                moveToMacroListFragment(5)
+            }
+            btnCustom.setOnClickListener {
+                moveToMacroListFragment(6)
             }
         }
     }
 
-    private fun moveToMacroListFragment() {
+    private fun moveToMacroListFragment(category: Int) {
         findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment())
     }
 
