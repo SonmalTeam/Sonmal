@@ -5,7 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d202.sonmal.databinding.ItemResultBinding
 
-class VoiceAdapter(private val itemList: List<String>): RecyclerView.Adapter<VoiceViewHolder>() {
+class VoiceAdapter(): RecyclerView.Adapter<VoiceViewHolder>() {
+    var itemList = mutableListOf<String>()
+        set(value) {
+            field = value
+            notifyItemInserted(itemList.size - 1)
+        }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VoiceViewHolder {
         val voiceBinding = ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VoiceViewHolder(voiceBinding)

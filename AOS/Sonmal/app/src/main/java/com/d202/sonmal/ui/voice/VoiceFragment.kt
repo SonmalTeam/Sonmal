@@ -20,12 +20,15 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.VoiceAdapter
 import com.d202.sonmal.databinding.FragmentVoiceBinding
 import com.d202.sonmal.databinding.ToastLayoutBinding
+import com.d202.sonmal.ui.call.viewmodel.CallViewModel
+import com.d202.sonmal.utils.MainSharedPreference
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.mediapipe.solutioncore.CameraInput
@@ -36,9 +39,11 @@ import java.util.*
 
 class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     private lateinit var binding : FragmentVoiceBinding
+    private val viewModel: CallViewModel by viewModels()
     private val recordingDialogFragment by lazy { RecordingDialogFragment() }
     private val resultList = mutableListOf<String>()
     private lateinit var tts : TextToSpeech
+    private lateinit var voiceAdapter: VoiceAdapter
 
     private val REQUIRED_PERMISSIONS = mutableListOf(
         Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO).toTypedArray()
@@ -48,6 +53,8 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentVoiceBinding.inflate(layoutInflater, container, false)
+
+        voiceAdapter = VoiceAdapter()
 
         tts = TextToSpeech(requireContext(), this)
 
@@ -66,30 +73,32 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
             .setPermissions(*REQUIRED_PERMISSIONS)
             .check()
 
+
         binding.apply {
             rvResult.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = VoiceAdapter(itemList = resultList)
+                adapter = voiceAdapter
             }
 
             ivRecord.setOnClickListener {
-                if(!recordingDialogFragment.isAdded) {
-                    recordingDialogFragment.setInterface(object : RecordingDialogFragment.TranslateInterface{
-                        override fun getResult(result: String) {
-                            resultList.add(result)
-                            rvResult.adapter!!.notifyDataSetChanged()
-                            if(binding.ivMic.visibility == View.VISIBLE) {
-                                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right)
-                                binding.ivMic.startAnimation(animation)
-                                binding.tvIntro.startAnimation(animation)
-                                binding.ivMic.visibility = View.GONE
-                                binding.tvIntro.visibility = View.GONE
-                            }
-                        }
-
-                    })
-                    recordingDialogFragment.show(childFragmentManager, "recording")
-                }
+                viewModel.startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
+//                if(!recordingDialogFragment.isAdded) {
+//                    recordingDialogFragment.setInterface(object : RecordingDialogFragment.TranslateInterface{
+//                        override fun getResult(result: String) {
+//                            resultList.add(result)
+//                            rvResult.adapter!!.notifyDataSetChanged()
+//                            if(binding.ivMic.visibility == View.VISIBLE) {
+//                                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right)
+//                                binding.ivMic.startAnimation(animation)
+//                                binding.tvIntro.startAnimation(animation)
+//                                binding.ivMic.visibility = View.GONE
+//                                binding.tvIntro.visibility = View.GONE
+//                            }
+//                        }
+//
+//                    })
+//                    recordingDialogFragment.show(childFragmentManager, "recording")
+//                }
             }
 
             ivMacro.setOnClickListener {
@@ -102,6 +111,17 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
             }
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.apply {
+//            sttResult.observe(viewLifecycleOwner){
+//                resultList.add(it)
+//                voiceAdapter.itemList = resultList
+//            }
+            startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
+        }
     }
 
 

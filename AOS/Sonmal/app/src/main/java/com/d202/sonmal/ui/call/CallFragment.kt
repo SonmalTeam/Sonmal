@@ -135,8 +135,8 @@ class CallFragment : Fragment() {
 
 
     private fun initView(){
-        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager.mode = AudioManager.MODE_NORMAL
+//        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//        audioManager.mode = AudioManager.MODE_NORMAL
         macroAdapter = CallMacroPagingAdapter()
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
@@ -187,7 +187,7 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
-            startSTT(requireContext())
+//            startSTT(requireContext(), userName)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }
