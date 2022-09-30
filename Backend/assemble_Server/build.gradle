@@ -60,6 +60,11 @@ dependencies {
 	//Jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+	
+	//jsp
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+  	implementation 'javax.servlet:jstl'
+	
 }
 
 tasks.named('test') {
