@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.graphics.Typeface
 import android.os.Bundle
+import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
@@ -116,15 +117,26 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.apply {
-//            sttResult.observe(viewLifecycleOwner){
-//                resultList.add(it)
-//                voiceAdapter.itemList = resultList
-//            }
-            startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
+            sttResult.observe(viewLifecycleOwner){
+                if (it.isNotBlank()) {
+                    resultList.add(it)
+                    voiceAdapter.itemList = resultList
+                }
+            }
+
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
+    }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopSTT()
+
+    }
 
     override fun onInit(p0: Int) {
         if(p0 == TextToSpeech.SUCCESS) {
