@@ -1,15 +1,23 @@
 package com.d202.sonmal.ui.main
 
+import android.Manifest
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.R
+import com.d202.sonmal.common.ApplicationClass
+import com.d202.sonmal.common.TFLITE_PATH
 import com.d202.sonmal.databinding.FragmentMainBinding
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
+import org.tensorflow.lite.Interpreter
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 
 class MainFragment : Fragment() {
 
@@ -28,6 +36,8 @@ class MainFragment : Fragment() {
 
         initView()
 
+        // Interpreter 초기화
+        ApplicationClass.interpreter = Interpreter(loadModelFile(requireActivity(), TFLITE_PATH)!!)
 
     }
 
@@ -37,10 +47,49 @@ class MainFragment : Fragment() {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroChoiceFragment())
             }
             btnCall.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+                checkPermission()
+            }
+//            btnLogin.setOnClickListener {
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+//            }
+//            btnVideo.setOnClickListener {
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
+//            }
+            btnSignLang.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
+            }
+            btnVoiceTranslate.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
             }
         }
+    }
 
+
+    private fun loadModelFile(activity: Activity, path: String): MappedByteBuffer? {
+        val fileDescriptor = activity.assets.openFd(path)
+        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+        val fileChannel = inputStream.channel
+        val startOffset = fileDescriptor.startOffset
+        val declaredLength = fileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
+
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                requireContext().showToast("카메라, 오디오 권한을 허용해야 이용이 가능합니다.")
+            }
+
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+            .check()
     }
 
 

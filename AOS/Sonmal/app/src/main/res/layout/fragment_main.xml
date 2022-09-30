@@ -5,42 +5,108 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.main.MainFragment">
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="match_parent"
+<!--        <TextView-->
+<!--            android:id="@+id/tv1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Main Fragment"-->
+<!--            android:gravity="center"-->
+<!--            android:textSize="20dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_macro"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="48dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv1"-->
+<!--            android:layout_margin="30dp"-->
+<!--            android:backgroundTint="#4142AC"-->
+<!--            android:text="Macro"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_login"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="48dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/btn_macro"-->
+<!--            android:layout_margin="30dp"-->
+<!--            android:backgroundTint="#4142AC"-->
+<!--            android:text="Login"/>-->
+        
+<!--        <Button-->
+<!--            android:id="@+id/btn_video"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="48dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/btn_call"-->
+<!--            android:layout_margin="30dp"-->
+<!--            android:backgroundTint="#4142AC"-->
+<!--            android:text="Video"/>-->
+
+        <!-- Appbar 영역 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_home_appbar"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_macro"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_baseline_settings_black_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <!-- Button Layout 영역 -->
+        <LinearLayout
+            android:id="@+id/layout_home_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Main Fragment"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_marginTop="20dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/layout_home_appbar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/btn_macro"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv1"
-            android:layout_margin="30dp"
-            android:backgroundTint="#4142AC"
-            android:text="Macro"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_sign_lang"
+                android:layout_width="352dp"
+                android:layout_height="160dp"
+                android:background="@drawable/btn_home_sltranslate"
+                android:layout_marginBottom="32dp"/>
 
-        <Button
-            android:id="@+id/btn_call"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_macro"
-            android:layout_margin="30dp"
-            android:backgroundTint="#4142AC"
-            android:text="Call"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_voice_translate"
+                android:layout_width="352dp"
+                android:layout_height="160dp"
+                android:background="@drawable/btn_home_stt_tts"
+                android:layout_marginBottom="32dp"/>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_call"
+                android:layout_width="352dp"
+                android:layout_height="160dp"
+                android:background="@drawable/btn_home_call"/>
+            
+        </LinearLayout>
+        
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

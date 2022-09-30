@@ -1,6 +1,13 @@
 pipeline {         
         agent none
-        stages {                
+        stages { 
+	   stage('Gradle build'){
+		agent any
+		steps{
+			dir('Backend/assemble_Server') {sh 'chmod +x ./gradlew'}
+			dir('Backend/assemble_Server') {sh './gradlew clean build'}
+		}
+	   }             
                 stage('Docker build') {
                         agent any
                         steps {                                                     

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -14,8 +14,21 @@
             android:id="@+id/action_mainFragment_to_macroChoiceFragment"
             app:destination="@id/macroChoiceFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_callFragment"
             app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_signLangFragment"
+            app:destination="@id/signLangFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_voiceFragment"
+            app:destination="@id/voiceFragment" />
+
     </fragment>
 
     <fragment
@@ -24,29 +37,90 @@
         tools:layout="@layout/fragment_macro_choice"
         android:label="MacroChoiceFragment" >
         <action
-            android:id="@+id/action_macroChoiceFragment_to_macroStoreFragment"
-            app:destination="@id/macroStoreFragment" />
-        <action
             android:id="@+id/action_macroChoiceFragment_to_macroCafeFragment"
             app:destination="@id/macroCafeFragment" />
         <action
-            android:id="@+id/action_macroChoiceFragment_to_macroHospitalFragment"
-            app:destination="@id/macroHospitalFragment" />
+            android:id="@+id/action_macroChoiceFragment_to_macroAddFragment"
+            app:destination="@id/macroAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/macroCafeFragment"
         android:name="com.d202.sonmal.ui.macro.MacroCafeFragment"
-        android:label="MacroCafeFragment" />
+        android:label="MacroCafeFragment" >
+        <action
+            android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/macroStoreFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroStoreFragment"
-        android:label="MacroStoreFragment" />
-    <fragment
-        android:id="@+id/macroHospitalFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroHospitalFragment"
-        android:label="MacroHospitalFragment" />
+        android:id="@+id/loginFragment"
+        android:name="com.d202.sonmal.ui.sign.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
     <fragment
         android:id="@+id/callFragment"
         android:name="com.d202.sonmal.ui.call.CallFragment"
         android:label="CallFragment" />
+    <fragment
+        android:id="@+id/macroVideoFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
+        android:label="MacroVideoFragment" >
+        <argument
+            android:name="videoSeq"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/macroAddFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroAddFragment"
+        android:label="MacroAddFragment" />
+
+    <fragment
+        android:id="@+id/signLangFragment"
+        android:name="com.d202.sonmal.ui.signlang.SignLangFragment"
+        android:label="SignLangFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/voiceFragment"
+        android:name="com.d202.sonmal.ui.voice.VoiceFragment"
+        android:label="VoiceFragment">
+        <action
+            android:id="@+id/action_voiceFragment_to_macroBottomSheet"
+            app:destination="@id/macroBottomSheet"
+            app:enterAnim="@anim/translate_up" />
+        <action
+            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"
+            app:destination="@id/macroCafeFragment" />
+        <action
+            android:id="@+id/action_voiceFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+
+        <action
+            android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+        <action
+            android:id="@+id/action_voiceFragment_to_recordingDialogFragment"
+            app:destination="@id/recordingDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recordingDialogFragment"
+        android:name="com.d202.sonmal.ui.voice.RecordingDialogFragment"
+        android:label="RecordingDialogFragment">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/macroBottomSheet"
+        android:name="com.d202.sonmal.ui.voice.MacroBottomSheet"
+        android:label="MacroBottomSheet">
+<!--        <action-->
+<!--            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"-->
+<!--            app:destination="@id/macroCafeFragment" />-->
+    </fragment>
 </navigation>
