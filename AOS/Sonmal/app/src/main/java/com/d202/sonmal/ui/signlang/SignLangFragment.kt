@@ -8,6 +8,8 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +50,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
     private var charlist = mutableListOf<String>()
     private var startTime = 0L
     private var isStarted = false
-    private var isRecording = false
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_NETWORK_STATE).toTypedArray()
 
@@ -95,6 +96,8 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private fun initView() {
         binding.apply {
+            tvSttResult.movementMethod = ScrollingMovementMethod()
+
             ivRecord.setOnClickListener {
                 isStarted = !isStarted
                 if(isStarted) {
@@ -111,12 +114,13 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 }
                 else {
                     ivRecord.setImageResource(R.drawable.record_start)
+                    tvLiveTranslate.text = ""
                     convertToSentence()
                 }
                 charlist.clear()
             }
 
-            ivSpeak.setOnClickListener {
+            ltSpeak.setOnClickListener {
                 speakOut()
             }
 
@@ -156,6 +160,7 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
             removeAllViewsInLayout()
             addView(glSurfaceView)
             glSurfaceView.visibility = View.VISIBLE
+            addView(binding.tvLiveTranslate)
             requestLayout()
         }
     }
@@ -265,7 +270,10 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 // 자음인 경우
                 charlist.add(classes[index])
             }
-            Log.d(TAG, "translate: ${classes[index]}")
+            (activity as Activity).runOnUiThread {
+                binding.tvLiveTranslate.text = classes[index]
+                binding.etNowTranslate.setText(binding.etNowTranslate.text.toString() + classes[index])
+            }
         }
     }
 
@@ -348,13 +356,11 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
         try {
             val sentence = HangulParser.assemble(charlist)
-            if(binding.tvNowTranslate.text.toString().isNotEmpty()) {
-                binding.tvNextTranslate.text = binding.tvNowTranslate.text.toString()
-            }
-            binding.tvNowTranslate.text = sentence
+            binding.etNowTranslate.setText(sentence)
         }
         catch (e: Exception) {
             Toast.makeText(requireContext(), "잘못된 문장입니다. 처음부터 다시 입력해주세요!", Toast.LENGTH_SHORT).show()
+            binding.etNowTranslate.setText("")
         }
     }
 
@@ -378,10 +384,33 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
     }
 
     private fun speakOut() {
-        val text = binding.tvNowTranslate.text as CharSequence
+        val text = binding.etNowTranslate.text as CharSequence
         tts.setPitch(1f)
         tts.setSpeechRate(1f)
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, "id1")
+        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(p0: String?) {
+                (activity as Activity).runOnUiThread {
+                    binding.ltSpeak.playAnimation()
+                }
+            }
+
+            override fun onDone(p0: String?) {
+                (activity as Activity).runOnUiThread {
+                    binding.ltSpeak.pauseAnimation()
+                    binding.ltSpeak.progress = 0f
+                }
+            }
+
+            override fun onError(p0: String?) {
+            }
+
+        })
+
+        if(binding.etNowTranslate.text.toString().isNotEmpty()) {
+            binding.tvNextTranslate.text = binding.etNowTranslate.text.toString()
+            binding.etNowTranslate.setText("")
+        }
     }
 
     override fun onInit(p0: Int) {
@@ -391,7 +420,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
     }
 
     private  fun startSTT() {
-        val ii = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireContext().packageName)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
@@ -410,7 +438,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
         override fun onReadyForSpeech(params: Bundle?) {
             binding.ltRecord.playAnimation()
-            Toast.makeText(requireContext(), "음성인식 시작", Toast.LENGTH_SHORT).show()
         }
 
         override fun onRmsChanged(rmsdB: Float) {}
@@ -432,10 +459,9 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         }
 
         override fun onResults(results: Bundle) {
-            Toast.makeText(requireContext(), "음성인식 종료", Toast.LENGTH_SHORT).show()
             binding.ltRecord.progress = 0f
             binding.ltRecord.pauseAnimation()
-            binding.tvSstResult.text = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+            binding.tvSttResult.text = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
         }
     }
 }
