@@ -134,6 +134,8 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
     // STT
     private lateinit var translateInterface : TranslateInterface
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private var FLAG_STT = false
     interface TranslateInterface {
         fun getResult(result: String)
     }
@@ -141,6 +143,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         this.translateInterface = translateInterface
     }
     fun startSTT(context: Context, userName: String) {
+        FLAG_STT = true
         setInterface(object : TranslateInterface{
             override fun getResult(result: String) {
                 Log.d(TAG, "getResult: ${result}")
@@ -154,11 +157,16 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
             putExtra("android.speech.extra.DICTATION_MODE", true)
         }
 
-
-        SpeechRecognizer.createSpeechRecognizer(context).apply {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        speechRecognizer.apply {
             setRecognitionListener(recognitionListener(context, userName))
             startListening(speechRecognizerIntent)
         }
+
+    }
+
+    fun stopSTT(){
+        FLAG_STT = false
     }
 
     private val _sttStatus= MutableLiveData<String>("")
@@ -167,7 +175,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
     private val _sttResult = MutableLiveData<String>()
     val sttResult: LiveData<String>
-        get() = sttResult
+        get() = _sttResult
 
     private fun recognitionListener(context: Context, userName: String) = object : RecognitionListener {
 
@@ -199,12 +207,14 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
             Log.d(TAG, "onEndOfSpeech: ")
             context.showToast("onEndOfSpeech")
             _sttStatus.postValue("onEndOfSpeech")
-            startSTT(context, userName)
+            if(FLAG_STT)
+                startSTT(context, userName)
         }
 
 
         override fun onError(error: Int) {
-            startSTT(context, userName)
+            if(FLAG_STT)
+                startSTT(context, userName)
             when (error) {
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
                     context,
@@ -215,13 +225,16 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         }
 
         override fun onResults(results: Bundle) {
-            startSTT(context, userName)
+            if(FLAG_STT)
+                startSTT(context, userName)
             translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
             val result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
             Log.d("TAG", "onResults : ${result}")
             context.showToast(result)
             sendMessage(result, userName)
-//            _sttResult.postValue(result)
+            if(result.isNotEmpty()) {
+                _sttResult.postValue(result)
+            }
         }
     }
 
