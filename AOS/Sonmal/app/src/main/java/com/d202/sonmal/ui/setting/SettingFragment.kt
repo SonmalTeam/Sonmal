@@ -80,15 +80,17 @@ class SettingFragment: Fragment(){
             if(it == true) {
                 Toast.makeText(requireContext(), "회원 탈퇴 성공", Toast.LENGTH_LONG).show()
                 ApplicationClass.mainPref.apply {
-
+                    token = null
+                    refreshToken = null
                 }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             } else {
                 Toast.makeText(requireContext(), "최종 회원 탈퇴 실패", Toast.LENGTH_LONG).show()
-                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
                 ApplicationClass.mainPref.apply {
-
+                    token = null
+                    refreshToken = null
                 }
+                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
         }
     }
