@@ -67,7 +67,7 @@ class MacroCafeFragment: Fragment() {
 
         binding.apply {
             ivBack.setOnClickListener {
-
+                findNavController().navigateUp()
             }
         }
 
@@ -101,10 +101,6 @@ class MacroCafeFragment: Fragment() {
 //                findNavController().safeNavigate(UserProfileFragmentDirections.actionUserProfileFragmentToStoryDetailFragment(story.seq))
 //            }
 //        }
-
-        binding.ivBack.setOnClickListener {
-            parentFragmentManager.beginTransaction().remove(this).commit()
-        }
 
         binding.rcyMacro.apply {
             layoutManager = LinearLayoutManager(requireContext())

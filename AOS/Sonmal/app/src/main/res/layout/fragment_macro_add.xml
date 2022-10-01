@@ -186,7 +186,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/img_category5"
                 app:layout_constraintBottom_toBottomOf="@id/img_category5"
-                android:text="일상"
+                android:text="기타"
                 android:textColor="#5A5A5A"
                 android:textSize="20dp"/>
 

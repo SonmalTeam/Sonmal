@@ -145,8 +145,7 @@ class MacroAddFragment: Fragment() {
             } else if (videoUri == null) {
                 macroViewmodel.addMacroNull(title, content, category, emoji)
             }
-
-
+            findNavController().navigateUp()
 
         }
 
