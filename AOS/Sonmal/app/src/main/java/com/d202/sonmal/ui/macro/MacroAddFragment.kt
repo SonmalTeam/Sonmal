@@ -9,12 +9,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputFilter
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -22,12 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.databinding.DataBindingUtil.bind
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
@@ -35,6 +31,7 @@ import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.regex.Pattern
 
 
 private val TAG = "MacroAddFragment"
@@ -283,19 +280,19 @@ class MacroAddFragment: Fragment() {
 
     private fun showdialog(){
         val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("Title")
+        builder.setTitle("제목을 나타내는 이모티콘 등록")
 
         val input = EditText(requireContext())
-        input.setHint("Enter Text")
-        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.setHint("이모티콘 입력")
+//        input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+        builder.setPositiveButton("등록", DialogInterface.OnClickListener { dialog, which ->
             var textE = input.text.toString()
             binding.tvEmoji.text = textE
             this.emoji = textE
         })
-        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
         builder.show()
     }
@@ -311,5 +308,19 @@ class MacroAddFragment: Fragment() {
     private fun deleteCacheFile() {
         var filename = "a"
     }
+
+    /** 이모티콘이 있을경우 "" 리턴, 그렇지 않을 경우 null 리턴  */
+    private val specialCharacterFilter =
+        InputFilter { source, start, end, dest, dstart, dend ->
+            for (i in start until end) {
+                // 이모티콘 패턴
+                val unicodeOutliers: Pattern = Pattern.compile("[\\uD83C-\\uDBFF\\uDC00-\\uDFFF]+")
+                if (unicodeOutliers.matcher(source).matches()) {
+                    return@InputFilter "emoji"
+                }
+            }
+            null
+        }
+
 
 }
