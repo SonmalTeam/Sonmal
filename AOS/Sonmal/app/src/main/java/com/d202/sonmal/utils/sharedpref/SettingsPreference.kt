@@ -21,4 +21,11 @@ class SettingsPreference {
     fun getCallNumber(): String{
         return ApplicationClass.callPref.getString("PHONE", "").toString()
     }
+
+    fun setUseCall(use: Boolean){
+        ApplicationClass.useCallPref.edit().putBoolean("UseCall", use).apply()
+    }
+    fun getUseCall(): Boolean{
+        return ApplicationClass.useCallPref.getBoolean("UseCall", false)
+    }
 }

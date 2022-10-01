@@ -18,6 +18,7 @@ class ApplicationClass: Application() {
         lateinit var retrofit: Retrofit
         lateinit var mainPref: MainSharedPreference
         lateinit var callPref: SharedPreferences
+        lateinit var useCallPref: SharedPreferences
         var jwtFlag : Boolean = true
         lateinit var interpreter: Interpreter
         val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
@@ -36,6 +37,7 @@ class ApplicationClass: Application() {
         // Preference 초기화
         mainPref = MainSharedPreference(applicationContext)
         callPref = getSharedPreferences("PHONE", MODE_PRIVATE)
+        useCallPref = getSharedPreferences("UseCall", MODE_PRIVATE)
 
         // token 적용을 위한 intercepter 사용
         val client = OkHttpClient.Builder()
