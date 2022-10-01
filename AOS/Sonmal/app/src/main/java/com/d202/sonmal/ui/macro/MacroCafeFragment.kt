@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.MacroAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroCafeBinding
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.setting.SettingFragmentDirections
 import com.d202.sonmal.utils.MacroDetailFragment
 import java.util.*
 
@@ -89,6 +91,12 @@ class MacroCafeFragment: Fragment() {
         macroViewModel.macroDeleteCallback.observe(viewLifecycleOwner) {
             Log.d(TAG, "deleteMacro success")
             macroViewModel.getPagingMacroListValue(categorySeq)
+        }
+
+        macroViewModel.refreshExpire.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+            ApplicationClass.mainPref.loginPlatform = 0
+            findNavController().navigate(MacroCafeFragmentDirections.actionMacroCafeFragmentToLoginFragment())
         }
     }
 

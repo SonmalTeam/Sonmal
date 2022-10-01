@@ -61,6 +61,9 @@
             android:name="category"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_macroCafeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -92,6 +95,9 @@
         <action
             android:id="@+id/action_macroAddFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_macroAddFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment

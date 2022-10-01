@@ -95,6 +95,12 @@ class SettingFragment: Fragment(){
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
         }
+
+        signViewModel.refreshExpire.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+            ApplicationClass.mainPref.loginPlatform = 0
+            findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
+        }
     }
 
     private fun kakaoLogout(){ // 카카오 로그아웃

@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import java.io.File
@@ -180,6 +181,11 @@ class MacroAddFragment: Fragment() {
             Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
 //            binding.tvEmoji.text = "성공"
 
+        }
+        macroViewmodel.refreshExpire.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+            ApplicationClass.mainPref.loginPlatform = 0
+            findNavController().navigate(MacroAddFragmentDirections.actionMacroAddFragmentToLoginFragment())
         }
     }
 
