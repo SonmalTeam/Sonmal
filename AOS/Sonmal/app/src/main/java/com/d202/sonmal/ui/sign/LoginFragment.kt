@@ -51,6 +51,12 @@ class LoginFragment : Fragment() {
 
         initView()
         initObserve()
+
+        if(ApplicationClass.mainPref.refreshToken != null) {
+            Log.d("refresh", "refresh ${ApplicationClass.mainPref.refreshToken}")
+//            navController.navigate(R.id.action_loginFragment_to_mainFragment)
+//            signViewModel.refresh()
+        }
     }
 
     private fun initView() {
@@ -114,6 +120,7 @@ class LoginFragment : Fragment() {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
                 UserApiClient.instance.me { user, error ->
                     //로그인 성공 시 회원가입 api 호출
+                    ApplicationClass.mainPref.loginPlatform = 1
                     signViewModel.joinWithKaKao(token.accessToken)
 
                 }
@@ -130,6 +137,7 @@ class LoginFragment : Fragment() {
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        Log.d(TAG,"kakaologin back cancle")
                         return@loginWithKakaoTalk
                     }
 
@@ -137,6 +145,7 @@ class LoginFragment : Fragment() {
                     UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
                 } else if (token != null) {
                     //로그인 성공 시 회원가입 api 호출
+                    ApplicationClass.mainPref.loginPlatform = 1
                     signViewModel.joinWithKaKao(token.accessToken)
                 }
             }
@@ -200,13 +209,14 @@ class LoginFragment : Fragment() {
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
 
+                ApplicationClass.mainPref.loginPlatform = 2
                 //로그인 성공 시 회원가입 api 호출
                 signViewModel.joinWithNaver(naverToken!!)
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(requireContext(), "네이버 로그인 인증 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "네이버 로그인 실패", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "naver login 인증 실패   errorCode: ${errorCode}\n" +
                         "errorDescription: ${errorDescription}")
             }

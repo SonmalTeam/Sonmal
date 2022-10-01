@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.databinding.DialogConfirmBinding
+import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.ui.setting.SettingFragmentDirections
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
 import com.d202.sonmal.utils.getDeviceSize
@@ -38,9 +39,7 @@ class ConfirmDialog: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             btnRemove.setOnClickListener {
-                kakaoUnlink()
-                naverUnlink()
-                findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
+                buttonClickListener.onButton1Clicked()
                 dismiss()
             }
             btnCancel.setOnClickListener { dismiss() }
@@ -97,4 +96,17 @@ class ConfirmDialog: DialogFragment() {
             }
         })
     }
+
+    // 인터페이스
+    interface OnButtonClickListener {
+        fun onButton1Clicked() // 삭제
+    }
+
+    // 클릭 이벤트 설정
+    fun setButtonClickListener(buttonClickListener: OnButtonClickListener) {
+        this.buttonClickListener = buttonClickListener
+    }
+
+    // 클릭 이벤트 실행
+    private lateinit var buttonClickListener: OnButtonClickListener
 }

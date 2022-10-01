@@ -118,12 +118,12 @@ class SignViewModel: ViewModel() {
                                 }
 
                             } catch (e: Exception) {
-                                Log.d(TAG, "e: ${e.message}")
+                                _unregisterCallBack.postValue(false)
                             }
                         }
                     } else {
                         Log.d(TAG, "unregister 실패 error ${it.code()}")
-
+                        _unregisterCallBack.postValue(false)
                     }
                 }
 

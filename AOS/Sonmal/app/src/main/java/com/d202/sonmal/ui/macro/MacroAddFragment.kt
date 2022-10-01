@@ -161,10 +161,10 @@ class MacroAddFragment: Fragment() {
                 selectedCategoty = 2
             }
             imgCategory3.setOnClickListener {
-                selectedCategoty = 3
+                selectedCategoty = 4
             }
             imgCategory4.setOnClickListener {
-                selectedCategoty = 4
+                selectedCategoty = 3
             }
             imgCategory5.setOnClickListener {
                 selectedCategoty = 5
