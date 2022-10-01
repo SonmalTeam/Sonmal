@@ -14,18 +14,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil.bind
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
@@ -157,21 +161,44 @@ class MacroAddFragment: Fragment() {
         binding.apply {
             imgCategory1.setOnClickListener {
                 selectedCategoty = 1
+                categoryChange(selectedCategoty)
             }
             imgCategory2.setOnClickListener {
                 selectedCategoty = 2
+                categoryChange(selectedCategoty)
             }
             imgCategory3.setOnClickListener {
                 selectedCategoty = 4
+                categoryChange(selectedCategoty)
             }
             imgCategory4.setOnClickListener {
                 selectedCategoty = 3
+                categoryChange(selectedCategoty)
             }
             imgCategory5.setOnClickListener {
                 selectedCategoty = 5
+                categoryChange(selectedCategoty)
             }
             imgCategory6.setOnClickListener {
                 selectedCategoty = 6
+                categoryChange(selectedCategoty)
+            }
+        }
+    }
+
+    private fun categoryChange(seq: Int) {
+        var categories = mutableListOf<TextView>(
+            binding.imgCategory1, binding.imgCategory2,
+            binding.imgCategory4, binding.imgCategory3,
+            binding.imgCategory5, binding.imgCategory6
+        )
+
+        var selected = seq-1
+        for(i in 0..5) {
+            if(i == selected) {
+                categories.get(i).setBackgroundResource(R.drawable.background_category_add)
+            } else {
+                categories.get(i).setBackgroundResource(0)
             }
         }
     }
