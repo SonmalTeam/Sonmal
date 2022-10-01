@@ -1,4 +1,4 @@
-package com.d202.sonmal.utils
+package com.d202.sonmal.utils.sharedpref
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Context
@@ -18,5 +18,6 @@ class MainSharedPreference(context: Context) {
         set(value) {
             prefs.edit().putString("refreshToken", value).apply()
         }
+
 
 }

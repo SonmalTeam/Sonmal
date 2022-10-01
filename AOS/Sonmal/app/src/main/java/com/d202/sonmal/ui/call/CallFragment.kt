@@ -31,7 +31,7 @@ import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import com.d202.sonmal.utils.HandsResultImageView
-import com.d202.sonmal.utils.MainSharedPreference
+import com.d202.sonmal.utils.sharedpref.MainSharedPreference
 import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
@@ -154,6 +154,7 @@ class CallFragment : Fragment() {
                 session.getLocalParticipant()!!.switchCamera()
             }
             ivCallEnd.setOnClickListener {
+                leaveSession()
                 findNavController().popBackStack()
             }
             viewsContainer.setOnClickListener {
@@ -224,13 +225,11 @@ class CallFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        resizeView()
-        initViews()
 
-        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+
         Log.d(TAG, "onResume: CustomHttpClient")
         val sessionId = "-session"
-        getToken(sessionId)
+
     }
 
     private fun getToken(sessionId: String) {
@@ -343,8 +342,21 @@ class CallFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        leaveSession()
         viewModel.stopSTT()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+        resizeView()
+        initViews()
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+        getToken(arguments?.getString("PHONE").toString())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        leaveSession()
     }
 
     private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {

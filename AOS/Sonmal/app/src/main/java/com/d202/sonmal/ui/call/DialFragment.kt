@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.d202.sonmal.adapter.DialAdapter
 import com.d202.sonmal.databinding.FragmentDialBinding
 import com.d202.sonmal.ui.call.viewmodel.DialViewModel
@@ -61,6 +62,10 @@ class DialFragment : Fragment() {
             }
             ivBack.setOnClickListener {
                 viewModel.dialVisibility(true)
+            }
+            recyclerDial.apply {
+                adapter = dialAdapter
+                layoutManager = GridLayoutManager(requireContext(), 3)
             }
         }
     }

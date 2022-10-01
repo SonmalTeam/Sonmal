@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Handler
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
@@ -14,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.ui.MainActivity
+import com.d202.sonmal.utils.sharedpref.SettingsPreference
 import com.gun0912.tedpermission.provider.TedPermissionProvider
 import kotlinx.coroutines.Runnable
 import okhttp3.internal.notify
@@ -60,6 +62,7 @@ class CallReceiver : BroadcastReceiver() {
                             .setFullScreenIntent(fullScreenPendingIntent, true)
 
                     val incomingCallNotification = notificationBuilder.build()
+                    SettingsPreference().setCallNumber(phoneNo!!)
 
                     notiManager.notify(1, incomingCallNotification)
                 } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {

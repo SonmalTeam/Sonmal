@@ -12,4 +12,13 @@ class SettingsPreference {
     fun setFirstRunCheck(accept: Boolean){
         ApplicationClass.firstRunCheck.edit().putBoolean("State", accept).apply()
     }
+
+
+    fun setCallNumber(number: String){
+        ApplicationClass.callPref.edit().putString("PHONE", number).apply()
+    }
+
+    fun getCallNumber(): String{
+        return ApplicationClass.callPref.getString("PHONE", "").toString()
+    }
 }

@@ -2,9 +2,8 @@ package com.d202.sonmal.common
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import com.d202.sonmal.model.AuthInterceptor
-import com.d202.sonmal.utils.MainSharedPreference
+import com.d202.sonmal.utils.sharedpref.MainSharedPreference
 import com.kakao.sdk.common.KakaoSdk
 import com.navercorp.nid.NaverIdLoginSDK
 import okhttp3.Interceptor
@@ -18,6 +17,7 @@ class ApplicationClass: Application() {
     companion object{
         lateinit var retrofit: Retrofit
         lateinit var mainPref: MainSharedPreference
+        lateinit var callPref: SharedPreferences
         var jwtFlag : Boolean = true
         lateinit var interpreter: Interpreter
         val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
@@ -35,6 +35,7 @@ class ApplicationClass: Application() {
 
         // Preference 초기화
         mainPref = MainSharedPreference(applicationContext)
+        callPref = getSharedPreferences("PHONE", MODE_PRIVATE)
 
         // token 적용을 위한 intercepter 사용
         val client = OkHttpClient.Builder()
