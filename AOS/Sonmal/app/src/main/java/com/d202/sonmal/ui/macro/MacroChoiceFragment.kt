@@ -37,9 +37,9 @@ class MacroChoiceFragment: Fragment() {
 
     private fun initBtn() {
         binding.apply {
-//            btnMacroAdd.setOnClickListener {
-//                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
-//            }
+            btnMacroAdd.setOnClickListener {
+                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
+            }
 
             btnHospital.setOnClickListener {
                 moveToMacroListFragment(1)
