@@ -54,10 +54,10 @@ class LoginFragment : Fragment() {
         initView()
         initObserve()
 
-        if(ApplicationClass.mainPref.refreshToken != null) {
-            Log.d("refresh", "refresh ${ApplicationClass.mainPref.refreshToken}")
-//            navController.navigate(R.id.action_loginFragment_to_mainFragment)
-//            signViewModel.refresh()
+        Log.d(TAG, "${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.loginPlatform}" )
+        if(ApplicationClass.mainPref.token != null && ApplicationClass.mainPref.loginPlatform != 0) {
+            Log.d(TAG, "자동로그인 ${ApplicationClass.mainPref.token}")
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
         }
     }
 

@@ -82,6 +82,7 @@ class SettingFragment: Fragment(){
                 ApplicationClass.mainPref.apply {
                     token = null
                     refreshToken = null
+                    loginPlatform = 0
                 }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             } else {
@@ -89,6 +90,7 @@ class SettingFragment: Fragment(){
                 ApplicationClass.mainPref.apply {
                     token = null
                     refreshToken = null
+                    loginPlatform = 0
                 }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
