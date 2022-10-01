@@ -2,6 +2,7 @@ package com.d202.sonmal.ui.call
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.d202.sonmal.adapter.DialAdapter
 import com.d202.sonmal.databinding.FragmentDialBinding
 import com.d202.sonmal.ui.call.viewmodel.DialViewModel
+import com.google.android.gms.tasks.Tasks.call
 
 private const val TAG ="DialFragment"
 class DialFragment : Fragment() {
@@ -55,7 +57,9 @@ class DialFragment : Fragment() {
                 }
             }
             ivCall.setOnClickListener {
-
+                if(tvPhone.text.isNotEmpty()) {
+                    call(tvPhone.text.toString())
+                }
             }
             ivContacts.setOnClickListener {
                 resultLauncher.launch(Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI))
@@ -91,7 +95,7 @@ class DialFragment : Fragment() {
     }
 
 
-    private fun call(){
-
+    private fun call(number: String){
+        requireContext().startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}")))
     }
 }

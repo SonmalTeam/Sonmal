@@ -42,6 +42,10 @@ import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
 import com.google.mediapipe.solutions.hands.HandsOptions
 import com.google.mediapipe.solutions.hands.HandsResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -210,7 +214,6 @@ class CallFragment : Fragment() {
                 macroAdapter.submitData(this@CallFragment.lifecycle, it)
             }
         }
-        setupStaticImageModePipeline()
 
     }
 
@@ -352,6 +355,7 @@ class CallFragment : Fragment() {
         initViews()
         httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
         getToken(arguments?.getString("PHONE").toString())
+        setupStaticImageModePipeline()
     }
 
     override fun onStop() {

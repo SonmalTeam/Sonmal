@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity() {
             TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
         telephonyManager.endCall()
         val phone = intent?.getStringExtra("PHONE").toString()
+        Log.d(TAG, "onNewIntent: $phone")
+
         startCall(phone)
     }
 

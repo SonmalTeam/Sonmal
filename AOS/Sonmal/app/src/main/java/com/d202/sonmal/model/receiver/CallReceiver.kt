@@ -1,4 +1,4 @@
-package com.d202.sonmal.utils.receiver
+package com.d202.sonmal.model.receiver
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,19 +6,14 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Handler
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.d202.sonmal.R
-import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.ui.MainActivity
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
 import com.gun0912.tedpermission.provider.TedPermissionProvider
-import kotlinx.coroutines.Runnable
-import okhttp3.internal.notify
 
 private const val TAG = "CallReceiver"
 
@@ -66,7 +61,6 @@ class CallReceiver : BroadcastReceiver() {
 
                     notiManager.notify(1, incomingCallNotification)
                 } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                    telephonyManager.endCall()
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d(TAG, "통화종료 혹은 통화벨 종료")
                 }
