@@ -24,6 +24,7 @@
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/black"
             />
         <TextView
             android:id="@+id/tv_macro_title"
@@ -34,6 +35,7 @@
             tools:text="title "
             app:layout_constraintStart_toEndOf="@id/tv_macro_emoji"
             android:gravity="center"
+            android:textColor="@color/black"
             android:layout_marginStart="8dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

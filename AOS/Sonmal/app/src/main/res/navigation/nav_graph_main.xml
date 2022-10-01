@@ -149,7 +149,15 @@
             android:id="@+id/action_settingFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_macroAddFragment"
-            app:destination="@id/macroAddFragment" />
+            android:id="@+id/action_settingFragment_to_appInfoFragment"
+            app:destination="@+id/appInfoFragment"/>
+<!--        <action-->
+<!--            android:id="@+id/action_settingFragment_to_macroAddFragment"-->
+<!--            app:destination="@id/macroAddFragment" />-->
     </fragment>
+
+    <fragment
+        android:id="@+id/appInfoFragment"
+        android:name="com.d202.sonmal.ui.setting.AppInfoFragment"
+        android:label="AppInfoFragment"/>
 </navigation>
