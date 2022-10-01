@@ -1,5 +1,8 @@
 package com.d202.sonmal.utils.receiver
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -7,10 +10,13 @@ import android.os.Handler
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.ui.MainActivity
 import com.gun0912.tedpermission.provider.TedPermissionProvider
 import kotlinx.coroutines.Runnable
+import okhttp3.internal.notify
 
 private const val TAG = "CallReceiver"
 
@@ -19,21 +25,6 @@ class CallReceiver : BroadcastReceiver() {
     private var phoneNum: String? = ""
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent!!.action.equals("android.intent.action.PHONE_STATE")) {
-            val crun = Runnable {
-                val intentPhoneCall = Intent(context, MainActivity::class.java)
-                intentPhoneCall.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intentPhoneCall.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context!!.startActivity(intentPhoneCall)
-            }
-            resultData
-            val handler = Handler(context!!.mainLooper)
-            handler.postDelayed(crun, 1000)
-
-            Log.d(TAG, "onReceive: Coroutine-----------")
-            val i = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                        context.applicationContext.startActivity(i)
-            }
             val telephonyManager =
                 TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
             val extras = intent!!.extras
@@ -46,53 +37,35 @@ class CallReceiver : BroadcastReceiver() {
                 }
                 if (state == TelephonyManager.EXTRA_STATE_RINGING) {
                     val phoneNo = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                    phoneNum = phoneNo
-                    Log.d(TAG, phoneNo + "currentNumber")
                     Log.d(TAG, "통화벨 울리는중")
+                    val notiManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    val notiChannel = NotificationChannel("sonmal", "sonmal", NotificationManager.IMPORTANCE_HIGH)
+                    notiManager.createNotificationChannel(notiChannel)
 
+                    Log.d(TAG, "onReceive: ${phoneNo}")
+                    val fullScreenIntent = Intent(context, MainActivity::class.java).apply {
+                        putExtra("PHONE",phoneNo)
+                    }
+                    val fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
+                        fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-                    // telephonyManager.acceptRingingCall(); 전화 받기 함수이다.
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                    telephonyManager.endCall(); 전화 끊기, 거절 함수이다.
-//                }
+                    val notificationBuilder =
+                        NotificationCompat.Builder(context, notiChannel.id)
+                            .setSmallIcon(R.mipmap.ic_launcher_sonmal_foreground)
+                            .setContentTitle("Sonmal 전화")
+                            .setContentText(phoneNo)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .addAction(R.mipmap.ic_launcher_sonmal_foreground, "Call", fullScreenPendingIntent)
+                            .setCategory(NotificationCompat.CATEGORY_CALL)
+                            .setFullScreenIntent(fullScreenPendingIntent, true)
+
+                    val incomingCallNotification = notificationBuilder.build()
+
+                    notiManager.notify(1, incomingCallNotification)
                 } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
                     telephonyManager.endCall()
-//                    val packageManager = context!!.packageManager
-//                    val intent =
-//                        packageManager.getLaunchIntentForPackage("com.d202.sonmal")!!.apply {
-//                            putExtra("PHONE", phoneNum)
-//                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or
-//                                    Intent.FLAG_ACTIVITY_NEW_TASK or
-//                                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-//                        }
-//
-//
-//                    PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-//                    context!!.startActivity(intent)
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        delay(1000)
-//                        context!!.startActivity(intent)
-//
-//                    }
-
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d(TAG, "통화종료 혹은 통화벨 종료")
-                    val packageManager = context!!.packageManager
-//                    val intent = packageManager.getLaunchIntentForPackage("com.d202.sonmal", "com.d202.sonmal.ui.MainActivity")!!.apply {
-//                        putExtra("PHONE", phoneNum)
-//                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or
-//                                Intent.FLAG_ACTIVITY_NEW_TASK or
-//                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-//                    }
-//                    context!!.startActivity(intent)
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        delay(2000)
-//                        context!!.startActivity(intent)
-//
-//                    }
-
-
-
                 }
                 Log.d(TAG, "phone state : $state")
                 Log.d(TAG, "phone currentPhonestate : $phoneState")

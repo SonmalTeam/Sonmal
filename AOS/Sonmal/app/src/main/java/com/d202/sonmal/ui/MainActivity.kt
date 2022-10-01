@@ -1,7 +1,9 @@
 package com.d202.sonmal.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.telecom.TelecomManager
 import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +11,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.ActivityMainBinding
+import com.d202.sonmal.ui.call.CallFragment
 
 import com.d202.sonmal.ui.sign.LoginFragment
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.provider.TedPermissionProvider
 import com.kakao.sdk.common.util.Utility
 
 private const val TAG ="MainActivity"
@@ -36,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d(TAG, "onNewIntent: ${intent?.getStringExtra("PHONE").toString()}")
+        val telephonyManager =
+            TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+        telephonyManager.endCall()
+        val phone = intent?.getStringExtra("PHONE").toString()
+        this.showToast(phone)
+        supportFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment()).commit()
     }
 }

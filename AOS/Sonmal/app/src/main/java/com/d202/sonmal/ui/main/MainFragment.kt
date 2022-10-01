@@ -1,6 +1,8 @@
 package com.d202.sonmal.ui.main
 
 import android.Manifest
+import android.Manifest.permission.READ_CALL_LOG
+import android.Manifest.permission.READ_PHONE_NUMBERS
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -88,7 +90,7 @@ class MainFragment : Fragment() {
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.READ_CONTACTS)
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG)
             .check()
     }
 }
