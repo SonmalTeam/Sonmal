@@ -103,6 +103,14 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         binding.apply {
             tvSttResult.movementMethod = ScrollingMovementMethod()
 
+            test.setOnClickListener {
+                ivRecord.setImageResource(R.drawable.record_start)
+                tvLiveTranslate.text = ""
+                etNowTranslate.text.clear()
+                hangulMaker.clear()
+                isStarted = false
+            }
+
             ivRecord.setOnClickListener {
                 isStarted = !isStarted
                 if(isStarted) {

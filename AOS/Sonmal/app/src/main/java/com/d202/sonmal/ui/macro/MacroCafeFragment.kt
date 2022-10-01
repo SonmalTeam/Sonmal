@@ -40,6 +40,9 @@ class MacroCafeFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Todo args 1~6 Int 형태로 보냈습니다.
+        val result = arguments?.getInt("args")
+        Log.d(TAG, "onCreateView: $result")
 
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
         initObseve()
@@ -63,14 +66,6 @@ class MacroCafeFragment: Fragment() {
         val userSeq = 1
         categorySeq = args.category
         macroViewModel.getPagingMacroListValue(categorySeq)
-
-
-        binding.apply {
-            ivBack.setOnClickListener {
-
-            }
-        }
-
     }
 
     private fun initObseve() {
