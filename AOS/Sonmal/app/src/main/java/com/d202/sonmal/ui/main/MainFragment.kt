@@ -78,17 +78,17 @@ class MainFragment : Fragment() {
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                requireContext().showToast("카메라, 오디오 권한을 허용해야 이용이 가능합니다.")
+                requireContext().showToast("권한을 허용해야 이용이 가능합니다.")
             }
 
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.READ_CONTACTS)
             .check()
     }
 }

@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui.sign
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,12 +14,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentLoginBinding
+import com.d202.sonmal.ui.main.MainFragmentDirections
 import com.d202.sonmal.ui.sign.dialog.PermissionDialog
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -51,6 +57,7 @@ class LoginFragment : Fragment() {
 
         initView()
         initObserve()
+        checkPermission()
     }
 
     private fun initView() {
@@ -245,4 +252,20 @@ class LoginFragment : Fragment() {
 //            }
 //        })
 //    }
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                requireContext().showToast("전화 권한을 허용해야 이용이 가능합니다.")
+            }
+
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
+            .check()
+    }
 }

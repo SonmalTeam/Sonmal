@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import com.d202.sonmal.databinding.ActivityMainBinding
 import com.d202.sonmal.ui.sign.LoginFragment
 import com.kakao.sdk.common.util.Utility
 
+private const val TAG ="MainActivity"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -30,5 +32,10 @@ class MainActivity : AppCompatActivity() {
         //keyHash 구하기
         var keyHash = Utility.getKeyHash(this)
         Log.d("key", "해쉬 키 : ${keyHash}")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d(TAG, "onNewIntent: ${intent?.getStringExtra("PHONE").toString()}")
     }
 }
