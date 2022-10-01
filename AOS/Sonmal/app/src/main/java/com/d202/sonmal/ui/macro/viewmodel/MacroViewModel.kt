@@ -111,6 +111,7 @@ class MacroViewModel: ViewModel() {
 
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG,"add macro 호출 $video")
             try {
                 val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
@@ -130,9 +131,9 @@ class MacroViewModel: ViewModel() {
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
-
+                    Log.d(TAG,"add macro 성공 ${response.code()}")
                 } else if(response.code() == 401) {
-
+                    Log.d(TAG,"add macro 권한 실패 ${response.code()}")
                     runBlocking {
                         try {
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)

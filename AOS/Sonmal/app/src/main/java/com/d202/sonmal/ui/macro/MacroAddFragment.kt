@@ -48,6 +48,7 @@ class MacroAddFragment: Fragment() {
     private val STORAGE_PERMISSION = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     private val STORAGE_PERMISSION_FLAG = 200
 
     // 영상 캡쳐
@@ -72,13 +73,13 @@ class MacroAddFragment: Fragment() {
         initObserver()
 
         if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG)){
-            checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
+//            checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
         }
 
         binding.btnRecord.setOnClickListener {
             val recordVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             val videoFile = File(
-                File("${requireActivity().filesDir}/video").apply {
+                File("${requireActivity().cacheDir}/video").apply {
                     if(!this.exists()){
                         this.mkdirs()
                     }
@@ -146,7 +147,6 @@ class MacroAddFragment: Fragment() {
             } else if (videoUri == null) {
                 macroViewmodel.addMacroNull(title, content, category, emoji)
             }
-            findNavController().navigateUp()
 
         }
 
@@ -179,7 +179,10 @@ class MacroAddFragment: Fragment() {
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
-//            binding.tvEmoji.text = "성공"
+            if(videoFileSave != null) {
+                videoFileSave!!.delete()
+            }
+            findNavController().navigateUp()
 
         }
         macroViewmodel.refreshExpire.observe(viewLifecycleOwner) {
@@ -237,17 +240,17 @@ class MacroAddFragment: Fragment() {
                     if(grant != PackageManager.PERMISSION_GRANTED){
                         Toast.makeText(requireContext(), "카메라 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
                     }else{
-                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
+//                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
                     }
                 }
             }
-            STORAGE_PERMISSION_FLAG -> {
-                for(grant in grantResults) {
-                    if(grant != PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(requireContext(), "저장소 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
+//            STORAGE_PERMISSION_FLAG -> {
+//                for(grant in grantResults) {
+//                    if(grant != PackageManager.PERMISSION_GRANTED){
+//                        Toast.makeText(requireContext(), "저장소 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+//            }
         }
     }
 
@@ -268,6 +271,18 @@ class MacroAddFragment: Fragment() {
         builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
         builder.show()
+    }
+
+    //cache 이용 테스트
+    private fun createCacheFile() {
+        var filename = "a"
+        val cacheFile = File(requireContext().cacheDir,filename)
+//        cacheFile.delete() // 특정 파일 삭제
+//        requireContext().deleteFile(filename) // 캐시에서 해당 이름의 파일 삭제제
+   }
+
+    private fun deleteCacheFile() {
+        var filename = "a"
     }
 
 }

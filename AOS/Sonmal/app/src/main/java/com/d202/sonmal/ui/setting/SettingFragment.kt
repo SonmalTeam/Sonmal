@@ -126,6 +126,11 @@ class SettingFragment: Fragment(){
             if (error != null) {
                 Log.d(TAG, "연결 끊기 실패: ${error}")
                 Toast.makeText(requireContext(), "회원 탈퇴 실패", Toast.LENGTH_LONG).show()
+                ApplicationClass.mainPref.apply {
+                    token = null
+                    refreshToken = null
+                    loginPlatform = 0
+                }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
             else {
@@ -150,12 +155,22 @@ class SettingFragment: Fragment(){
                 Log.d(TAG, "naver 탈퇴 errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
                 Log.d(TAG, "naver 탈퇴 errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
                 Toast.makeText(requireContext(), "회원 탈퇴 실패", Toast.LENGTH_LONG).show()
+                ApplicationClass.mainPref.apply {
+                    token = null
+                    refreshToken = null
+                    loginPlatform = 0
+                }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
             }
             override fun onError(errorCode: Int, message: String) {
                 // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
                 // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
                 Toast.makeText(requireContext(), "회원 탈퇴 실패", Toast.LENGTH_LONG).show()
+                ApplicationClass.mainPref.apply {
+                    token = null
+                    refreshToken = null
+                    loginPlatform = 0
+                }
                 findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToLoginFragment())
                 onFailure(errorCode, message)
             }
