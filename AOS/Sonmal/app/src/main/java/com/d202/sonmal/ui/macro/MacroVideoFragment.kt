@@ -10,12 +10,15 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.MediaController
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroVideoBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.setting.SettingFragmentDirections
 
 private const val TAG = "MacroVideoFragment"
 class MacroVideoFragment : Fragment() {
@@ -74,6 +77,7 @@ class MacroVideoFragment : Fragment() {
             requestFocus()
             start()
         }
+
     }
 
 //        macroSignViewModel.getVideo(videoId)

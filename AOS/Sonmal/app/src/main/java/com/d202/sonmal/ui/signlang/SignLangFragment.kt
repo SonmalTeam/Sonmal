@@ -14,6 +14,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.d202.sonmal.R
@@ -53,6 +55,9 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_NETWORK_STATE).toTypedArray()
 
+    lateinit var hangulMaker: HangulMaker
+
+
     private val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
         "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "ㅏ", "ㅐ",
         "ㅑ", "ㅓ", "ㅔ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ")
@@ -65,6 +70,7 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSignLangBinding.inflate(inflater, container, false)
+
 
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
@@ -97,9 +103,20 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         binding.apply {
             tvSttResult.movementMethod = ScrollingMovementMethod()
 
+            test.setOnClickListener {
+                ivRecord.setImageResource(R.drawable.record_start)
+                tvLiveTranslate.text = ""
+                etNowTranslate.text.clear()
+                hangulMaker.clear()
+                isStarted = false
+            }
+
             ivRecord.setOnClickListener {
                 isStarted = !isStarted
                 if(isStarted) {
+                    val inputConnection: InputConnection = binding.etNowTranslate.onCreateInputConnection(EditorInfo())
+                    hangulMaker = HangulMaker(inputConnection)
+
                     ivRecord.setImageResource(R.drawable.record_stop)
                     startTime = System.currentTimeMillis()
                     thread(start = true) {
@@ -113,7 +130,8 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 else {
                     ivRecord.setImageResource(R.drawable.record_start)
                     tvLiveTranslate.text = ""
-                    convertToSentence()
+                    hangulMaker.clear()
+                    //convertToSentence()
                 }
                 charlist.clear()
             }
@@ -259,20 +277,22 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
         if(System.currentTimeMillis() - startTime >= 2000) {
             startTime = System.currentTimeMillis()
+            hangulMaker.commit(classes[index][0])
 
             // 들어온 글자가 모음인지 판별
-            if(Jun.contains(classes[index])) {
-                // 모음일 경우
-                mergeJun(classes[index])
-            }
-            else {
-                // 자음인 경우
-                charlist.add(classes[index])
-            }
+//            if(Jun.contains(classes[index])) {
+//                // 모음일 경우
+//                mergeJun(classes[index])
+//            }
+//            else {
+//                // 자음인 경우
+//                charlist.add(classes[index])
+//            }
             (activity as Activity).runOnUiThread {
                 binding.tvLiveTranslate.text = classes[index]
-                binding.etNowTranslate.setText(binding.etNowTranslate.text.toString() + classes[index])
+                //binding.etNowTranslate.setText(binding.etNowTranslate.text.toString() + classes[index])
             }
+
         }
     }
 
@@ -408,7 +428,7 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
 
         if(binding.etNowTranslate.text.toString().isNotEmpty()) {
             binding.tvNextTranslate.text = binding.etNowTranslate.text.toString()
-            binding.etNowTranslate.setText("")
+            binding.etNowTranslate.text.clear()
         }
     }
 

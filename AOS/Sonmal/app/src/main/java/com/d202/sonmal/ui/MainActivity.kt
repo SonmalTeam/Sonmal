@@ -5,18 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.telecom.TelecomManager
 import android.util.Log
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.d202.sonmal.R
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.ActivityMainBinding
 import com.d202.sonmal.ui.call.CallFragment
-
-import com.d202.sonmal.ui.sign.LoginFragment
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
-import com.d202.sonmal.utils.showToast
 import com.gun0912.tedpermission.provider.TedPermissionProvider
 import com.kakao.sdk.common.util.Utility
 
@@ -39,6 +36,10 @@ class MainActivity : AppCompatActivity() {
         //keyHash 구하기
         var keyHash = Utility.getKeyHash(this)
         Log.d("key", "해쉬 키 : ${keyHash}")
+
+        if(ApplicationClass.mainPref.refreshToken != null) {
+            Log.d("refresh", "refresh ${ApplicationClass.mainPref.refreshToken}")
+        }
 
 //        SettingsPreference().setCallNumber("01012341234")
         val phone = SettingsPreference().getCallNumber()
@@ -64,5 +65,6 @@ class MainActivity : AppCompatActivity() {
             arguments = bundleOf("PHONE" to phone)
         }).commit()
         Log.d(TAG, "startCall: $phone")
+
     }
 }

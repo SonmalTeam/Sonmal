@@ -19,6 +19,7 @@ import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentLoginBinding
 import com.d202.sonmal.ui.main.MainFragmentDirections
+import com.d202.sonmal.ui.setting.SettingFragmentDirections
 import com.d202.sonmal.ui.sign.dialog.PermissionDialog
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
@@ -58,6 +59,12 @@ class LoginFragment : Fragment() {
         initView()
         initObserve()
         checkPermission()
+
+        Log.d(TAG, "${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.loginPlatform}" )
+        if(ApplicationClass.mainPref.token != null && ApplicationClass.mainPref.loginPlatform != 0) {
+            Log.d(TAG, "자동로그인 ${ApplicationClass.mainPref.token}")
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
+        }
     }
 
     private fun initView() {
@@ -67,18 +74,13 @@ class LoginFragment : Fragment() {
 
         binding.apply {
             btnKakaoLogin.setOnClickListener { // 카카오 로그인 및 회원가입
+                ApplicationClass.mainPref.loginPlatform = 1
                 kakaoLogIn()
             }
             btnNaverLogin.setOnClickListener { // 네이버 로그인 및 회원가입
+                ApplicationClass.mainPref.loginPlatform = 2
                 naverLogIn()
             }
-
-//            btnExitKakao.setOnClickListener { // 카카오 회원 탈퇴
-//                kakaoUnlink()
-//            }
-//            btnExitNaver.setOnClickListener {
-//                naverUnlink()
-//            }
         }
     }
 
@@ -91,6 +93,14 @@ class LoginFragment : Fragment() {
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
                 signViewModel.refresh()
             }
+//            else { // 서버 회원가입 실패 시 탈퇴 처리
+//                if(ApplicationClass.mainPref.loginPlatform == 1) {
+//                    kakaoUnlink()
+//                }
+//                else { // 서버 회원가입 실패 시 탈퇴 처리
+//                    naverUnlink()
+//                }
+//            }
         }
 
         signViewModel.jwtToken.observe(viewLifecycleOwner) {
@@ -121,6 +131,7 @@ class LoginFragment : Fragment() {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
                 UserApiClient.instance.me { user, error ->
                     //로그인 성공 시 회원가입 api 호출
+                    ApplicationClass.mainPref.loginPlatform = 1
                     signViewModel.joinWithKaKao(token.accessToken)
 
                 }
@@ -137,6 +148,7 @@ class LoginFragment : Fragment() {
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        Log.d(TAG,"kakaologin back cancle")
                         return@loginWithKakaoTalk
                     }
 
@@ -144,6 +156,7 @@ class LoginFragment : Fragment() {
                     UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
                 } else if (token != null) {
                     //로그인 성공 시 회원가입 api 호출
+                    ApplicationClass.mainPref.loginPlatform = 1
                     signViewModel.joinWithKaKao(token.accessToken)
                 }
             }
@@ -161,23 +174,6 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-//    private fun kakaoUnlink(){ // 카카오 회원탈퇴
-//        // 연결 끊기
-//        Log.d(TAG, "연결 끊기. SDK에서 토큰 삭제 됨" +
-//                "${signViewModel.refreshtoken.value}")
-//
-//        UserApiClient.instance.unlink { error ->
-//            if (error != null) {
-//                Log.d(TAG, "연결 끊기 실패: ${error}")
-//            }
-//            else {
-//                Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨") }
-//            Toast.makeText(requireContext(), "회원 탈퇴 성공", Toast.LENGTH_LONG).show()
-//            signViewModel.unregister()
-//        }
-//    }
-
 
     private fun naverLogIn() {
         var naverToken :String? = ""
@@ -207,13 +203,14 @@ class LoginFragment : Fragment() {
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
 
+                ApplicationClass.mainPref.loginPlatform = 2
                 //로그인 성공 시 회원가입 api 호출
                 signViewModel.joinWithNaver(naverToken!!)
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                 val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                Toast.makeText(requireContext(), "네이버 로그인 인증 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "네이버 로그인 실패", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "naver login 인증 실패   errorCode: ${errorCode}\n" +
                         "errorDescription: ${errorDescription}")
             }
@@ -267,5 +264,40 @@ class LoginFragment : Fragment() {
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
             .setPermissions(Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
             .check()
+    private fun kakaoUnlink(){ // 카카오 회원탈퇴
+        // 연결 끊기
+        Log.d(TAG, "kakaoUnlink 실행")
+        UserApiClient.instance.unlink { error ->
+            if (error != null) {
+                Log.d(TAG, "연결 끊기 실패: ${error}")
+            }
+            else {
+                Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+            }
+            Toast.makeText(requireContext(), "다시 가입해 주세요.", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun naverUnlink() {
+        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
+            override fun onSuccess() {
+                //서버에서 토큰 삭제에 성공한 상태입니다.
+                Toast.makeText(requireContext(), "다시 가입해 주세요.", Toast.LENGTH_LONG).show()
+
+            }
+
+            override fun onFailure(httpStatus: Int, message: String) {
+                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                Log.d(TAG, "naver 탈퇴 errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
+                Log.d(TAG, "naver 탈퇴 errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
+            }
+
+            override fun onError(errorCode: Int, message: String) {
+                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+                onFailure(errorCode, message)
+            }
+        })
     }
 }

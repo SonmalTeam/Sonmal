@@ -19,5 +19,10 @@ class MainSharedPreference(context: Context) {
             prefs.edit().putString("refreshToken", value).apply()
         }
 
+    var loginPlatform: Int?
+        get() = prefs.getInt("loginPlatform", 0)
+        set(value) {
+            prefs.edit().putInt("loginPlatform", value!!).apply()
+        }
 
 }

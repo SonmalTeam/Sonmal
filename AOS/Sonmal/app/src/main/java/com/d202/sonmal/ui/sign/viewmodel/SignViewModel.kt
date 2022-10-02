@@ -16,6 +16,11 @@ import kotlinx.coroutines.runBlocking
 private const val TAG = "SignViewModel"
 class SignViewModel: ViewModel() {
 
+
+    private val _refreshExpire = MutableLiveData<Boolean>()
+    val refreshExpire: LiveData<Boolean>
+        get() = _refreshExpire
+
     private val _refreshtoken = MutableLiveData<String>() // 소셜로그인 성공 시 콜백
     val refreshtoken: LiveData<String>
         get() = _refreshtoken
@@ -51,7 +56,6 @@ class SignViewModel: ViewModel() {
                         _jwtToken.postValue(it.body()!!.accessToken)
                         _refreshtoken.postValue(it.body()!!.refreshToken)
                         ApplicationClass.jwtFlag = true
-
                     }
                     else {
                         Log.d(TAG, "joinWithKaKao api 통신 실패 ${it.body()}")
@@ -115,15 +119,17 @@ class SignViewModel: ViewModel() {
                                     unregister()
                                 } else {
                                     Log.d(TAG, "refreshToken err ${response.code()}")
+                                    _refreshExpire.postValue(true)
                                 }
 
                             } catch (e: Exception) {
-                                Log.d(TAG, "e: ${e.message}")
+                                _unregisterCallBack.postValue(false)
+                                _refreshExpire.postValue(true)
                             }
                         }
                     } else {
                         Log.d(TAG, "unregister 실패 error ${it.code()}")
-
+                        _unregisterCallBack.postValue(false)
                     }
                 }
 
