@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -30,6 +31,7 @@ import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.signlang.HangulMaker
 import com.d202.sonmal.utils.HandsResultImageView
 import com.d202.sonmal.utils.sharedpref.MainSharedPreference
 import com.d202.sonmal.utils.translate
@@ -79,6 +81,8 @@ class CallFragment : Fragment() {
     private lateinit var hands: Hands
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
+    private var startTime = 0L
+    private lateinit var hangulMaker: HangulMaker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -118,6 +122,10 @@ class CallFragment : Fragment() {
             val result = translate(handsResult)
             if(result.isNotEmpty()) {
                 viewModel.setTranslateText(result)
+                if(System.currentTimeMillis() - startTime >= 2000){
+                    startTime = System.currentTimeMillis()
+                    hangulMaker.commit(result[0])
+                }
             }
         }
         hands.setErrorListener { message, e ->
@@ -150,10 +158,12 @@ class CallFragment : Fragment() {
             }
         }
 
+
         binding.apply {
             lifecycleOwner = this@CallFragment
             vm = viewModel
 
+            hangulMaker = HangulMaker(etChat.onCreateInputConnection(EditorInfo()))
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
@@ -177,6 +187,7 @@ class CallFragment : Fragment() {
                 viewModel.sendMessage(etChat.text.toString(), userName)
                 etChatInput.setText("${etChatInput.text}\n${etChat.text}")
                 etChat.setText("")
+                hangulMaker.clear()
                 etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
                 etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
             }
