@@ -168,7 +168,6 @@ class CallFragment : Fragment() {
                 session.getLocalParticipant()!!.switchCamera()
             }
             ivCallEnd.setOnClickListener {
-                leaveSession()
                 findNavController().popBackStack()
             }
             viewsContainer.setOnClickListener {

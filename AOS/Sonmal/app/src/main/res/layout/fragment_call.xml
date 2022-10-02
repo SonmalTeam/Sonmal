@@ -112,7 +112,6 @@
                     android:layout_height="match_parent"
                     tools:text="채팅 내용"
                     android:textSize="22sp"
-                    android:text="@{vm.sttStatus}"
                     android:layout_margin="8dp"
                     android:paddingStart="24dp"
                     android:maxLines="2"
