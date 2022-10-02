@@ -147,13 +147,13 @@ class CallFragment : Fragment() {
 
 
     private fun initView(){
-//        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-//        audioManager.mode = AudioManager.MODE_NORMAL
+        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.mode = AudioManager.MODE_NORMAL
         macroAdapter = CallMacroPagingAdapter()
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
                 override fun onClick(title: String) {
-                    binding.etChat.setText("${binding.etChat.text} ${title} ")
+                    binding.etMergedText.setText("${binding.etChat.text} ${title} ")
                 }
             }
         }
