@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,6 +38,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val signViewModel: SignViewModel by activityViewModels()
     private lateinit var navController: NavController
+    private lateinit var callback1: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +54,16 @@ class LoginFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback1 = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback1)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

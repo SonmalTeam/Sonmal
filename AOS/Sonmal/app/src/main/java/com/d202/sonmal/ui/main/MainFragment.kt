@@ -2,11 +2,13 @@ package com.d202.sonmal.ui.main
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.common.ApplicationClass
@@ -23,6 +25,8 @@ import java.nio.channels.FileChannel
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    private lateinit var callback1: OnBackPressedCallback
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +37,15 @@ class MainFragment : Fragment() {
         Log.d("Main", "메인프래그먼트 호출 isFromMain ${ApplicationClass.mainPref.isFromMain}")
 
         return binding.root
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback1 = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback1)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
