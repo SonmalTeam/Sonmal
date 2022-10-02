@@ -34,32 +34,50 @@ class CallReceiver : BroadcastReceiver() {
                 }
                 if (state == TelephonyManager.EXTRA_STATE_RINGING) {
                     val phoneNo = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                    Log.d(TAG, "통화벨 울리는중")
-                    val notiManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val notiChannel = NotificationChannel("sonmal", "sonmal", NotificationManager.IMPORTANCE_HIGH)
-                    notiManager.createNotificationChannel(notiChannel)
+                    val tManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                    var myNumber = tManager.getLine1Number()
+                    if(phoneNo != myNumber) {
+                        Log.d(TAG, "통화벨 울리는중")
 
-                    Log.d(TAG, "onReceive: ${phoneNo}")
-                    val fullScreenIntent = Intent(context, MainActivity::class.java).apply {
-                        putExtra("PHONE",phoneNo)
+                        val notiManager =
+                            context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        val notiChannel = NotificationChannel(
+                            "sonmal",
+                            "sonmal",
+                            NotificationManager.IMPORTANCE_HIGH
+                        )
+                        notiManager.createNotificationChannel(notiChannel)
+
+                        Log.d(TAG, "onReceive: ${phoneNo}")
+                        val fullScreenIntent = Intent(context, MainActivity::class.java).apply {
+                            putExtra("PHONE", phoneNo)
+                        }
+                        val fullScreenPendingIntent = PendingIntent.getActivity(
+                            context,
+                            0,
+                            fullScreenIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        )
+
+                        val notificationBuilder =
+                            NotificationCompat.Builder(context, notiChannel.id)
+                                .setSmallIcon(R.mipmap.ic_launcher_sonmal_foreground)
+                                .setContentTitle("Sonmal 전화")
+                                .setContentText(phoneNo)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .addAction(
+                                    R.mipmap.ic_launcher_sonmal_foreground,
+                                    "Call",
+                                    fullScreenPendingIntent
+                                )
+                                .setCategory(NotificationCompat.CATEGORY_CALL)
+                                .setFullScreenIntent(fullScreenPendingIntent, true)
+
+                        val incomingCallNotification = notificationBuilder.build()
+                        SettingsPreference().setCallNumber(phoneNo!!)
+
+                        notiManager.notify(1, incomingCallNotification)
                     }
-                    val fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-                        fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-                    val notificationBuilder =
-                        NotificationCompat.Builder(context, notiChannel.id)
-                            .setSmallIcon(R.mipmap.ic_launcher_sonmal_foreground)
-                            .setContentTitle("Sonmal 전화")
-                            .setContentText(phoneNo)
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .addAction(R.mipmap.ic_launcher_sonmal_foreground, "Call", fullScreenPendingIntent)
-                            .setCategory(NotificationCompat.CATEGORY_CALL)
-                            .setFullScreenIntent(fullScreenPendingIntent, true)
-
-                    val incomingCallNotification = notificationBuilder.build()
-                    SettingsPreference().setCallNumber(phoneNo!!)
-
-                    notiManager.notify(1, incomingCallNotification)
                 } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d(TAG, "통화종료 혹은 통화벨 종료")

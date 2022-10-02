@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.d202.sonmal.adapter.DialAdapter
 import com.d202.sonmal.databinding.FragmentDialBinding
 import com.d202.sonmal.ui.call.viewmodel.DialViewModel
+import com.d202.sonmal.utils.sharedpref.SettingsPreference
 import com.google.android.gms.tasks.Tasks.call
 
 private const val TAG ="DialFragment"
@@ -96,6 +97,7 @@ class DialFragment : Fragment() {
 
 
     private fun call(number: String){
+        SettingsPreference().setUseCall(true)
         requireContext().startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}")))
     }
 }
