@@ -51,9 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val telephonyManager =
-            TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
-        telephonyManager.endCall()
+
         val phone = intent?.getStringExtra("PHONE").toString()
         Log.d(TAG, "onNewIntent: $phone")
 
@@ -61,6 +59,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCall(phone: String){
+        val telephonyManager =
+            TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+        telephonyManager.endCall()
         supportFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
             arguments = bundleOf("PHONE" to phone)
         }).commit()

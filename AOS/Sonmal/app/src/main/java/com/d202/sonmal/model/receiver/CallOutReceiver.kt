@@ -23,13 +23,13 @@ class CallOutReceiver : BroadcastReceiver() {
         val telephonyManager =
             TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
         CoroutineScope(Dispatchers.IO).launch {
+            delay(1500)
             if(SettingsPreference().getUseCall()) {
                 telephonyManager.endCall()
                 SettingsPreference().setUseCall(false)
             }else{
                 return@launch
             }
-            delay(1000)
             val tManager = context!!.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
             var number = tManager.getLine1Number()
             if (number.startsWith("+82")) {
