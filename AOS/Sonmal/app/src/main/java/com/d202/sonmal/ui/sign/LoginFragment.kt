@@ -1,5 +1,6 @@
 package com.d202.sonmal.ui.sign
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,6 +44,13 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        Log.d(TAG, "${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.loginPlatform}" )
+        if(ApplicationClass.mainPref.token != null && ApplicationClass.mainPref.loginPlatform != 0) {
+            Log.d(TAG, "자동로그인 ${ApplicationClass.mainPref.token}")
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
+        }
+
         return binding.root
     }
 
@@ -54,11 +62,6 @@ class LoginFragment : Fragment() {
         initView()
         initObserve()
 
-        Log.d(TAG, "${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.loginPlatform}" )
-        if(ApplicationClass.mainPref.token != null && ApplicationClass.mainPref.loginPlatform != 0) {
-            Log.d(TAG, "자동로그인 ${ApplicationClass.mainPref.token}")
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
-        }
     }
 
     private fun initView() {

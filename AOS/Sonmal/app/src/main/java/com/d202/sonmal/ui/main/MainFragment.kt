@@ -3,6 +3,7 @@ package com.d202.sonmal.ui.main
 import android.Manifest
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        ApplicationClass.mainPref.isFromMain = true
+        Log.d("Main", "메인프래그먼트 호출 isFromMain ${ApplicationClass.mainPref.isFromMain}")
+
         return binding.root
     }
 
@@ -49,12 +53,6 @@ class MainFragment : Fragment() {
             btnCall.setOnClickListener {
                 checkPermission()
             }
-//            btnLogin.setOnClickListener {
-//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
-//            }
-//            btnVideo.setOnClickListener {
-//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToMacroVideoFragment())
-//            }
             btnSignLang.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
             }

@@ -25,4 +25,10 @@ class MainSharedPreference(context: Context) {
             prefs.edit().putInt("loginPlatform", value!!).apply()
         }
 
+    var isFromMain: Boolean?
+        get() = prefs.getBoolean("isFromMain", false)
+        set(value) {
+            prefs.edit().putBoolean("isFromMain", value!!).apply()
+        }
+
 }
