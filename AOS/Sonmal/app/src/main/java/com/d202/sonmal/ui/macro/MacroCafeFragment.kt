@@ -25,6 +25,7 @@ import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import com.d202.sonmal.ui.setting.SettingFragmentDirections
 import com.d202.sonmal.utils.MacroDetailFragment
+import com.d202.sonmal.utils.VideoDialogFragment
 import java.util.*
 
 private val TAG = "MacroCafeFragment"
@@ -122,11 +123,13 @@ class MacroCafeFragment: Fragment() {
             setVideoClickListener(object: MacroPagingAdapter.VideoItemClickListener{
                 override fun onClick(view: View, position: Int, item: MacroDto) {
                     if (item.videoFileId != 0) {
-                        findNavController().navigate(
-                            MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(
-                                item.videoFileId
-                            )
-                        )
+                        val dialog = VideoDialogFragment(item.videoFileId)
+                        dialog.show(parentFragmentManager, "VideoDialogFragment")
+//                        findNavController().navigate(
+//                            MacroCafeFragmentDirections.actionMacroCafeFragmentToMacroVideoFragment(
+//                                item.videoFileId
+//                            )
+//                        )
 
                     }
                 }
