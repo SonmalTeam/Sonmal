@@ -264,14 +264,16 @@ class LoginFragment : Fragment() {
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
             .setPermissions(Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
             .check()
-    private fun kakaoUnlink(){ // 카카오 회원탈퇴
+
+    }
+
+    private fun kakaoUnlink() { // 카카오 회원탈퇴
         // 연결 끊기
         Log.d(TAG, "kakaoUnlink 실행")
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.d(TAG, "연결 끊기 실패: ${error}")
-            }
-            else {
+            } else {
                 Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
             }
             Toast.makeText(requireContext(), "다시 가입해 주세요.", Toast.LENGTH_LONG).show()
