@@ -22,8 +22,6 @@ class MacroDetailFragment(var item: MacroDto): DialogFragment() {
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-
-
         return bindig.root
 
     }

@@ -12,10 +12,10 @@
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_macroChoiceFragment"
-            app:destination="@id/macroChoiceFragment" />
+            app:destination="@id/macroChoiceFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_callFragment"
             app:destination="@id/callFragment" />
@@ -30,7 +30,7 @@
             app:destination="@id/voiceFragment" />
         <action
             android:id="@+id/action_mainFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
+            app:destination="@id/settingFragment"/>
 
     </fragment>
 
@@ -61,6 +61,9 @@
             android:name="category"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_macroCafeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -70,7 +73,7 @@
             android:id="@+id/action_loginFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="false"/>
     </fragment>
     <fragment
         android:id="@+id/callFragment"
@@ -88,7 +91,14 @@
     <fragment
         android:id="@+id/macroAddFragment"
         android:name="com.d202.sonmal.ui.macro.MacroAddFragment"
-        android:label="MacroAddFragment" />
+        android:label="MacroAddFragment" >
+        <action
+            android:id="@+id/action_macroAddFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_macroAddFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/signLangFragment"

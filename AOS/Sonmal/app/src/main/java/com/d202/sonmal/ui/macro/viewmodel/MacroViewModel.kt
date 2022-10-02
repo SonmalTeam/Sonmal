@@ -24,6 +24,10 @@ import java.io.File
 private val TAG = "MacroViewModel"
 class MacroViewModel: ViewModel() {
 
+    private val _refreshExpire = MutableLiveData<Boolean>()
+    val refreshExpire: LiveData<Boolean>
+        get() = _refreshExpire
+
     private val macroListPage = MutableLiveData<Int>()
     val pagingMacroList = macroListPage.switchMap {
         getPagingMacroList(it).cachedIn(viewModelScope)
@@ -82,10 +86,12 @@ class MacroViewModel: ViewModel() {
                                 getMacroList(category)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
 
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
                 } else {
@@ -105,6 +111,7 @@ class MacroViewModel: ViewModel() {
 
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(TAG,"add macro 호출 $video")
             try {
                 val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
@@ -124,9 +131,9 @@ class MacroViewModel: ViewModel() {
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
-
+                    Log.d(TAG,"add macro 성공 ${response.code()}")
                 } else if(response.code() == 401) {
-
+                    Log.d(TAG,"add macro 권한 실패 ${response.code()}")
                     runBlocking {
                         try {
                             var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
@@ -137,10 +144,11 @@ class MacroViewModel: ViewModel() {
                                 addMacro(title, content, category, emoji, video)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
-
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
 //                    refreshToken("getMacroList", category)
@@ -178,10 +186,12 @@ class MacroViewModel: ViewModel() {
                                 addMacroNull(title, content, category, emoji)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
 
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
                 } else {
@@ -217,10 +227,12 @@ class MacroViewModel: ViewModel() {
                                 modifyCategryMacro(macroSeq, categorySeq)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
 
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
                 } else {
@@ -258,10 +270,12 @@ class MacroViewModel: ViewModel() {
                                 deleteMacro(macroSeq)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
 
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
                 } else {
@@ -294,10 +308,12 @@ class MacroViewModel: ViewModel() {
                                 getVideo(videoId)
                             } else {
                                 Log.d(TAG, "refreshToken err ${response.code()}")
+                                _refreshExpire.postValue(true)
                             }
 
                         } catch (e: Exception) {
                             Log.d(TAG, "e: ${e.message}")
+                            _refreshExpire.postValue(true)
                         }
                     }
 //                    refreshToken("getMacroList", category)
@@ -329,10 +345,12 @@ class MacroViewModel: ViewModel() {
                     }
                 } else {
                     Log.d(TAG, "refreshToken err ${response.code()}")
+                    _refreshExpire.postValue(true)
                 }
 
             } catch (e: Exception) {
                 Log.d(TAG, "e: ${e.message}")
+                _refreshExpire.postValue(true)
             }
         }
     }

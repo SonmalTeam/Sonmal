@@ -28,84 +28,83 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TableLayout
-                android:id="@+id/bottom_table"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_macro_choice_appbar"
-                android:layout_marginTop="16dp">
+        <TableLayout
+            android:id="@+id/bottom_table"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_macro_choice_appbar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-                <TableRow
-                    android:gravity="center">
-                    <ImageView
-                        android:id="@+id/btn_hospital"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:text="병원"
-                        android:src="@drawable/btn_macro_hospital_320px"
-                        android:textColor="@color/white"
-                        android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
-                    <ImageView
-                        android:id="@+id/btn_public"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:src="@drawable/btn_macro_offices_320px"
-                        android:text="관공서"
-                        android:textColor="@color/white"
-                        android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
-                </TableRow>
+            <TableRow
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/btn_hospital"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:text="병원"
+                    android:src="@drawable/btn_macro_hospital_320px"
+                    android:textColor="@color/white"
+                    android:gravity="bottom |center_horizontal"
+                    android:padding="4dp"/>
+                <ImageView
+                    android:id="@+id/btn_public"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/btn_macro_offices_320px"
+                    android:text="관공서"
+                    android:textColor="@color/white"
+                    android:gravity="bottom |center_horizontal"
+                    android:padding="4dp"/>
+            </TableRow>
 
-                <TableRow
-                    android:gravity="center">
-                    <ImageView
-                        android:id="@+id/btn_restaurant"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:src="@drawable/btn_macro_transport_320px"
-                        android:text="식당"
-                        android:textColor="@color/white"
-                        android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
-                    <ImageView
-                        android:id="@+id/btn_work"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:src="@drawable/btn_macro_restaurant_320px"
-                        android:text="업무"
-                        android:textColor="@color/white"
-                        android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
-                </TableRow>
-                <TableRow
-                    android:gravity="center">
+            <TableRow
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/btn_restaurant"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/btn_macro_transport_320px"
+                    android:text="식당"
+                    android:textColor="@color/white"
+                    android:gravity="bottom |center_horizontal"
+                    android:padding="4dp"/>
+                <ImageView
+                    android:id="@+id/btn_work"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/btn_macro_restaurant_320px"
+                    android:text="업무"
+                    android:textColor="@color/white"
+                    android:gravity="bottom |center_horizontal"
+                    android:padding="4dp"/>
+            </TableRow>
+            <TableRow
+                android:gravity="center">
 
-                    <ImageView
-                        android:id="@+id/btn_store"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:layout_margin="4dp"
-                        android:src="@drawable/btn_macro_work_320px"
-                        android:gravity="bottom |center_horizontal"
-                        android:text="상점"
-                        android:textColor="@color/white" />
+                <ImageView
+                    android:id="@+id/btn_store"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="4dp"
+                    android:src="@drawable/btn_macro_work_320px"
+                    android:gravity="bottom |center_horizontal"
+                    android:text="상점"
+                    android:textColor="@color/white" />
 
-                    <ImageView
-                        android:id="@+id/btn_custom"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:src="@drawable/btn_macro_more_320px"
-                        android:text="생활"
-                        android:textColor="@color/white"
-                        android:gravity="bottom |center_horizontal"
-                        android:layout_margin="4dp"/>
-                </TableRow>
-            </TableLayout>
+                <ImageView
+                    android:id="@+id/btn_custom"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/btn_macro_more_320px"
+                    android:text="생활"
+                    android:textColor="@color/white"
+                    android:gravity="bottom |center_horizontal"
+                    android:padding="4dp"/>
+            </TableRow>
+        </TableLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

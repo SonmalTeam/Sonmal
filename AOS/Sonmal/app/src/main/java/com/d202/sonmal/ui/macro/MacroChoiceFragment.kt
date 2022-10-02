@@ -1,6 +1,7 @@
 package com.d202.sonmal.ui.macro
 
 import android.os.Bundle
+import android.system.Os.remove
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,7 @@ class MacroChoiceFragment: Fragment() {
 
     private fun moveToMacroListFragment(category: Int) {
         findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment(category))
+
     }
 
 }

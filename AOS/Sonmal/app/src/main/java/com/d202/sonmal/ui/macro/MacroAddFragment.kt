@@ -9,27 +9,29 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputFilter
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.d202.sonmal.R
+import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.regex.Pattern
 
 
 private val TAG = "MacroAddFragment"
@@ -47,6 +49,7 @@ class MacroAddFragment: Fragment() {
     private val STORAGE_PERMISSION = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     private val STORAGE_PERMISSION_FLAG = 200
 
     // 영상 캡쳐
@@ -71,13 +74,13 @@ class MacroAddFragment: Fragment() {
         initObserver()
 
         if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG)){
-            checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
+//            checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
         }
 
         binding.btnRecord.setOnClickListener {
             val recordVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             val videoFile = File(
-                File("${requireActivity().filesDir}/video").apply {
+                File("${requireActivity().cacheDir}/video").apply {
                     if(!this.exists()){
                         this.mkdirs()
                     }
@@ -146,8 +149,6 @@ class MacroAddFragment: Fragment() {
                 macroViewmodel.addMacroNull(title, content, category, emoji)
             }
 
-
-
         }
 
         binding.btnAddEmoji.setOnClickListener {
@@ -157,21 +158,44 @@ class MacroAddFragment: Fragment() {
         binding.apply {
             imgCategory1.setOnClickListener {
                 selectedCategoty = 1
+                categoryChange(selectedCategoty)
             }
             imgCategory2.setOnClickListener {
                 selectedCategoty = 2
+                categoryChange(selectedCategoty)
             }
             imgCategory3.setOnClickListener {
-                selectedCategoty = 3
+                selectedCategoty = 4
+                categoryChange(selectedCategoty)
             }
             imgCategory4.setOnClickListener {
-                selectedCategoty = 4
+                selectedCategoty = 3
+                categoryChange(selectedCategoty)
             }
             imgCategory5.setOnClickListener {
                 selectedCategoty = 5
+                categoryChange(selectedCategoty)
             }
             imgCategory6.setOnClickListener {
                 selectedCategoty = 6
+                categoryChange(selectedCategoty)
+            }
+        }
+    }
+
+    private fun categoryChange(seq: Int) {
+        var categories = mutableListOf<TextView>(
+            binding.imgCategory1, binding.imgCategory2,
+            binding.imgCategory4, binding.imgCategory3,
+            binding.imgCategory5, binding.imgCategory6
+        )
+
+        var selected = seq-1
+        for(i in 0..5) {
+            if(i == selected) {
+                categories.get(i).setBackgroundResource(R.drawable.background_category_add)
+            } else {
+                categories.get(i).setBackgroundResource(0)
             }
         }
     }
@@ -179,8 +203,16 @@ class MacroAddFragment: Fragment() {
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
-//            binding.tvEmoji.text = "성공"
+            if(videoFileSave != null) {
+                videoFileSave!!.delete()
+            }
+            findNavController().navigateUp()
 
+        }
+        macroViewmodel.refreshExpire.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+            ApplicationClass.mainPref.loginPlatform = 0
+            findNavController().navigate(MacroAddFragmentDirections.actionMacroAddFragmentToLoginFragment())
         }
     }
 
@@ -232,37 +264,63 @@ class MacroAddFragment: Fragment() {
                     if(grant != PackageManager.PERMISSION_GRANTED){
                         Toast.makeText(requireContext(), "카메라 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
                     }else{
-                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
+//                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
                     }
                 }
             }
-            STORAGE_PERMISSION_FLAG -> {
-                for(grant in grantResults) {
-                    if(grant != PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(requireContext(), "저장소 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
+//            STORAGE_PERMISSION_FLAG -> {
+//                for(grant in grantResults) {
+//                    if(grant != PackageManager.PERMISSION_GRANTED){
+//                        Toast.makeText(requireContext(), "저장소 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+//            }
         }
     }
 
     private fun showdialog(){
         val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("Title")
+        builder.setTitle("제목을 나타내는 이모티콘 등록")
 
         val input = EditText(requireContext())
-        input.setHint("Enter Text")
-        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.setHint("이모티콘 입력")
+//        input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+        builder.setPositiveButton("등록", DialogInterface.OnClickListener { dialog, which ->
             var textE = input.text.toString()
             binding.tvEmoji.text = textE
             this.emoji = textE
         })
-        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
         builder.show()
     }
+
+    //cache 이용 테스트
+    private fun createCacheFile() {
+        var filename = "a"
+        val cacheFile = File(requireContext().cacheDir,filename)
+//        cacheFile.delete() // 특정 파일 삭제
+//        requireContext().deleteFile(filename) // 캐시에서 해당 이름의 파일 삭제제
+   }
+
+    private fun deleteCacheFile() {
+        var filename = "a"
+    }
+
+    /** 이모티콘이 있을경우 "" 리턴, 그렇지 않을 경우 null 리턴  */
+    private val specialCharacterFilter =
+        InputFilter { source, start, end, dest, dstart, dend ->
+            for (i in start until end) {
+                // 이모티콘 패턴
+                val unicodeOutliers: Pattern = Pattern.compile("[\\uD83C-\\uDBFF\\uDC00-\\uDFFF]+")
+                if (unicodeOutliers.matcher(source).matches()) {
+                    return@InputFilter "emoji"
+                }
+            }
+            null
+        }
+
 
 }
