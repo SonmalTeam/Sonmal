@@ -24,14 +24,14 @@
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
                 <ImageView
-                    android:id="@+id/btn_public"
+                    android:id="@+id/btn_traffic"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/btn_macro_transport_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
                 <ImageView
-                    android:id="@+id/btn_restaurant"
+                    android:id="@+id/btn_offical"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/btn_macro_offices_320px"
@@ -40,21 +40,21 @@
             </TableRow>
             <TableRow>
                 <ImageView
-                    android:id="@+id/btn_cafe"
+                    android:id="@+id/btn_restaurant"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/btn_macro_restaurant_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
                 <ImageView
-                    android:id="@+id/btn_store"
+                    android:id="@+id/btn_work"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/btn_macro_work_320px"
                     android:gravity="bottom |center_horizontal"
                     android:layout_margin="4dp"/>
                 <ImageView
-                    android:id="@+id/btn_custom"
+                    android:id="@+id/btn_etc"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/btn_macro_more_320px"

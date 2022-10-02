@@ -3,6 +3,7 @@ package com.d202.sonmal.ui.voice
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ class MacroBottomSheet: BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetMacroLayoutBinding
 
     enum class Place {
-        Cafe, Hospital, Public, Store, Restaurant, Custom
+        Hospital, Traffic, Official, Restaurant, Work, Etc
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,35 +45,62 @@ class MacroBottomSheet: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            btnCafe.setOnClickListener {
-                moveTo(Place.Cafe)
-            }
             btnHospital.setOnClickListener {
                 moveTo(Place.Hospital)
             }
-            btnPublic.setOnClickListener {
-                moveTo(Place.Public)
+            btnTraffic.setOnClickListener {
+                moveTo(Place.Traffic)
             }
-            btnStore.setOnClickListener {
-                moveTo(Place.Store)
+            btnOffical.setOnClickListener {
+                moveTo(Place.Official)
             }
             btnRestaurant.setOnClickListener {
                 moveTo(Place.Restaurant)
             }
-            btnCustom.setOnClickListener {
-                moveTo(Place.Custom)
+            btnWork.setOnClickListener {
+                moveTo(Place.Work)
+            }
+            btnEtc.setOnClickListener {
+                moveTo(Place.Etc)
             }
         }
     }
 
     private fun moveTo(where: Place) {
+        val bundle = Bundle()
+        bundle.putInt("args", where.ordinal + 1)
+        
         when(where) {
-            Place.Cafe -> childFragmentManager.beginTransaction().replace(R.id.container, MacroCafeFragment()).commit()
-            Place.Hospital -> {}
-            Place.Public -> {}
-            Place.Store -> {}
-            Place.Restaurant -> {}
-            Place.Custom -> {}
+            Place.Hospital -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            Place.Traffic -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            Place.Official -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            Place.Restaurant -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            Place.Work -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
+            Place.Etc -> {
+                val fragment = MacroCafeFragment()
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            }
         }
     }
 }
