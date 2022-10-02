@@ -1,11 +1,14 @@
 package com.d202.sonmal.utils
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.d202.sonmal.databinding.FragmentMacroDetailDialogBinding
 import com.d202.sonmal.model.dto.MacroDto
@@ -43,6 +46,7 @@ class MacroDetailFragment(var item: MacroDto): DialogFragment() {
 
         }
 
+        resize()
     }
 
     // 인터페이스
@@ -59,4 +63,23 @@ class MacroDetailFragment(var item: MacroDto): DialogFragment() {
 
     // 클릭 이벤트 실행
     private lateinit var buttonClickListener: OnButtonClickListener
+
+    override fun onResume() {
+        super.onResume()
+        resize()
+    }
+
+    private fun resize() {
+        val windowManager = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
+        val deviceWidth = size.x
+        val deviceHeight = size.y
+        params?.width = (deviceWidth * 0.7).toInt()
+        params?.height = (deviceHeight * 0.7).toInt()
+        dialog?.window?.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
 }

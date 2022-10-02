@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textColor="@color/black"
+        android:textColor="#232323"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         android:hint="타이틀"
@@ -45,23 +45,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_detail"/>
 
-    <TextView
-        android:id="@+id/tv_content_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_content"
-        android:hint="컨텐트 내용"
+    <ScrollView
+        android:id="@+id/scv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"
+        app:layout_constraintBottom_toTopOf="@id/btn_confirm">
+
+        <TextView
+            android:id="@+id/tv_content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#232323"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_content"
+            android:hint="컨텐트 내용"/>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="#30C1B0"
         android:text="삭제"
@@ -70,32 +84,22 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/btn_confirm"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_content_detail" />
-
-    <Button
-        android:id="@+id/btn_move"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="변경"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/tv_content_detail"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/btn_confirm"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="확인"
         android:textSize="18dp"
         android:textColor="#ffffff"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_content_detail"
         app:layout_constraintStart_toEndOf="@id/btn_delete"
         app:layout_constraintEnd_toEndOf="parent"
         android:backgroundTint="#30C1B0"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
