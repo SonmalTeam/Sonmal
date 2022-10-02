@@ -33,8 +33,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        ApplicationClass.mainPref.isFromMain = true
-        Log.d("Main", "메인프래그먼트 호출 isFromMain ${ApplicationClass.mainPref.isFromMain}")
 
         return binding.root
     }
