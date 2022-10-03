@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.common.TFLITE_PATH
 import com.d202.sonmal.databinding.FragmentMainBinding
+import com.d202.sonmal.ui.call.CallFragment
 import com.d202.sonmal.utils.showToast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
@@ -79,7 +82,10 @@ class MainFragment : Fragment() {
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
+                parentFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
+                    arguments = bundleOf("PHONE" to "test2")
+                }).commit()
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 requireContext().showToast("권한을 허용해야 이용이 가능합니다.")

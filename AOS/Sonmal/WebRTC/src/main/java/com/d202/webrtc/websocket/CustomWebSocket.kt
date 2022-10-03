@@ -201,14 +201,14 @@ class CustomWebSocket(session: Session, openviduUrl: String, activity: AppCompat
 
     fun publishVideo(sessionDescription: SessionDescription) {
         val publishVideoParams: MutableMap<String, String> = HashMap()
-        publishVideoParams["audioActive"] = "true"
+        publishVideoParams["audioActive"] = "false"
         publishVideoParams["videoActive"] = "true"
         publishVideoParams["doLoopback"] = "false"
         publishVideoParams["frameRate"] = "30"
-        publishVideoParams["hasAudio"] = "true"
+        publishVideoParams["hasAudio"] = "false"
         publishVideoParams["hasVideo"] = "true"
         publishVideoParams["typeOfVideo"] = "CAMERA"
-        publishVideoParams["videoDimensions"] = "{\"width\":320, \"height\":240}"
+        publishVideoParams["videoDimensions"] = "{\"width\":800, \"height\":1200}"
         publishVideoParams["sdpOffer"] = sessionDescription.description
         ID_PUBLISHVIDEO.set(this.sendJson(JsonConstants.PUBLISHVIDEO_METHOD, publishVideoParams))
     }

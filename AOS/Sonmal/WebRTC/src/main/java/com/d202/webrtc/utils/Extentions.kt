@@ -18,6 +18,7 @@ fun AppCompatActivity.setRemoteMediaStream(
     remoteParticipant: RemoteParticipant){
 
     val videoTrack :VideoTrack = stream.videoTracks.first()
+//    if(remoteParticipant.getVideoView() != null)
     videoTrack.addSink(remoteParticipant.getVideoView())
 
     runOnUiThread{

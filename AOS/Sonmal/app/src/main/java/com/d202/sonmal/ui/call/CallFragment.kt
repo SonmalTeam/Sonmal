@@ -3,7 +3,10 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.media.AudioRecord
+import android.media.AudioRecordingConfiguration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Base64
@@ -100,6 +103,8 @@ class CallFragment : Fragment() {
         userId = MainSharedPreference(requireContext()).token.toString()
         userName = MainSharedPreference(requireContext()).token.toString()
 
+
+        viewModel.startSTT(requireContext(), userName)
         initView()
         initViewModel()
     }
@@ -124,7 +129,9 @@ class CallFragment : Fragment() {
                 viewModel.setTranslateText(result)
                 if(System.currentTimeMillis() - startTime >= 2000){
                     startTime = System.currentTimeMillis()
-                    hangulMaker.commit(result[0])
+                    requireActivity().runOnUiThread {
+                        hangulMaker.commit(result[0])
+                    }
                 }
             }
         }
@@ -168,7 +175,7 @@ class CallFragment : Fragment() {
                 session.getLocalParticipant()!!.switchCamera()
             }
             ivCallEnd.setOnClickListener {
-                findNavController().popBackStack()
+                parentFragmentManager.popBackStackImmediate()
             }
             viewsContainer.setOnClickListener {
                 resizeView()
@@ -202,7 +209,6 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
-            startSTT(requireContext(), userName)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }
@@ -227,6 +233,35 @@ class CallFragment : Fragment() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopSTT()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        leaveSession()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSTT(requireContext(), userName)
+        resizeView()
+        initViews()
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+        getToken(arguments?.getString("PHONE").toString())
+        setupStaticImageModePipeline()
+        Log.d(TAG, "onResume: CustomHttpClient")
+        val sessionId = "-session"
+
+    }
+
     private fun resizeView() {
         val displaymetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
@@ -234,15 +269,6 @@ class CallFragment : Fragment() {
         val deviceHeight = deviceWidth
         binding.peerContainerRemote.layoutParams.width = deviceWidth
         binding.peerContainerRemote.layoutParams.height = deviceWidth
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-
-        Log.d(TAG, "onResume: CustomHttpClient")
-        val sessionId = "-session"
-
     }
 
     private fun getToken(sessionId: String) {
@@ -353,25 +379,6 @@ class CallFragment : Fragment() {
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.stopSTT()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: ")
-        resizeView()
-        initViews()
-        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        getToken(arguments?.getString("PHONE").toString())
-        setupStaticImageModePipeline()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        leaveSession()
-    }
 
     private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {
         if (result.multiHandLandmarks().isEmpty()) {
