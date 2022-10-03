@@ -1,6 +1,13 @@
 pipeline {         
         agent none
-        stages {                
+        stages { 
+	   stage('Gradle build'){
+		agent any
+		steps{
+			dir('Backend/assemble_Server') {sh 'chmod +x ./gradlew'}
+			dir('Backend/assemble_Server') {sh './gradlew clean build'}
+		}
+	   }             
                 stage('Docker build') {
                         agent any
                         steps {                                                     
@@ -16,7 +23,7 @@ pipeline {
                                 sh 'docker container ls -a -f name=back -q \
                                         | xargs -r docker container rm'
 
-                                sh 'docker run -d --name back -p 8090:8090 backimg'
+                                sh 'docker run -v /home/files:/home/files -d --name back -p 8090:8090 backimg'
                         }
                 }
         }

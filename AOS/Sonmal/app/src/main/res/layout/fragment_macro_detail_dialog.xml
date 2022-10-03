@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="5dp"
+
+    android:background="@drawable/background_macro_list">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_title_detail"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:textSize="20dp"
+        android:textColor="#232323"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        android:hint="타이틀"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내용"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_detail"/>
+
+    <ScrollView
+        android:id="@+id/scv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"
+        app:layout_constraintBottom_toTopOf="@id/btn_confirm">
+
+        <TextView
+            android:id="@+id/tv_content_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#232323"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_content"
+            android:hint="컨텐트 내용"/>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#30C1B0"
+        android:text="삭제"
+        android:textColor="#ffffff"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btn_confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:textSize="18dp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/btn_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#30C1B0"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

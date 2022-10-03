@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="data"
+            type="com.d202.sonmal.model.dto.MacroDto" />
+    </data>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/background_macro_list">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/c_thumbnail"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_emoji"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:padding="5dp"
+            android:gravity="center"
+            android:text="@{data.icon}"
+            tools:text="icon"
+            android:textSize="40dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:text="@{data.title}"
+            tools:text="타이틀"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"/>
+
+        <ImageView
+            android:id="@+id/img_speak"
+            android:layout_width="60dp"
+            android:padding="10dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_speak_out"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+</layout>

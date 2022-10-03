@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mainFragment"
+        android:icon="@drawable/check"
+        android:title="Main"/>
+
+    <item
+        android:id="@+id/textMacroFragment"
+        android:icon="@drawable/icon_add_circle"
+        android:title="TextMacro"/>
+
+    <item
+        android:id="@+id/translationFragment"
+        android:icon="@drawable/btn_video_off"
+        android:title="Translation"/>
+
+    <item
+        android:id="@+id/phoneCallFragment"
+        android:icon="@drawable/btn_call_end"
+        android:title="PhoneCall"/>
+
+</menu>
