@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -12,10 +12,26 @@
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_macroChoiceFragment"
-            app:destination="@id/macroChoiceFragment" />
+            app:destination="@id/macroChoiceFragment"/>
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_callFragment"
             app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_signLangFragment"
+            app:destination="@id/signLangFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_voiceFragment"
+            app:destination="@id/voiceFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment"/>
+
     </fragment>
 
     <fragment
@@ -24,29 +40,133 @@
         tools:layout="@layout/fragment_macro_choice"
         android:label="MacroChoiceFragment" >
         <action
-            android:id="@+id/action_macroChoiceFragment_to_macroStoreFragment"
-            app:destination="@id/macroStoreFragment" />
-        <action
             android:id="@+id/action_macroChoiceFragment_to_macroCafeFragment"
             app:destination="@id/macroCafeFragment" />
         <action
-            android:id="@+id/action_macroChoiceFragment_to_macroHospitalFragment"
-            app:destination="@id/macroHospitalFragment" />
+            android:id="@+id/action_macroChoiceFragment_to_macroAddFragment"
+            app:destination="@id/macroAddFragment" />
+        <argument
+            android:name="category"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/macroCafeFragment"
         android:name="com.d202.sonmal.ui.macro.MacroCafeFragment"
-        android:label="MacroCafeFragment" />
+        android:label="MacroCafeFragment" >
+        <action
+            android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+        <argument
+            android:name="category"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_macroCafeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/macroStoreFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroStoreFragment"
-        android:label="MacroStoreFragment" />
-    <fragment
-        android:id="@+id/macroHospitalFragment"
-        android:name="com.d202.sonmal.ui.macro.MacroHospitalFragment"
-        android:label="MacroHospitalFragment" />
+        android:id="@+id/loginFragment"
+        android:name="com.d202.sonmal.ui.sign.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false"/>
+    </fragment>
     <fragment
         android:id="@+id/callFragment"
         android:name="com.d202.sonmal.ui.call.CallFragment"
         android:label="CallFragment" />
+    <fragment
+        android:id="@+id/macroVideoFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
+        android:label="MacroVideoFragment" >
+        <argument
+            android:name="videoSeq"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/macroAddFragment"
+        android:name="com.d202.sonmal.ui.macro.MacroAddFragment"
+        android:label="MacroAddFragment" >
+        <action
+            android:id="@+id/action_macroAddFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_macroAddFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signLangFragment"
+        android:name="com.d202.sonmal.ui.signlang.SignLangFragment"
+        android:label="SignLangFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/voiceFragment"
+        android:name="com.d202.sonmal.ui.voice.VoiceFragment"
+        android:label="VoiceFragment">
+        <action
+            android:id="@+id/action_voiceFragment_to_macroBottomSheet"
+            app:destination="@id/macroBottomSheet"
+            app:enterAnim="@anim/translate_up" />
+        <action
+            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"
+            app:destination="@id/macroCafeFragment" />
+        <action
+            android:id="@+id/action_voiceFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+
+        <action
+            android:id="@+id/action_macroCafeFragment_to_macroVideoFragment"
+            app:destination="@id/macroVideoFragment" />
+        <action
+            android:id="@+id/action_voiceFragment_to_recordingDialogFragment"
+            app:destination="@id/recordingDialogFragment" />
+        <action
+            android:id="@+id/action_macroCafeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recordingDialogFragment"
+        android:name="com.d202.sonmal.ui.voice.UploadingDialogFragment"
+        android:label="RecordingDialogFragment">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/macroBottomSheet"
+        android:name="com.d202.sonmal.ui.voice.MacroBottomSheet"
+        android:label="MacroBottomSheet">
+<!--        <action-->
+<!--            android:id="@+id/action_macroBottomSheet_to_macroCafeFragment"-->
+<!--            app:destination="@id/macroCafeFragment" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.d202.sonmal.ui.setting.SettingFragment"
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_macroChoiceFragment"
+            app:destination="@id/macroChoiceFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_appInfoFragment"
+            app:destination="@+id/appInfoFragment"/>
+<!--        <action-->
+<!--            android:id="@+id/action_settingFragment_to_macroAddFragment"-->
+<!--            app:destination="@id/macroAddFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/appInfoFragment"
+        android:name="com.d202.sonmal.ui.setting.AppInfoFragment"
+        android:label="AppInfoFragment"/>
 </navigation>

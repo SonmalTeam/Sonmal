@@ -47,6 +47,10 @@ class Session(
 
     }
 
+    fun sendTextMessage(message: String){
+        websocket!!.sendTextMessage(message)
+    }
+
     fun createLocalPeerConnection(): PeerConnection?{
         val iceServers = ArrayList<PeerConnection.IceServer>();
         val iceServer = PeerConnection.IceServer
@@ -103,7 +107,8 @@ class Session(
 
     fun createRemotePeerConnection(connectionId: String?) {
         val iceServers: MutableList<IceServer> = java.util.ArrayList()
-        val iceServer = IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
+//        val iceServer = IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
+        val iceServer = IceServer.builder("stun:sduty.kro.kr:443").createIceServer()
         iceServers.add(iceServer)
         val rtcConfig = RTCConfiguration(iceServers)
         rtcConfig.tcpCandidatePolicy = TcpCandidatePolicy.ENABLED

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-mergeDebugResources-4:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-main-7:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-mergeDebugResources-4:\\layout\\fragment_login.xml",
+        "source": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-main-7:\\layout\\fragment_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-mergeDebugResources-4:\\layout\\fragment_main.xml",
+        "source": "C:\\Users\\IdealML\\.gradle\\daemon\\7.3.3\\com.d202.assemble.app-main-7:\\layout\\fragment_main.xml"
+    },
+    {
+        "merged": "com.d202.assemble.app-mergeDebugResources-4:/layout/activity_main.xml",
+        "source": "com.d202.assemble.app-main-7:/layout/activity_main.xml"
+    }
+]
