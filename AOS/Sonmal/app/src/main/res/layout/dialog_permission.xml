@@ -42,15 +42,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="'손말'에서는 다음 권한들을 사용하오니,"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="서비스 이용을 위해 권한을 허용해 주시기 바랍니다."
-                android:textSize="16sp" />
+                android:text="서비스 이용을 위해\n권한을 허용해 주시기 바랍니다."
+                android:textSize="16sp"
+                android:gravity="center"/>
         </LinearLayout>
 
         <!-- Divider1 -->
@@ -180,6 +180,7 @@
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_perm_content"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="16dp">
 
             <TextView
@@ -195,7 +196,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="접근 권한 변경 : 설정 > 손말"
+                android:text="접근 권한 변경 : 설정 > 애플리케이션 > 손말 > 권한"
+                android:layout_gravity="center"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
 

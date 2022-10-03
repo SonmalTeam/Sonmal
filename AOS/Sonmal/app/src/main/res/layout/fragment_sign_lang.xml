@@ -119,7 +119,7 @@
             android:src="@drawable/ic_perm_mic"
             app:layout_constraintBottom_toTopOf="@id/iv_record"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/iv_record"
