@@ -155,11 +155,12 @@ class MacroViewModel: ViewModel() {
                 }
                 else {
                     Log.d(TAG, "addMacro fail : ${response.code()}")
-                    _macroAddCallback.postValue(400)
+                    _macroAddCallback.postValue(response.code())
                 }
                 _flag.postValue(false)
             }catch (e: Exception) {
                 Log.d(TAG, "addMacro error: ${e.message}")
+                _macroAddCallback.postValue(700)
             }
         }
 

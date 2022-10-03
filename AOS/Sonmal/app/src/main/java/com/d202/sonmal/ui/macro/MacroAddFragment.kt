@@ -204,11 +204,16 @@ class MacroAddFragment: Fragment() {
 
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
-            if(videoFileSave != null) {
-                videoFileSave!!.delete()
+            if(it == 200) {
+                Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
+                if(videoFileSave != null) {
+                    videoFileSave!!.delete()
+                }
+                findNavController().navigateUp()
+            } else {
+                Toast.makeText(requireContext(), "등록 실패", Toast.LENGTH_SHORT).show()
             }
-            findNavController().navigateUp()
+
 
         }
         macroViewmodel.refreshExpire.observe(viewLifecycleOwner) {
