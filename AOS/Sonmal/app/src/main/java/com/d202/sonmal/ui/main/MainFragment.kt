@@ -62,7 +62,8 @@ class MainFragment : Fragment() {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
             }
             btnCall.setOnClickListener {
-                checkPermission()
+                //checkPermission()
+
             }
             btnSignLang.setOnClickListener {
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())

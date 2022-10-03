@@ -68,35 +68,35 @@
 
             </LinearLayout>
 
-            <!-- Divider1 -->
-            <LinearLayout
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/sonmal_gray_300"
-                android:orientation="vertical"/>
+<!--            &lt;!&ndash; Divider1 &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:id="@+id/divider1"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="@color/sonmal_gray_300"-->
+<!--                android:orientation="vertical"/>-->
 
-            <LinearLayout
-                android:id="@+id/btn_terms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="16dp">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/btn_terms"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingVertical="16dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="이용 약관"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="이용 약관"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textColor="@color/black"/>-->
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_baseline_chevron_right_black_24"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:src="@drawable/ic_baseline_chevron_right_black_24"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
             <!-- Divider2 -->
             <LinearLayout
