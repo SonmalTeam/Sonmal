@@ -16,8 +16,8 @@ public class JwtToken {
 	
 	@Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int seq;
-	@Column(name = "user_seq", nullable = false)
-//	@Column(name = "user_seq", nullable = false, unique=true)
+//	@Column(name = "user_seq", nullable = false)
+	@Column(name = "user_seq", nullable = false, unique=true)
 	private int userSeq;
 	@Column(name = "access_token", nullable = false)
 	private String accessToken;

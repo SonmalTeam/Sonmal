@@ -3,6 +3,9 @@ package com.d202.assemble.jwt;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.aop.ThrowsAdvice;
+import org.springframework.security.access.AccessDeniedException;
+
 import com.d202.assemble.dto.User;
 
 import io.jsonwebtoken.Claims;
@@ -12,15 +15,28 @@ import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class JwtUtils {
 	//유효성 검사
-	public static boolean validateToken(String token) throws ExpiredJwtException, JwtException {
+	public static boolean validateToken(String token) {
 		// jwtToken에서 seq를 찾습니다.
-		Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKeyResolver(SigningKeyResolver.instance) //키에 맞는 키값을 가져오는 역할
-                .build()
-                .parseClaimsJws(token); //키를 통해 검증,만료확인 부적절시 익셉션 발생
+//		try {
+			Jws<Claims> claimsJws = Jwts.parserBuilder()
+	                .setSigningKeyResolver(SigningKeyResolver.instance) //키에 맞는 키값을 가져오는 역할
+	                .build()
+	                .parseClaimsJws(token); //키를 통해 검증,만료확인 부적절시 익셉션 발생
+//		}
+//		catch(ExpiredJwtException e1){
+//			log.info("만료예외처리");
+//			throw new AccessDeniedException("");
+//		}
+//		catch(JwtException e2) {
+//			log.info("jwt예외처리");
+//			throw new AccessDeniedException("");
+//		}
     	
     	return true;
 	}
@@ -34,18 +50,19 @@ public class JwtUtils {
     public static String getUserSeq(String token) {
     	
         // jwtToken에서 seq를 찾습니다.
-    	try {
+//    	try {
     		 return Jwts.parserBuilder()
  	                .setSigningKeyResolver(SigningKeyResolver.instance) //키에 맞는 키값을 가져오는 역할
  	                .build()
  	                .parseClaimsJws(token) //키를 통해 검증,만료확인 부적절시 익셉션 발생
  	                .getBody()
  	                .getSubject(); // username
-    	}catch(ExpiredJwtException e) {
-    		return e.getClaims().getSubject();
-    	} catch(JwtException e) {
-    		throw new RuntimeException("유효하지 않은 토큰입니다.");
-    	}
+//    	}catch(ExpiredJwtException e) {
+//    		System.out.println("만료됨!!");
+//    		return e.getClaims().get                                                                                                                                                                                                                                                                                                                           Subject();
+//    	} catch(JwtException e) {
+//    		throw new RuntimeException("유효하지 않은 토큰입니다.");
+//    	}
     }
 
 	
