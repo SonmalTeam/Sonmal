@@ -164,6 +164,10 @@ public class SignMacroService {
     @Transactional
     public void deleteSignMacro(long signMacroSeq) {
         SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
+        if (signMacro.getVideoFileId() != null) {
+            videoFileRepo.deleteById(signMacro.getVideoFileId());
+        }
+
         signMacroRepo.delete(signMacro);
     }
 
@@ -173,5 +177,18 @@ public class SignMacroService {
         SignMacro signMacro = signMacroRepo.findBySeq(singMacroSeq).get();
         Category category = categoryRepo.findBySeq(categorySeq);
         signMacro.setCategory(category);
+    }
+
+    // 회원 전체 매크로 삭제
+    @Transactional
+    public void deleteUserMacro(long signMacroSeq) {
+        List<SignMacro> signMacros = signMacroRepo.findAllByUserSeq(signMacroSeq);
+        for (SignMacro signMacro : signMacros) {
+            if (signMacro.getVideoFileId() != null) {
+                videoFileRepo.deleteById(signMacro.getVideoFileId());
+            }
+
+            signMacroRepo.delete(signMacro);
+        }
     }
 }
