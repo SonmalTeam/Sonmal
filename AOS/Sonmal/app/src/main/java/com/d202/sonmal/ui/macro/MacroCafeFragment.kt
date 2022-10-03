@@ -38,14 +38,20 @@ class MacroCafeFragment: Fragment() {
     private lateinit var pagingAdapter: MacroPagingAdapter
     private val args by navArgs<MacroCafeFragmentArgs>()
     private var categorySeq = 0
+    private var result = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Todo args 1~6 Int 형태로 보냈습니다.
-        val result = arguments?.getInt("args")
-        Log.d(TAG, "onCreateView: $result")
+        // Todo result 값이 0인 경우 MacroChoiceFragment 에서 온 것
+        result = arguments?.getInt("args")!!
+        if(result > 0) {
+            categorySeq = result
+        }
+        Log.d(TAG, "onCreateView: $categorySeq")
 
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
         initObseve()
@@ -72,7 +78,12 @@ class MacroCafeFragment: Fragment() {
 
         binding.apply {
             ivBack.setOnClickListener {
-                findNavController().navigateUp()
+                if(result == 0) {
+                    findNavController().navigateUp()
+                }
+                else {
+                    parentFragmentManager.beginTransaction().remove(this@MacroCafeFragment).commit()
+                }
             }
         }
 

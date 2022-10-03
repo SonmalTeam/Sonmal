@@ -48,6 +48,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
     private val _bitmap = MutableLiveData<Bitmap?>()
     val bitmap : LiveData<Bitmap?>
         get() = _bitmap
+
     fun setSurfaceViewRenderer(surfaceViewRenderer: SurfaceViewRenderer) {
         _surfaceViewRenderer.value = surfaceViewRenderer
     }
@@ -177,6 +178,8 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
     val sttResult: LiveData<String>
         get() = _sttResult
 
+    private var errorCount = 0
+
     private fun recognitionListener(context: Context, userName: String) = object : RecognitionListener {
 
         override fun onReadyForSpeech(params: Bundle?) {
@@ -213,13 +216,6 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         override fun onError(error: Int) {
             if(FLAG_STT)
                 startSTT(context, userName)
-            when (error) {
-                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
-                    context,
-                    "퍼미션 없음",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         }
 
         override fun onResults(results: Bundle) {
