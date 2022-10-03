@@ -68,8 +68,8 @@ public class UserService {
 		return userRepo.findById(seq);
 	}
 
-//	public Optional<User> findUserByEmail(String email) {
-//		return userRepo.findByEmail(email);
+//	public Optional<User> findUserByEmailAndType(String email, SocialType socialType) {
+//		return userRepo.findByEmailAndSocialType(email, socialType);
 //	}
 	
 	@Transactional

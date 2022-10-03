@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.d202.assemble.dto.JwtToken;
 import com.d202.assemble.dto.JwtTokenDto;
+import com.d202.assemble.dto.SocialType;
 import com.d202.assemble.dto.User;
 import com.d202.assemble.jwt.JwtUtils;
 import com.d202.assemble.service.JwtTokenService;
@@ -55,7 +56,7 @@ public class JwtController {
 //	@ApiOperation(value="jwt발급 테스트")
 //	@GetMapping("/{email}")
 //	public ResponseEntity<?> getToken(@PathVariable String email){
-//		Optional<User> userOp = userService.findUserByEmail(email);
+//		Optional<User> userOp = userService.findUserByEmailAndType(email, SocialType.NAVER);
 //		if(userOp.isPresent()) {
 //			User user = userOp.get();
 //			JwtTokenDto jwtTokenDto = new JwtTokenDto(JwtUtils.createAccessToken(user), JwtUtils.createRefreshToken(user));
