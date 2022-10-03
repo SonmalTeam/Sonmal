@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.FragmentAppInfoBinding
+import com.d202.sonmal.ui.setting.dialog.PrivacyPolishDialog
+import com.d202.sonmal.ui.sign.dialog.PermissionDialog
 
 
 class AppInfoFragment : Fragment() {
@@ -27,8 +29,9 @@ class AppInfoFragment : Fragment() {
 
         binding.apply {
             btnBack.setOnClickListener { findNavController().popBackStack() }
-
-            // TODO : 앱 정보 뭐 추가할지 생각해보고 추가하세요...
+            btnPrivacyPolish.setOnClickListener {
+                PrivacyPolishDialog(requireContext()).show(parentFragmentManager, null)
+            }
         }
     }
 }
