@@ -59,7 +59,8 @@ class MainFragment : Fragment() {
     private fun initView() {
         binding.apply {
             btnMacro.setOnClickListener { // btn m
-                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
+//                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
             }
             btnCall.setOnClickListener {
                 //checkPermission()
