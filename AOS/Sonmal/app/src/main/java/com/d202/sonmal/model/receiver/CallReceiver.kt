@@ -67,12 +67,12 @@ class CallReceiver : BroadcastReceiver() {
 
                             val notificationBuilder =
                                 NotificationCompat.Builder(context, notiChannel.id)
-                                    .setSmallIcon(R.mipmap.ic_launcher_sonmal_foreground)
+                                    .setSmallIcon(R.mipmap.ic_launcher)
                                     .setContentTitle("Sonmal 전화")
                                     .setContentText(phoneNo)
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .addAction(
-                                        R.mipmap.ic_launcher_sonmal_foreground,
+                                        R.mipmap.ic_launcher,
                                         "Call",
                                         fullScreenPendingIntent
                                     )
