@@ -14,9 +14,11 @@ import com.d202.assemble.repo.JwtTokenRepo;
 import com.d202.assemble.repo.UserRepo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class JwtTokenService {
 	
 	private final JwtTokenRepo jwtTokenRepo;
@@ -42,6 +44,7 @@ public class JwtTokenService {
 			JwtUtils.validateToken(refreshToken);
 		}catch(Exception e) {
 			e.printStackTrace();
+			log.info("refresh만료");
 			return null;
 		}
 		
