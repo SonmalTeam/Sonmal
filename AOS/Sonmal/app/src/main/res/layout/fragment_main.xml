@@ -88,23 +88,24 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_sign_lang"
-                android:layout_width="352dp"
-                android:layout_height="160dp"
-                android:background="@drawable/btn_home_sltranslate"
+                android:layout_width="340dp"
+                android:layout_height="200dp"
+                android:background="@drawable/btn_home_sltranslate_large"
                 android:layout_marginBottom="32dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_voice_translate"
-                android:layout_width="352dp"
-                android:layout_height="160dp"
-                android:background="@drawable/btn_home_stt_tts"
+                android:layout_width="340dp"
+                android:layout_height="200dp"
+                android:background="@drawable/btn_home_stt_tts_large"
                 android:layout_marginBottom="32dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_call"
                 android:layout_width="352dp"
                 android:layout_height="160dp"
-                android:background="@drawable/btn_home_call"/>
+                android:background="@drawable/btn_home_call"
+                android:visibility="gone"/>
             
         </LinearLayout>
         
