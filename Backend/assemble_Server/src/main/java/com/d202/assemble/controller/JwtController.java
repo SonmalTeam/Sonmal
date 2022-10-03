@@ -41,12 +41,12 @@ public class JwtController {
 		String accessToken = requestToken.getAccessToken();
 		String refreshToken = requestToken.getRefreshToken();
 		if(requestToken.getAccessToken()==null || requestToken.getRefreshToken()==null) {
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 		//---
 		JwtTokenDto jwtTokenDto = jwtTokenService.refreshToken(accessToken, refreshToken);
 		if(jwtTokenDto==null) {
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<JwtTokenDto>(jwtTokenDto, HttpStatus.OK);
 	}

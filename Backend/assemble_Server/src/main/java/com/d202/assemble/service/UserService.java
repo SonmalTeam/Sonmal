@@ -35,6 +35,7 @@ public class UserService {
 	
 	private final UserRepo userRepo;
 	private final JwtTokenRepo jwtTokenRepo;
+	private final SignMacroService signMacroService;
 	
 	@Transactional
 	public JwtTokenDto loginUser(String email, SocialType socialType) {
@@ -74,6 +75,11 @@ public class UserService {
 	
 	@Transactional
 	public void deleteUser(int seq) throws Exception {
+		//1. user 매크로 삭제
+		signMacroService.deleteUserMacro(seq);
+		//2. user token삭제
+		jwtTokenRepo.deleteByUserSeq(seq);
+		//3. user 개인정보 삭제
 		userRepo.deleteById(seq);
 	}
 	
