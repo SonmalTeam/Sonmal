@@ -114,15 +114,7 @@ class RecordingDialogFragment: DialogFragment() {
 
         override fun onEndOfSpeech() {}
 
-        override fun onError(error: Int) {
-            when (error) {
-                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
-                    requireContext(),
-                    "퍼미션 없음",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+        override fun onError(error: Int) {}
 
         override fun onResults(results: Bundle) {
             translateInterface.getResult(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0])
