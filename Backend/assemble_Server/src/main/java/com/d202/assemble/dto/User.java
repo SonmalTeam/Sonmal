@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int seq;
+	private Integer seq;
 	@Column(nullable = false)
 	private String email; 
 	@Column(columnDefinition = "boolean default false not null")

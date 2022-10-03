@@ -9,4 +9,5 @@ import com.d202.assemble.dto.JwtToken;
 public interface JwtTokenRepo extends JpaRepository<JwtToken, Integer>{
 	public Optional<JwtToken> findByUserSeq(Integer userSeq);
 	public Optional<JwtToken> findByRefreshToken(String refreshToken);
+	public int deleteByUserSeq(Integer userSeq);
 }
