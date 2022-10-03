@@ -292,7 +292,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 binding.tvLiveTranslate.text = classes[index]
                 //binding.etNowTranslate.setText(binding.etNowTranslate.text.toString() + classes[index])
             }
-
         }
     }
 

@@ -28,7 +28,7 @@ import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
-import com.d202.sonmal.ui.voice.UploadingDialogFragment
+import com.d202.sonmal.utils.UploadingDialogFragment
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
@@ -109,11 +109,12 @@ class MacroAddFragment: Fragment() {
                     binding.videoView.stopPlayback()
                     binding.btnPlay.text = "Play"
                     binding.videoView.setVideoURI(videoUri)
-                }                false -> {
+                }
+                false -> {
                 isVideoPlaying = true
                 binding.btnPlay.text = "Stop"
                 binding.videoView.start()
-            }
+                }
             }
         }
 

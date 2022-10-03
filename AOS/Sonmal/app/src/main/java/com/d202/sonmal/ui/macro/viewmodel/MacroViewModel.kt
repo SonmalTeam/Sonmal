@@ -130,9 +130,9 @@ class MacroViewModel: ViewModel() {
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
-                    _flag.postValue(false)
                     Log.d(TAG,"add macro 성공 ${response.code()}")
-                } else if(response.code() == 401) {
+                }
+                else if(response.code() == 401) {
                     Log.d(TAG,"add macro 권한 실패 ${response.code()}")
                     runBlocking {
                         try {
@@ -152,10 +152,12 @@ class MacroViewModel: ViewModel() {
                         }
                     }
 //                    refreshToken("getMacroList", category)
-                } else {
+                }
+                else {
                     Log.d(TAG, "addMacro fail : ${response.code()}")
                     _macroAddCallback.postValue(400)
                 }
+                _flag.postValue(false)
             }catch (e: Exception) {
                 Log.d(TAG, "addMacro error: ${e.message}")
             }
@@ -214,7 +216,6 @@ class MacroViewModel: ViewModel() {
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
-
                 } else if(response.code() == 401) {
 
                     runBlocking {

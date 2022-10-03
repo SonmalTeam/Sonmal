@@ -7,17 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.BottomSheetMacroLayoutBinding
 import com.d202.sonmal.ui.macro.MacroCafeFragment
-import com.d202.sonmal.ui.macro.MacroChoiceFragment
-import com.d202.sonmal.ui.macro.MacroChoiceFragmentDirections
-import com.d202.sonmal.ui.macro.MacroListFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MacroBottomSheet: BottomSheetDialogFragment() {

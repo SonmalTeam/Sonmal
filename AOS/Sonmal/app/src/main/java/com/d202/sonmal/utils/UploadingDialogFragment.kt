@@ -1,4 +1,4 @@
-package com.d202.sonmal.ui.voice
+package com.d202.sonmal.utils
 
 import android.app.Dialog
 import android.graphics.Color
@@ -9,22 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.d202.sonmal.databinding.FragmentUploadingDialogBinding
-import java.util.*
 import kotlin.concurrent.thread
 
 class UploadingDialogFragment: DialogFragment() {
     private var _binding: FragmentUploadingDialogBinding? = null
     private val binding get() = _binding!!
     private var flag = 0
-    private lateinit var translateInterface : TranslateInterface
-
-    public interface TranslateInterface {
-        fun getResult(result: String)
-    }
-
-    public fun setInterface(translateInterface : TranslateInterface) {
-        this.translateInterface = translateInterface
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -67,8 +57,6 @@ class UploadingDialogFragment: DialogFragment() {
             val ft = manager.beginTransaction()
             ft.add(this, tag)
             ft.commitAllowingStateLoss()
-        } catch (_: java.lang.IllegalStateException) {
-
-        }
+        } catch (_: java.lang.IllegalStateException) {}
     }
 }

@@ -45,8 +45,6 @@ class MacroCafeFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
         initObseve()
         initView()
@@ -62,8 +60,6 @@ class MacroCafeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
         result = arguments?.getInt("args")!!
@@ -86,7 +82,6 @@ class MacroCafeFragment: Fragment() {
                 }
             }
         }
-
     }
 
     private fun initObseve() {

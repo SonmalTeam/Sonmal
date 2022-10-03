@@ -30,9 +30,6 @@ class MacroChoiceFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initBtn()
-
-
-
     }
 
     private fun initBtn() {
@@ -64,7 +61,5 @@ class MacroChoiceFragment: Fragment() {
 
     private fun moveToMacroListFragment(category: Int) {
         findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment(category))
-
     }
-
 }
