@@ -127,6 +127,9 @@
         <action
             android:id="@+id/action_voiceFragment_to_recordingDialogFragment"
             app:destination="@id/recordingDialogFragment" />
+        <action
+            android:id="@+id/action_macroCafeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment

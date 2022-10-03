@@ -45,13 +45,7 @@ class MacroCafeFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Todo args 1~6 Int 형태로 보냈습니다.
-        // Todo result 값이 0인 경우 MacroChoiceFragment 에서 온 것
-        result = arguments?.getInt("args")!!
-        if(result > 0) {
-            categorySeq = result
-        }
-        Log.d(TAG, "onCreateView: $categorySeq")
+
 
         binding = FragmentMacroCafeBinding.inflate(inflater, container, false)
         initObseve()
@@ -72,7 +66,13 @@ class MacroCafeFragment: Fragment() {
 
 
         //todo 진입 루트에 따라 다른 매크로 리스트 띄우기
-        categorySeq = args.category
+        result = arguments?.getInt("args")!!
+        categorySeq = if(result > 0) {
+            result
+        } else {
+            args.category
+        }
+        Log.d(TAG, "onCreateView: $categorySeq")
         macroViewModel.getPagingMacroListValue(categorySeq)
 
 

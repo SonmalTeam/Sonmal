@@ -109,8 +109,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/heart"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
