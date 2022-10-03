@@ -33,6 +33,10 @@ class MacroViewModel: ViewModel() {
         getPagingMacroList(it).cachedIn(viewModelScope)
     }
 
+    fun pushRefreshExpire() {
+        _refreshExpire.postValue(true)
+    }
+
     fun getPagingMacroListValue(categorySeq: Int){ // seq를 입력하면 Pager 데이터로 변환
         macroListPage.postValue(categorySeq)
     }
@@ -93,14 +97,10 @@ class MacroViewModel: ViewModel() {
                             Log.d(TAG, "e: ${e.message}")
                             _refreshExpire.postValue(true)
                         }
+                        Log.d(TAG, "getMacroList fail ${response.code()}")
                     }
                 } else {
-                    //todo 지우기 test 용
-                    val temp = mutableListOf<MacroDto>(
-                        MacroDto(1,1, "테스트1", "테스트1내용","1","category", "icon"),
-                        MacroDto(1,1, "테스트2", "테스트2내용","1","category", "icon2"),
-                    )
-                    _macroList.postValue(temp)
+
                 }
 
             }catch (e: Exception){

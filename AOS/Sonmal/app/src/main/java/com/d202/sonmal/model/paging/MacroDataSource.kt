@@ -1,6 +1,10 @@
 package com.d202.sonmal.model.paging
 
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.d202.sonmal.common.ApplicationClass
@@ -8,12 +12,16 @@ import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.api.MacroApi
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
+import com.d202.sonmal.ui.macro.MacroCafeFragmentDirections
+import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 0
 class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int): PagingSource<Int, MacroDto>() {
+
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
             val page = params.key?: START_PAGE_INDEX
@@ -21,7 +29,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             Log.d(TAG, "MacroDataSource 요청 $categorySeq $page")
             response = macroApi.getPageMacroList(categorySeq, page, 7)
             var body = response.body()
-            if(response.isSuccessful && body != null && body.totalPage > -1){
+            if(response.isSuccessful && body != null && body.totalPage > 0){
                 Log.d(TAG, "MacroDataSource ${response.body()}")
                 LoadResult.Page(
                     data = body.result,
@@ -40,6 +48,7 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                             body = macroApi.getPageMacroList(categorySeq, page, 7).body()
                         } else {
                             Log.d(TAG, "refreshToken err ${response.code()}")
+
                         }
 
                     } catch (e: Exception) {
