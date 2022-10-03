@@ -1,6 +1,5 @@
 package com.d202.sonmal.ui.call.viewmodel
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,19 +10,12 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
-import com.d202.sonmal.model.dto.MacroDto
-import com.d202.sonmal.ui.voice.RecordingDialogFragment
-import com.d202.sonmal.utils.MainSharedPreference
-import com.d202.sonmal.utils.showToast
-import com.google.common.flogger.backend.LogData
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

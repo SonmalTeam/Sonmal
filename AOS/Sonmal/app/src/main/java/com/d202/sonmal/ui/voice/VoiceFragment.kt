@@ -2,37 +2,22 @@ package com.d202.sonmal.ui.voice
 
 import android.Manifest
 import android.app.Activity
-import android.graphics.Typeface
 import android.os.Bundle
-import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.VoiceAdapter
 import com.d202.sonmal.databinding.FragmentVoiceBinding
-import com.d202.sonmal.databinding.ToastLayoutBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.utils.MainSharedPreference
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
-import com.google.mediapipe.solutioncore.CameraInput
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import java.util.*
@@ -41,7 +26,7 @@ import java.util.*
 class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     private lateinit var binding : FragmentVoiceBinding
     private val viewModel: CallViewModel by viewModels()
-    private val recordingDialogFragment by lazy { RecordingDialogFragment() }
+    private val uploadingDialogFragment by lazy { UploadingDialogFragment() }
     private val resultList = mutableListOf<String>()
     private lateinit var tts : TextToSpeech
     private lateinit var voiceAdapter: VoiceAdapter

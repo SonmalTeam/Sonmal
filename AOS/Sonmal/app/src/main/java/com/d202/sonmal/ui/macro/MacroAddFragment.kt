@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +28,7 @@ import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.voice.UploadingDialogFragment
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
@@ -38,6 +38,7 @@ private val TAG = "MacroAddFragment"
 class MacroAddFragment: Fragment() {
     private lateinit var binding: FragmentMacroAddBinding
     private val macroViewmodel: MacroViewModel by viewModels()
+    private val uploadingDialogFragment by lazy { UploadingDialogFragment() }
     private var selectedCategoty: Int = 0
 
     //emoji 입력
@@ -214,6 +215,12 @@ class MacroAddFragment: Fragment() {
             ApplicationClass.mainPref.loginPlatform = 0
             findNavController().navigate(MacroAddFragmentDirections.actionMacroAddFragmentToLoginFragment())
         }
+        macroViewmodel.flag.observe(viewLifecycleOwner) {
+            when(it) {
+                true -> showUploading()
+                false -> hideUploading()
+            }
+        }
     }
 
 
@@ -322,5 +329,16 @@ class MacroAddFragment: Fragment() {
             null
         }
 
+    fun showUploading() {
+        if(!uploadingDialogFragment.isAdded) {
+            uploadingDialogFragment.isCancelable = false
+            uploadingDialogFragment.show(childFragmentManager, "loader")
+        }
+    }
 
+    fun hideUploading() {
+        if(uploadingDialogFragment.isAdded) {
+            uploadingDialogFragment.dismissAllowingStateLoss()
+        }
+    }
 }

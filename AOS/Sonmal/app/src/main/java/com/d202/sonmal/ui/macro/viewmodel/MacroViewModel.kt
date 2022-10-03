@@ -8,15 +8,10 @@ import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
 import com.d202.sonmal.model.paging.MacroDataSource
-import com.d202.sonmal.model.paging.PagingResult
 import com.d202.sonmal.utils.FormDataUtil
-import com.kakao.sdk.common.KakaoSdk.type
-import com.navercorp.nid.oauth.NidOAuthPreferencesManager.refreshToken
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -67,6 +62,9 @@ class MacroViewModel: ViewModel() {
     val macroDeleteCallback: LiveData<Int>
         get() = _macroDeleteCallback
 
+    private val _flag = MutableLiveData<Boolean>()
+    val flag : LiveData<Boolean>
+        get() = _flag
 
 
 
@@ -112,6 +110,7 @@ class MacroViewModel: ViewModel() {
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG,"add macro 호출 $video")
+            _flag.postValue(true)
             try {
                 val response = Retrofit.macroApi.addMacro(
                     FormDataUtil.getBody("title", title),
@@ -131,6 +130,7 @@ class MacroViewModel: ViewModel() {
 
                 if(response.isSuccessful){
                     _macroAddCallback.postValue(200)
+                    _flag.postValue(false)
                     Log.d(TAG,"add macro 성공 ${response.code()}")
                 } else if(response.code() == 401) {
                     Log.d(TAG,"add macro 권한 실패 ${response.code()}")
