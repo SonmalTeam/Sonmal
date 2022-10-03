@@ -78,7 +78,6 @@ class LoginFragment : Fragment() {
 
         initView()
         initObserve()
-        checkPermission()
 
     }
 

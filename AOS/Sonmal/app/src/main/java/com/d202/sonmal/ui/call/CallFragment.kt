@@ -12,10 +12,8 @@ import android.text.method.ScrollingMovementMethod
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.view.View.OnKeyListener
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -155,8 +153,7 @@ class CallFragment : Fragment() {
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
         binding.tvTranslateText.bringToFront()
-        binding.tvChatTop.bringToFront()
-        binding.tvChatBottom.bringToFront()
+        binding.constChatBottom.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
@@ -178,7 +175,7 @@ class CallFragment : Fragment() {
             lifecycleOwner = this@CallFragment
             vm = viewModel
 
-            hangulMaker = HangulMaker(etChat.onCreateInputConnection(EditorInfo()))
+            hangulMaker = HangulMaker(tvChatBottom.onCreateInputConnection(EditorInfo()))
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
@@ -198,16 +195,22 @@ class CallFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
             btnSend.setOnClickListener {
-                viewModel.sendMessage(etChat.text.toString(), userName)
-                etChatInput.setText("${etChatInput.text}\n${etChat.text}")
-                etChat.setText("")
-                hangulMaker.clear()
-                etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
-                etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
+                sendMessage()
             }
             recyclerMacro.apply {
                 adapter = macroAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+            etChat.setOnKeyListener(object : OnKeyListener{
+                override fun onKey(p0: View?, p1: Int, p2: KeyEvent?): Boolean {
+                    when(p1){
+                        KeyEvent.KEYCODE_ENTER -> sendMessage()
+                    }
+                    return true
+                }
+            })
+            ivMic.setOnClickListener {
+                viewModel.startSTT(requireContext(), userName)
             }
         }
     }
@@ -223,10 +226,10 @@ class CallFragment : Fragment() {
             chatList.observe(viewLifecycleOwner){
                 binding.apply {
                     if(it.size > 0){
-                        tvChatBottom.text = it[it.size - 1].message
+                        tvChatBottom.setText(it[it.size - 1].message)
                     }
                     if(it.size > 1){
-                        tvChatTop.text = it[it.size - 2].message
+                        tvChatTop.setText(it[it.size - 2].message)
                     }
                 }
             }
@@ -239,6 +242,17 @@ class CallFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun sendMessage(){
+        binding.apply {
+            viewModel.sendMessage(etChat.text.toString(), userName)
+            etChatInput.setText("${etChatInput.text}\n${etChat.text}")
+            etChat.setText("")
+            hangulMaker.clear()
+            etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
+            etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
+        }
     }
 
     override fun onPause() {

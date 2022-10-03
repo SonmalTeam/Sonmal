@@ -20,4 +20,6 @@
     <color name="sonmal_gray_300">#E1E1E1</color>
     <color name="ic_launcher_sonmal_background">#20B2AA</color>
     <color name="blue_light">#DAEAFF</color>
+    <color name="black_alpha">#30000000</color>
+    <color name="black_alpha_100">#00000000</color>
 </resources>
