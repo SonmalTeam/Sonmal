@@ -58,8 +58,9 @@ class MainFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
-            btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
+            btnMacro.setOnClickListener { // btn m
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
+//                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
             }
             btnCall.setOnClickListener {
                 //checkPermission()
@@ -95,8 +96,11 @@ class MainFragment : Fragment() {
                     1 -> { // 음성 자막
                         findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
                     }
+                    2 -> { // 매크로
+                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
+                    }
                     else -> {
-                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+
                     }
                 }
             }
