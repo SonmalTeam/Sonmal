@@ -4,16 +4,20 @@ import android.content.Context
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
+import android.widget.Toast
 
 class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
 
+    private lateinit var contextC: Context
     private var hasEmoji = 0
 
     constructor(context: Context?) : super(context!!) {
+        contextC = context
         init()
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {
+        contextC = context
         init()
     }
 
@@ -22,6 +26,7 @@ class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
         attrs,
         defStyleAttr
     ) {
+        contextC = context
         init()
     }
 
@@ -48,6 +53,7 @@ class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
                 val type = Character.getType(source[i])
                 if (type != Character.SURROGATE.toInt() && type != Character.OTHER_SYMBOL.toInt()) {
                     // Other then emoji value will be blank
+                    Toast.makeText(contextC, "이모티콘만 입력이 가능합니다.", Toast.LENGTH_SHORT).show()
                     return ""
                 }
             }

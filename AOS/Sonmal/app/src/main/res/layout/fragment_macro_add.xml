@@ -92,11 +92,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_content" />
 
-            <TextView
+            <com.d202.sonmal.utils.CustomEditText
                 android:id="@+id/tv_emoji"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="#FAF9F9"
+                android:background="#F6F6F6"
                 android:gravity="center"
                 android:textSize="50dp"
                 android:textColor="@color/black"
@@ -224,6 +224,7 @@
                 android:layout_height="70dp"
                 android:layout_margin="20dp"
                 android:backgroundTint="#3DC3A8"
+                android:visibility="gone"
                 android:text="등록"
                 android:textColor="@color/white"
                 android:textSize="22dp"

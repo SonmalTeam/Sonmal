@@ -41,7 +41,7 @@ class MacroAddFragment: Fragment() {
     private var selectedCategoty: Int = 0
 
     //emoji 입력
-    private var emoji = "Emoji"
+    private var emoji = ""
 
     // 권한
     private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
@@ -125,7 +125,7 @@ class MacroAddFragment: Fragment() {
 
             if(binding.etTitle.text.toString() == "" ||
                 binding.etContent.text.toString() ==  "" ||
-                binding.tvEmoji.text ==  "" ||
+                binding.tvEmoji.text.toString() ==  "" ||
                     selectedCategoty == 0) {
                 Toast.makeText(requireContext(), "제목, 내용, 아이콘, 카테고리 입력 필요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -138,7 +138,7 @@ class MacroAddFragment: Fragment() {
             var title = binding.etTitle.text.toString()
             var content = binding.etContent.text.toString()
             var category = selectedCategoty// todo categrySeq 적용
-            var emoji = this.emoji // todo emoji만 입력
+            var emoji = binding.tvEmoji.text.toString() // todo emoji만 입력
 
             if(videoUri != null) {
                 // 선택
@@ -289,7 +289,7 @@ class MacroAddFragment: Fragment() {
 
         builder.setPositiveButton("등록", DialogInterface.OnClickListener { dialog, which ->
             var textE = input.text.toString()
-            binding.tvEmoji.text = textE
+            binding.tvEmoji.setText(textE)
             this.emoji = textE
         })
         builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
