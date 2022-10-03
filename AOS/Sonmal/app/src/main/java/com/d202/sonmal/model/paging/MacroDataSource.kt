@@ -12,6 +12,7 @@ import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.api.MacroApi
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
+import com.d202.sonmal.ui.macro.MacroCafeFragment
 import com.d202.sonmal.ui.macro.MacroCafeFragmentDirections
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import kotlinx.coroutines.runBlocking
@@ -19,7 +20,7 @@ import retrofit2.Response
 
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 0
-class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int): PagingSource<Int, MacroDto>() {
+class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int, private val viewModel: MacroViewModel): PagingSource<Int, MacroDto>() {
 
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
@@ -48,18 +49,19 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                             body = macroApi.getPageMacroList(categorySeq, page, 7).body()
                         } else {
                             Log.d(TAG, "refreshToken err ${response.code()}")
-
+                            viewModel.pushRefreshExpire()
                         }
 
                     } catch (e: Exception) {
                         Log.d(TAG, "e: ${e.message}")
+                        viewModel.pushRefreshExpire()
                     }
-                    LoadResult.Page(
-                        data = body!!.result,
-                        prevKey = if(page == 0) null else page -1,
-                        nextKey = if(page == body!!.totalPage-1) null else page +1
-                    )
                 }
+                LoadResult.Page(
+                    data = body!!.result,
+                    prevKey = if(page == 0) null else page -1,
+                    nextKey = if(page == body!!.totalPage-1) null else page +1
+                )
             } else {
                 Log.d(TAG, "getPageMacroList fail ${response.code()}")
                 LoadResult.Page(

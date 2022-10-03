@@ -45,7 +45,7 @@ class MacroViewModel: ViewModel() {
          Pager( // Pager로 데이터 변환
             config = PagingConfig(pageSize = 1, maxSize = 9, enablePlaceholders = false),
             pagingSourceFactory = {
-                MacroDataSource(Retrofit.macroApi, categorySeq)
+                MacroDataSource(Retrofit.macroApi, categorySeq, this@MacroViewModel)
             }
         ).liveData
 
