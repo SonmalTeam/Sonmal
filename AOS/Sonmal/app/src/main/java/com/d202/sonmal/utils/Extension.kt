@@ -54,7 +54,7 @@ fun Context.showToast(text: String){
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
-fun translate(result : HandsResult): String{
+fun  translate(result : HandsResult): String{
     if (result.multiHandLandmarks().isEmpty()) {
         return ""
     }

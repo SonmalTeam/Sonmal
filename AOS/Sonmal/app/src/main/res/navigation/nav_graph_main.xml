@@ -30,7 +30,10 @@
             app:destination="@id/voiceFragment" />
         <action
             android:id="@+id/action_mainFragment_to_settingFragment"
-            app:destination="@id/settingFragment"/>
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_dialFragment"
+            app:destination="@id/dialFragment" />
 
     </fragment>
 
@@ -78,7 +81,14 @@
     <fragment
         android:id="@+id/callFragment"
         android:name="com.d202.sonmal.ui.call.CallFragment"
-        android:label="CallFragment" />
+        android:label="CallFragment" >
+        <argument
+            android:name="phone"
+            app:argType="string"
+            android:defaultValue=""
+            app:nullable="true"
+            />
+    </fragment>
     <fragment
         android:id="@+id/macroVideoFragment"
         android:name="com.d202.sonmal.ui.macro.MacroVideoFragment"
@@ -164,6 +174,10 @@
 <!--            android:id="@+id/action_settingFragment_to_macroAddFragment"-->
 <!--            app:destination="@id/macroAddFragment" />-->
     </fragment>
+    <fragment
+        android:id="@+id/dialFragment"
+        android:name="com.d202.sonmal.ui.call.DialFragment"
+        android:label="DialFragment" />
 
     <fragment
         android:id="@+id/appInfoFragment"

@@ -136,6 +136,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         this.translateInterface = translateInterface
     }
     fun startSTT(context: Context, userName: String) {
+        Log.d(TAG, "startSTT: ")
         FLAG_STT = true
         setInterface(object : TranslateInterface{
             override fun getResult(result: String) {
@@ -207,7 +208,15 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
         override fun onError(error: Int) {
             if(FLAG_STT)
-                startSTT(context, userName)
+                Log.d(TAG, "onError: ${error}")
+//                startSTT(context, userName)
+            when (error) {
+                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
+                    context,
+                    "퍼미션 없음",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         override fun onResults(results: Bundle) {

@@ -1,4 +1,4 @@
-package com.d202.sonmal.utils
+package com.d202.sonmal.utils.sharedpref
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Context

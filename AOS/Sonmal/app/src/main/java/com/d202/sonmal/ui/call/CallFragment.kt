@@ -3,7 +3,10 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.media.AudioRecord
+import android.media.AudioRecordingConfiguration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Base64
@@ -13,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroPagingAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
@@ -30,8 +35,9 @@ import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.signlang.HangulMaker
 import com.d202.sonmal.utils.HandsResultImageView
-import com.d202.sonmal.utils.MainSharedPreference
+import com.d202.sonmal.utils.sharedpref.MainSharedPreference
 import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
@@ -42,6 +48,10 @@ import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
 import com.google.mediapipe.solutions.hands.HandsOptions
 import com.google.mediapipe.solutions.hands.HandsResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -62,6 +72,8 @@ class CallFragment : Fragment() {
     private val viewModel: CallViewModel by viewModels()
     private val macroViewModel: MacroViewModel by viewModels()
     private lateinit var macroAdapter: CallMacroPagingAdapter
+    private val args: CallFragmentArgs by navArgs()
+    private lateinit var phoneNumber: String
 
     //WebRTC
     private lateinit var session: Session
@@ -75,6 +87,8 @@ class CallFragment : Fragment() {
     private lateinit var hands: Hands
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
+    private var startTime = 0L
+    private lateinit var hangulMaker: HangulMaker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,10 +102,17 @@ class CallFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        if(args.phone.isNullOrEmpty()){
+            phoneNumber = arguments!!.getString("PHONE").toString()
+        }else{
+            phoneNumber = args.phone!!
+        }
 
         userId = MainSharedPreference(requireContext()).token.toString()
         userName = MainSharedPreference(requireContext()).token.toString()
 
+
+        viewModel.startSTT(requireContext(), userName)
         initView()
         initViewModel()
     }
@@ -114,6 +135,12 @@ class CallFragment : Fragment() {
             val result = translate(handsResult)
             if(result.isNotEmpty()) {
                 viewModel.setTranslateText(result)
+                if(System.currentTimeMillis() - startTime >= 2000){
+                    startTime = System.currentTimeMillis()
+                    requireActivity().runOnUiThread {
+                        hangulMaker.commit(result[0])
+                    }
+                }
             }
         }
         hands.setErrorListener { message, e ->
@@ -135,21 +162,23 @@ class CallFragment : Fragment() {
 
 
     private fun initView(){
-//        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-//        audioManager.mode = AudioManager.MODE_NORMAL
+        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.mode = AudioManager.MODE_NORMAL
         macroAdapter = CallMacroPagingAdapter()
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
                 override fun onClick(title: String) {
-                    binding.etChat.setText("${binding.etChat.text} ${title} ")
+                    binding.etMergedText.setText("${binding.etChat.text} ${title} ")
                 }
             }
         }
+
 
         binding.apply {
             lifecycleOwner = this@CallFragment
             vm = viewModel
 
+            hangulMaker = HangulMaker(etChat.onCreateInputConnection(EditorInfo()))
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
@@ -172,6 +201,7 @@ class CallFragment : Fragment() {
                 viewModel.sendMessage(etChat.text.toString(), userName)
                 etChatInput.setText("${etChatInput.text}\n${etChat.text}")
                 etChat.setText("")
+                hangulMaker.clear()
                 etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
                 etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
             }
@@ -187,7 +217,6 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
-            startSTT(requireContext(), userName)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }
@@ -209,7 +238,35 @@ class CallFragment : Fragment() {
                 macroAdapter.submitData(this@CallFragment.lifecycle, it)
             }
         }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopSTT()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        leaveSession()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSTT(requireContext(), userName)
+        resizeView()
+        initViews()
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+        getToken(phoneNumber)
         setupStaticImageModePipeline()
+        Log.d(TAG, "onResume: CustomHttpClient")
+        val sessionId = "-session"
 
     }
 
@@ -220,17 +277,6 @@ class CallFragment : Fragment() {
         val deviceHeight = deviceWidth
         binding.peerContainerRemote.layoutParams.width = deviceWidth
         binding.peerContainerRemote.layoutParams.height = deviceWidth
-    }
-
-    override fun onResume() {
-        super.onResume()
-        resizeView()
-        initViews()
-
-        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        Log.d(TAG, "onResume: CustomHttpClient")
-        val sessionId = "-session"
-        getToken(sessionId)
     }
 
     private fun getToken(sessionId: String) {
@@ -341,11 +387,6 @@ class CallFragment : Fragment() {
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        leaveSession()
-        viewModel.stopSTT()
-    }
 
     private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {
         if (result.multiHandLandmarks().isEmpty()) {

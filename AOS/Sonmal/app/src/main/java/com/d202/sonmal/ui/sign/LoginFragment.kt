@@ -1,6 +1,7 @@
 package com.d202.sonmal.ui.sign
 
 import android.content.Context
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,10 +20,14 @@ import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentLoginBinding
+import com.d202.sonmal.ui.main.MainFragmentDirections
 import com.d202.sonmal.ui.setting.SettingFragmentDirections
 import com.d202.sonmal.ui.sign.dialog.PermissionDialog
 import com.d202.sonmal.ui.sign.viewmodel.SignViewModel
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -73,6 +78,7 @@ class LoginFragment : Fragment() {
 
         initView()
         initObserve()
+        checkPermission()
 
     }
 
@@ -237,14 +243,52 @@ class LoginFragment : Fragment() {
         Toast.makeText(requireContext(), "네이버 아이디 로그아웃 성공!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun kakaoUnlink(){ // 카카오 회원탈퇴
+//    private fun naverUnlink() {
+//        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
+//            override fun onSuccess() {
+//                //서버에서 토큰 삭제에 성공한 상태입니다.
+//                Toast.makeText(requireContext(), "네이버 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
+//                signViewModel.unregister()
+//
+//            }
+//            override fun onFailure(httpStatus: Int, message: String) {
+//                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+//                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+//                Log.d(TAG, "naver 탈퇴 errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
+//                Log.d(TAG, "naver 탈퇴 errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
+//            }
+//            override fun onError(errorCode: Int, message: String) {
+//                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
+//                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
+//                onFailure(errorCode, message)
+//            }
+//        })
+//    }
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                requireContext().showToast("전화 권한을 허용해야 이용이 가능합니다.")
+            }
+
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
+            .check()
+
+    }
+
+    private fun kakaoUnlink() { // 카카오 회원탈퇴
         // 연결 끊기
         Log.d(TAG, "kakaoUnlink 실행")
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.d(TAG, "연결 끊기 실패: ${error}")
-            }
-            else {
+            } else {
                 Log.d(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
             }
             Toast.makeText(requireContext(), "다시 가입해 주세요.", Toast.LENGTH_LONG).show()
