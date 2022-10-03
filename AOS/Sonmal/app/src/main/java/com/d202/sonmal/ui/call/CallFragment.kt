@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroPagingAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
@@ -71,6 +72,8 @@ class CallFragment : Fragment() {
     private val viewModel: CallViewModel by viewModels()
     private val macroViewModel: MacroViewModel by viewModels()
     private lateinit var macroAdapter: CallMacroPagingAdapter
+    private val args: CallFragmentArgs by navArgs()
+    private lateinit var phoneNumber: String
 
     //WebRTC
     private lateinit var session: Session
@@ -99,6 +102,11 @@ class CallFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        if(args.phone.isNullOrEmpty()){
+            phoneNumber = arguments!!.getString("PHONE").toString()
+        }else{
+            phoneNumber = args.phone!!
+        }
 
         userId = MainSharedPreference(requireContext()).token.toString()
         userName = MainSharedPreference(requireContext()).token.toString()
@@ -175,7 +183,7 @@ class CallFragment : Fragment() {
                 session.getLocalParticipant()!!.switchCamera()
             }
             ivCallEnd.setOnClickListener {
-                parentFragmentManager.popBackStackImmediate()
+                findNavController().popBackStack()
             }
             viewsContainer.setOnClickListener {
                 resizeView()
@@ -255,7 +263,7 @@ class CallFragment : Fragment() {
         resizeView()
         initViews()
         httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        getToken(arguments?.getString("PHONE").toString())
+        getToken(phoneNumber)
         setupStaticImageModePipeline()
         Log.d(TAG, "onResume: CustomHttpClient")
         val sessionId = "-session"

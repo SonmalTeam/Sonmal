@@ -82,10 +82,11 @@ class MainFragment : Fragment() {
     private fun checkPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                parentFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
-                    arguments = bundleOf("PHONE" to "test2")
-                }).commit()
+//                parentFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
+//                    arguments = bundleOf("PHONE" to "test2")
+//                }).commit()
 //                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment("test"))
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 requireContext().showToast("권한을 허용해야 이용이 가능합니다.")
@@ -95,7 +96,8 @@ class MainFragment : Fragment() {
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
+//            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
+            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
             .check()
     }
 }
