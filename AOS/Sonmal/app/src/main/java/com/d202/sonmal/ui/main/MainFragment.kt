@@ -1,26 +1,18 @@
 package com.d202.sonmal.ui.main
 
-import android.Manifest
 import android.Manifest.permission.*
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-<<<<<<< HEAD
 import androidx.activity.OnBackPressedCallback
-=======
-import androidx.core.os.bundleOf
->>>>>>> FE/feat/contacts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.common.TFLITE_PATH
 import com.d202.sonmal.databinding.FragmentMainBinding
-import com.d202.sonmal.ui.call.CallFragment
 import com.d202.sonmal.utils.showToast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
