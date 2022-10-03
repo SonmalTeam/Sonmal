@@ -1,12 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.sign.LoginFragment">
+
+        <!-- app logo 영역 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/layout_login_btn">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_sonmal_logo_200px"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="손말"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/sonmal_main"/>
+
+        </LinearLayout>
+
+        <!-- 소셜 로그인 button 영역 -->
+        <LinearLayout
+            android:id="@+id/layout_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="160dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_kakao_login"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_kakao_login_large_wide"
+                android:layout_marginBottom="24dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_naver_login"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_naver_container_400px"
+                android:text="     네이버로 시작하기"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

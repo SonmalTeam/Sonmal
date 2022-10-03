@@ -1,12 +1,14 @@
 package com.d202.sonmal.ui.macro
 
 import android.os.Bundle
+import android.system.Os.remove
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.d202.sonmal.R
 import com.d202.sonmal.databinding.FragmentMacroChoiceBinding
 
@@ -27,19 +29,41 @@ class MacroChoiceFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view) // navcontroller 탐색
+        initBtn()
 
-        binding.btnCafe.setOnClickListener{ // cafe macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroCafeFragment)
-        }
 
-        binding.btnStore.setOnClickListener{ // store macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroStoreFragment)
-        }
 
-        binding.btnHospital.setOnClickListener{ // hospital macro로 이동
-            navController.navigate(R.id.action_macroChoiceFragment_to_macroHospitalFragment)
+    }
+
+    private fun initBtn() {
+        binding.apply {
+            btnMacroAdd.setOnClickListener {
+                findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroAddFragment())
+            }
+
+            btnHospital.setOnClickListener {
+                moveToMacroListFragment(1)
+            }
+            btnPublic.setOnClickListener {
+                moveToMacroListFragment(2)
+            }
+            btnWork.setOnClickListener {
+                moveToMacroListFragment(3)
+            }
+            btnRestaurant.setOnClickListener {
+                moveToMacroListFragment(4)
+            }
+            btnStore.setOnClickListener {
+                moveToMacroListFragment(5)
+            }
+            btnCustom.setOnClickListener {
+                moveToMacroListFragment(6)
+            }
         }
+    }
+
+    private fun moveToMacroListFragment(category: Int) {
+        findNavController().navigate(MacroChoiceFragmentDirections.actionMacroChoiceFragmentToMacroCafeFragment(category))
 
     }
 

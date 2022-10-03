@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.signlang.SignLangFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_voice"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="8dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lt_record"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="12dp"
+            app:lottie_autoPlay="false"
+            app:lottie_repeatMode="restart"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/recording"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleX="2"
+            android:scaleY="2"/>
+
+        <TextView
+            android:id="@+id/tv_stt_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:hint="버튼을 눌러 음성 인식을 해주세요."
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/lt_record"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/lt_record"
+            app:layout_constraintTop_toTopOf="@id/lt_record" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/preview_display_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/cl_voice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cl_record">
+
+        <TextView
+            android:id="@+id/tv_live_translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textSize="26dp"
+            android:layout_gravity="bottom |center_horizontal"/>
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_record"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/et_now_translate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lt_speak"
+            app:layout_constraintTop_toTopOf="@id/lt_speak"
+            app:layout_constraintBottom_toBottomOf="@id/lt_speak"
+            android:layout_marginEnd="8dp"
+            android:hint="내용이 표시 됩니다."
+            android:textSize="22dp"
+            android:textColor="@color/black"
+            android:padding="8dp"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lt_speak"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:lottie_rawRes="@raw/speaker_black"
+            app:lottie_loop="true"
+            app:lottie_repeatMode="restart"
+            app:lottie_autoPlay="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleX="1.7"
+            android:scaleY="1.7"
+            android:padding="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_next_translate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/et_now_translate"
+            app:layout_constraintTop_toBottomOf="@id/et_now_translate"
+            app:layout_constraintEnd_toEndOf="@id/et_now_translate"
+            android:textSize="22dp"
+            android:textColor="@color/black"
+            android:padding="6dp"
+            android:layout_marginTop="6dp"/>
+
+        <ImageButton
+            android:id="@+id/test"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_perm_mic"
+            app:layout_constraintBottom_toTopOf="@id/iv_record"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_record"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/record_start"
+            app:layout_constraintEnd_toEndOf="@id/lt_speak"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:max="2000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_record"
+            app:layout_constraintTop_toTopOf="@id/iv_record"
+            app:layout_constraintBottom_toBottomOf="@id/iv_record"
+            android:progressDrawable="@drawable/progressbar_background"
+            android:layout_marginEnd="8dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

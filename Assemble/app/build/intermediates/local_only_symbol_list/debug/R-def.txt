@@ -1,0 +1,34 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable btn_call_end
+drawable btn_video_off
+drawable check
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable icon_add_circle
+id bottom_navigation_view
+id frame_main
+id mainFragment
+id main_nav_graph
+id phoneCallFragment
+id textMacroFragment
+id translationFragment
+layout activity_main
+layout fragment_login
+layout fragment_main
+menu bottom_nav_menu
+mipmap ic_launcher
+mipmap ic_launcher_round
+navigation main_nav_graph
+string app_name
+string hello_blank_fragment
+style Theme.Assemble
+xml backup_rules
+xml data_extraction_rules
