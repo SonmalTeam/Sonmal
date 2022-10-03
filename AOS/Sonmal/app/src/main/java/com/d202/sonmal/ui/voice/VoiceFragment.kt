@@ -81,27 +81,6 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                 adapter = voiceAdapter
             }
 
-            ivRecord.setOnClickListener {
-                //viewModel.startSTT(requireContext(), MainSharedPreference(requireContext()).token.toString())
-//                if(!recordingDialogFragment.isAdded) {
-//                    recordingDialogFragment.setInterface(object : RecordingDialogFragment.TranslateInterface{
-//                        override fun getResult(result: String) {
-//                            resultList.add(result)
-//                            rvResult.adapter!!.notifyDataSetChanged()
-//                            if(binding.ivMic.visibility == View.VISIBLE) {
-//                                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right)
-//                                binding.ivMic.startAnimation(animation)
-//                                binding.tvIntro.startAnimation(animation)
-//                                binding.ivMic.visibility = View.GONE
-//                                binding.tvIntro.visibility = View.GONE
-//                            }
-//                        }
-//
-//                    })
-//                    recordingDialogFragment.show(childFragmentManager, "recording")
-//                }
-            }
-
             ivMacro.setOnClickListener {
                 val bottomSheet = MacroBottomSheet()
                 bottomSheet.show(childFragmentManager, bottomSheet.tag)
@@ -120,12 +99,10 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
             sttResult.observe(viewLifecycleOwner){
                 if (it.isNotBlank()) {
                     if(resultList.isEmpty()) {
-                        binding.ivMic.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right))
-                        binding.tvIntro.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right))
+                        binding.constImage.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right))
                     }
                     resultList.add(it)
                     voiceAdapter.itemList = resultList
-                    binding.constImage.visibility = View.GONE
                 }
             }
 
