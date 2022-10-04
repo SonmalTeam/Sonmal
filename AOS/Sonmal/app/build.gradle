@@ -14,7 +14,7 @@ android {
         applicationId "com.d202.sonmal"
         minSdk 21
         targetSdk 33
-        versionCode 3
+        versionCode 4
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
