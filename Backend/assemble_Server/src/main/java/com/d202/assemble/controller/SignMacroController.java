@@ -93,6 +93,17 @@ public class SignMacroController {
         return new ResponseEntity<PagingResult<SignMacroResponseDto>>(result, HttpStatus.OK);
     }
 
+    // 매크로 검색
+    @ApiOperation(value = "매크로 검색")
+    @GetMapping("/search")
+    public ResponseEntity<?> macroSearch(@ApiIgnore Authentication auth, @RequestParam String keyword, @PageableDefault Pageable pageable) {
+        long userSeq = (int)auth.getPrincipal();
+
+        PagingResult macroList = signMacroService.macroSearch(pageable, userSeq, keyword);
+
+        return new ResponseEntity<PagingResult<SignMacroResponseDto>>(macroList, HttpStatus.OK);
+    }
+
     // 매크로 사용횟수 카운트
     @ApiOperation(value = "매크로 사용횟수 카운트")
     @PutMapping("/count/{signMacroSeq}")
