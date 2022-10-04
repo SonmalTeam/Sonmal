@@ -1,9 +1,9 @@
 package com.d202.webrtc.openvidu
 
+import android.media.MediaRecorder
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.d202.webrtc.observers.CustomPeerConnectionObserver
@@ -13,6 +13,8 @@ import com.d202.webrtc.websocket.CustomWebSocket
 import org.webrtc.*
 import org.webrtc.PeerConnection.*
 import org.webrtc.RtpTransceiver.RtpTransceiverInit
+import org.webrtc.audio.AudioDeviceModule
+import org.webrtc.audio.JavaAudioDeviceModule
 
 class Session(
     private val id: String,
@@ -20,6 +22,13 @@ class Session(
     private var activity: AppCompatActivity?,
     private var viewContainer: RelativeLayout?
 ) {
+    private fun createAudioDeviceModule(): AudioDeviceModule? {
+        return JavaAudioDeviceModule.builder(activity)
+            .setAudioSource(MediaRecorder.AudioSource.MIC)
+            .setUseHardwareAcousticEchoCanceler(true)
+            .setUseHardwareNoiseSuppressor(true) // .setInputSampleRate(16000)
+            .createAudioDeviceModule()
+    }
 
     private var peerConnectionFactory: PeerConnectionFactory?
     private val remoteParticipants: MutableMap<String, RemoteParticipant> = mutableMapOf()
@@ -39,7 +48,10 @@ class Session(
         val encoderFactory = SoftwareVideoEncoderFactory()
         val decoderFactory = SoftwareVideoDecoderFactory()
 
+        val adm = createAudioDeviceModule()
+
         peerConnectionFactory = PeerConnectionFactory.builder()
+            .setAudioDeviceModule(adm)
             .setVideoEncoderFactory(encoderFactory)
             .setVideoDecoderFactory(decoderFactory)
             .setOptions(options)

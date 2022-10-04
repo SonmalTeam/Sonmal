@@ -3,16 +3,18 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.media.AudioRecord
+import android.media.AudioRecordingConfiguration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.view.View.OnKeyListener
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,18 +22,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroPagingAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
-import com.d202.sonmal.common.ApplicationClass
-import com.d202.sonmal.common.OPENVIDU_SECRET
-import com.d202.sonmal.common.OPENVIDU_URL
-import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
+import com.d202.sonmal.common.*
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
+import com.d202.sonmal.ui.signlang.HangulMaker
 import com.d202.sonmal.utils.HandsResultImageView
-import com.d202.sonmal.utils.MainSharedPreference
+import com.d202.sonmal.utils.sharedpref.MainSharedPreference
 import com.d202.sonmal.utils.translate
 import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
@@ -42,6 +43,10 @@ import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
 import com.google.mediapipe.solutions.hands.HandsOptions
 import com.google.mediapipe.solutions.hands.HandsResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -62,6 +67,8 @@ class CallFragment : Fragment() {
     private val viewModel: CallViewModel by viewModels()
     private val macroViewModel: MacroViewModel by viewModels()
     private lateinit var macroAdapter: CallMacroPagingAdapter
+    private val args: CallFragmentArgs by navArgs()
+    private lateinit var phoneNumber: String
 
     //WebRTC
     private lateinit var session: Session
@@ -71,29 +78,43 @@ class CallFragment : Fragment() {
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
 
-    //MediaPipe
+    //SignLanguage
     private lateinit var hands: Hands
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
+    private var startTime = 0L
+    private lateinit var hangulMaker: HangulMaker
+    private var FLAG_SIGN_LANGUAGE = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentCallBinding.inflate(inflater, container, false)
+        userId = MainSharedPreference(requireContext()).token.toString()
+        userName = MainSharedPreference(requireContext()).token.toString()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-
-        userId = MainSharedPreference(requireContext()).token.toString()
-        userName = MainSharedPreference(requireContext()).token.toString()
+        if(args.phone.isNullOrEmpty()){
+            phoneNumber = arguments!!.getString("PHONE").toString()
+        }else{
+            phoneNumber = args.phone!!
+        }
 
         initView()
         initViewModel()
+        initViews()
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+
+        viewModel.startSTT(requireContext(), userName)
+
     }
 
     private fun setupStaticImageModePipeline() {
@@ -114,6 +135,18 @@ class CallFragment : Fragment() {
             val result = translate(handsResult)
             if(result.isNotEmpty()) {
                 viewModel.setTranslateText(result)
+                viewModel.sendLetter(result, userName)
+                if(System.currentTimeMillis() - startTime >= 2000){
+                    startTime = System.currentTimeMillis()
+                    requireActivity().runOnUiThread {
+                        if(!FLAG_SIGN_LANGUAGE){
+                            binding.tvChatBottom.setText("")
+                            FLAG_SIGN_LANGUAGE = true
+                        }
+                        hangulMaker.commit(result[0])
+                        viewModel.sendWord(binding.tvChatBottom.text.toString(), userName)
+                    }
+                }
             }
         }
         hands.setErrorListener { message, e ->
@@ -127,16 +160,15 @@ class CallFragment : Fragment() {
         imageView = HandsResultImageView(requireContext())
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
-        binding.tvTranslateText.bringToFront()
-        binding.tvChatTop.bringToFront()
-        binding.tvChatBottom.bringToFront()
+        binding.constChatTop.bringToFront()
+        binding.constChatBottom.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
 
 
     private fun initView(){
-//        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-//        audioManager.mode = AudioManager.MODE_NORMAL
+        audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.mode = AudioManager.MODE_NORMAL
         macroAdapter = CallMacroPagingAdapter()
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
@@ -146,9 +178,12 @@ class CallFragment : Fragment() {
             }
         }
 
+
         binding.apply {
             lifecycleOwner = this@CallFragment
             vm = viewModel
+
+            hangulMaker = HangulMaker(tvChatBottom.onCreateInputConnection(EditorInfo()))
 
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
@@ -169,15 +204,22 @@ class CallFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
             btnSend.setOnClickListener {
-                viewModel.sendMessage(etChat.text.toString(), userName)
-                etChatInput.setText("${etChatInput.text}\n${etChat.text}")
-                etChat.setText("")
-                etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
-                etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
+                sendMessage()
             }
             recyclerMacro.apply {
                 adapter = macroAdapter
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
+            etChat.setOnKeyListener(object : OnKeyListener{
+                override fun onKey(p0: View?, p1: Int, p2: KeyEvent?): Boolean {
+                    when(p1){
+                        KeyEvent.KEYCODE_ENTER -> sendMessage()
+                    }
+                    return true
+                }
+            })
+            ivMic.setOnClickListener {
+                viewModel.startSTT(requireContext(), userName)
             }
         }
     }
@@ -187,18 +229,27 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
-            startSTT(requireContext(), userName)
+            setUseFragment(FLAG_CALL)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }
             chatList.observe(viewLifecycleOwner){
                 binding.apply {
+                    if(FLAG_SIGN_LANGUAGE){
+                        tvChatBottom.setText("")
+                        FLAG_SIGN_LANGUAGE = false
+                    }
                     if(it.size > 0){
-                        tvChatBottom.text = it[it.size - 1].message
+                        tvChatBottom.setText(it[it.size - 1].message)
                     }
                     if(it.size > 1){
-                        tvChatTop.text = it[it.size - 2].message
+                        tvChatTop.setText(it[it.size - 2].message)
                     }
+                }
+            }
+            sttResult.observe(viewLifecycleOwner){
+                binding.apply {
+                    etChatInput.setText("${etChatInput.text}\n${it}")
                 }
             }
             getRemoteFrames()
@@ -209,7 +260,38 @@ class CallFragment : Fragment() {
                 macroAdapter.submitData(this@CallFragment.lifecycle, it)
             }
         }
+
+    }
+
+    private fun sendMessage(){
+        binding.apply {
+            viewModel.sendMessage(etChat.text.toString(), userName)
+            etChatInput.setText("${etChatInput.text}\n${etChat.text}")
+            etChat.setText("")
+            hangulMaker.clear()
+            etChatInput.movementMethod = ScrollingMovementMethod.getInstance()
+            etChatInput.setSelection(etChatInput.text.length, etChatInput.text.length)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopSTT()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        leaveSession()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSTT(requireContext(), userName)
+        resizeView()
         setupStaticImageModePipeline()
+        Log.d(TAG, "onResume: CustomHttpClient")
+        val sessionId = "-session"
+        getToken(phoneNumber)
 
     }
 
@@ -220,17 +302,6 @@ class CallFragment : Fragment() {
         val deviceHeight = deviceWidth
         binding.peerContainerRemote.layoutParams.width = deviceWidth
         binding.peerContainerRemote.layoutParams.height = deviceWidth
-    }
-
-    override fun onResume() {
-        super.onResume()
-        resizeView()
-        initViews()
-
-        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        Log.d(TAG, "onResume: CustomHttpClient")
-        val sessionId = "-session"
-        getToken(sessionId)
     }
 
     private fun getToken(sessionId: String) {
@@ -337,15 +408,12 @@ class CallFragment : Fragment() {
         requireActivity().runOnUiThread {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
+            binding.remoteGlSurfaceView.clearImage()
+            binding.remoteGlSurfaceView.release()
         }
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        leaveSession()
-        viewModel.stopSTT()
-    }
 
     private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {
         if (result.multiHandLandmarks().isEmpty()) {

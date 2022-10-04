@@ -4,7 +4,8 @@ package com.d202.sonmal.common
 WebRTC
  */
 const val SERVER_URL = "https://d202.kro.kr/api/" //
-const val OPENVIDU_URL = "https://sduty.kro.kr:5443"
+//const val OPENVIDU_URL = "https://sduty.kro.kr:5443"
+const val OPENVIDU_URL = "https://d202.kro.kr:5443"
 const val OPENVIDU_SECRET = "MY_SECRET"
 const val REQUEST_CODE_PERMISSIONS = 10
 
@@ -29,3 +30,4 @@ const val TFLITE_PATH = "converted_model.tflite"
 
 const val FLAG_MACRO = 0
 const val FLAG_CALL = 1
+const val FLAG_VOICE = 2
