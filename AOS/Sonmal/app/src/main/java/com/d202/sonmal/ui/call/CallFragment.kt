@@ -87,6 +87,7 @@ class CallFragment : Fragment() {
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
     private var startTime = 0L
     private lateinit var hangulMaker: HangulMaker
+    private lateinit var letterMaker: HangulMaker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,6 +95,11 @@ class CallFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCallBinding.inflate(inflater, container, false)
+        userId = MainSharedPreference(requireContext()).token.toString()
+        userName = MainSharedPreference(requireContext()).token.toString()
+        initView()
+        initViewModel()
+
         return binding.root
     }
 
@@ -106,13 +112,13 @@ class CallFragment : Fragment() {
             phoneNumber = args.phone!!
         }
 
-        userId = MainSharedPreference(requireContext()).token.toString()
-        userName = MainSharedPreference(requireContext()).token.toString()
 
+        initViews()
+        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
+        getToken(phoneNumber)
 
         viewModel.startSTT(requireContext(), userName)
-        initView()
-        initViewModel()
+
     }
 
     private fun setupStaticImageModePipeline() {
@@ -137,6 +143,7 @@ class CallFragment : Fragment() {
                     startTime = System.currentTimeMillis()
                     requireActivity().runOnUiThread {
                         hangulMaker.commit(result[0])
+                        viewModel.sendLetter(result, userName)
                     }
                 }
             }
@@ -152,7 +159,7 @@ class CallFragment : Fragment() {
         imageView = HandsResultImageView(requireContext())
         imageView.setImageDrawable(null)
         viewGroup.addView(imageView)
-        binding.tvTranslateText.bringToFront()
+        binding.constChatTop.bringToFront()
         binding.constChatBottom.bringToFront()
         imageView.setVisibility(View.VISIBLE)
     }
@@ -165,7 +172,7 @@ class CallFragment : Fragment() {
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
                 override fun onClick(title: String) {
-                    binding.etMergedText.setText("${binding.etChat.text} ${title} ")
+                    binding.etChat.setText("${binding.etChat.text} ${title} ")
                 }
             }
         }
@@ -176,6 +183,8 @@ class CallFragment : Fragment() {
             vm = viewModel
 
             hangulMaker = HangulMaker(tvChatBottom.onCreateInputConnection(EditorInfo()))
+            letterMaker = HangulMaker(etMergedText.onCreateInputConnection(EditorInfo()))
+
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
             }
@@ -231,6 +240,12 @@ class CallFragment : Fragment() {
                     if(it.size > 1){
                         tvChatTop.setText(it[it.size - 2].message)
                     }
+                    letterMaker.clear()
+                }
+            }
+            letter.observe(viewLifecycleOwner){
+                if(it.isNotEmpty()){
+                    letterMaker.commit(it[0])
                 }
             }
             getRemoteFrames()
@@ -275,9 +290,6 @@ class CallFragment : Fragment() {
         super.onResume()
         viewModel.startSTT(requireContext(), userName)
         resizeView()
-        initViews()
-        httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        getToken(phoneNumber)
         setupStaticImageModePipeline()
         Log.d(TAG, "onResume: CustomHttpClient")
         val sessionId = "-session"

@@ -3,7 +3,6 @@ package com.d202.sonmal.ui.call.viewmodel
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
@@ -11,12 +10,13 @@ import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d202.sonmal.model.dto.Chat
+import com.d202.sonmal.model.dto.Letter
+import com.d202.sonmal.model.dto.Word
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -70,12 +70,24 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
     // Firebase Chat
     private var _db: DatabaseReference = Firebase.database.getReference("chat-message")
+    private var _letterDB = Firebase.database.getReference("letter")
+    private var _wordDB = Firebase.database.getReference("word")
+
     private val _chatList = MutableLiveData<MutableList<Chat>>(mutableListOf())
     val chatList : LiveData<MutableList<Chat>>
         get() = _chatList
+    private val _letter = MutableLiveData<String>("")
+    val letter: LiveData<String>
+        get() = _letter
+    private val _word = MutableLiveData<String>("")
+    val word: LiveData<String>
+        get() = _word
 
     fun initFirebaseDatabase(userName: String){
         _db.removeValue()
+        _letterDB.removeValue()
+        _wordDB.removeValue()
+
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chattingItem = snapshot.getValue(Chat::class.java)!!
@@ -86,19 +98,43 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
                     speakOut(chattingItem.message)
                 }
             }
-            @RequiresApi(Build.VERSION_CODES.N)
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                _chatList.value!!.removeIf {
-                    it.firebaseKey == snapshot.key
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
+        }
+
+        val letterListener = object :ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val item = snapshot.getValue(Letter::class.java)!!
+                item.firebaseKey = snapshot.key ?: ""
+                if(item.name != userName){
+                    _letter.postValue(item.letter)
                 }
             }
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-
             override fun onCancelled(error: DatabaseError) {}
         }
+
+        val wordListener = object :ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val item = snapshot.getValue(Word::class.java)!!
+                item.firebaseKey = snapshot.key ?: ""
+                if(item.name == userName){
+                    _word.postValue(item.word)
+                }
+            }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
+        }
+
         _db.addChildEventListener(childEventListener)
+        _letterDB.addChildEventListener(letterListener)
+        _wordDB.addChildEventListener(wordListener)
     }
 
     fun sendMessage(message: String, userName: String){
@@ -106,6 +142,18 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
             viewModelScope.launch(Dispatchers.IO) {
                 _db.push().setValue(Chat("", userName, message))
             }
+        }
+    }
+
+    fun sendLetter(letter: String, userName: String){
+        if(letter.isNotEmpty()){
+            _letterDB.push().setValue(Letter("", userName, letter))
+        }
+    }
+
+    fun sendWord(word: String, userName: String){
+        if(word.isNotEmpty()){
+            _wordDB.push().setValue(Word("", userName, word))
         }
     }
 
