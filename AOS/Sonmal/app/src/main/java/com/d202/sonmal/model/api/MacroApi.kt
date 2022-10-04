@@ -17,6 +17,9 @@ interface MacroApi {
     @GET("sign/macro/category/{categorySeq}")
     suspend fun getPageMacroList(@Path("categorySeq") categorySeq: Int, @Query("page")page: Int, @Query("size")size: Int): Response<PagingResult<MacroDto>>
 
+    @GET("sign/macro/search")
+    suspend fun getPageMacroSearchList(@Query("keyword") keyword: String, @Query("page")page: Int, @Query("size")size: Int): Response<PagingResult<MacroDto>>
+
     @Multipart
     @POST("sign/macro/video")
     suspend fun addMacro(

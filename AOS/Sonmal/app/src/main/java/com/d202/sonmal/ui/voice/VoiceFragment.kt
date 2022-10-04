@@ -27,7 +27,7 @@ import java.util.*
 class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     private lateinit var binding : FragmentVoiceBinding
     private val viewModel: CallViewModel by viewModels()
-    private val uploadingDialogFragment by lazy { UploadingDialogFragment() }
+
     private val resultList = mutableListOf<String>()
     private lateinit var tts : TextToSpeech
     private lateinit var voiceAdapter: VoiceAdapter
@@ -41,25 +41,30 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     ): View? {
         binding = FragmentVoiceBinding.inflate(layoutInflater, container, false)
 
-        voiceAdapter = VoiceAdapter()
+        initPermission()
+        initView()
 
-        tts = TextToSpeech(requireContext(), this)
+        return binding.root
+    }
 
+    private fun initPermission() {
         val permissionListener = object : PermissionListener {
-            override fun onPermissionGranted() {
-            }
+            override fun onPermissionGranted() {}
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
                 Toast.makeText(requireContext(), "권한을 다시 설정해주세요!", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setPermissions(*REQUIRED_PERMISSIONS)
             .check()
+    }
 
+    private fun initView() {
+        voiceAdapter = VoiceAdapter()
+        tts = TextToSpeech(requireContext(), this)
 
         binding.apply {
             rvResult.apply {
@@ -76,7 +81,6 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                 speakOut()
             }
         }
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,7 +95,6 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                     voiceAdapter.itemList = resultList
                 }
             }
-
         }
     }
 
@@ -122,9 +125,7 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
                     }
                 }
 
-                override fun onError(p0: String?) {
-                }
-
+                override fun onError(p0: String?) {}
             })
         }
     }

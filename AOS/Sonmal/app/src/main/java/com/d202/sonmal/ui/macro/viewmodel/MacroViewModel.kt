@@ -28,12 +28,21 @@ class MacroViewModel: ViewModel() {
         getPagingMacroList(it).cachedIn(viewModelScope)
     }
 
+    private val macroSearchListPage = MutableLiveData<String>()
+    val pagingMacroSearchList = macroSearchListPage.switchMap {
+        getPagingMacroSearchList(it).cachedIn(viewModelScope)
+    }
+
     fun pushRefreshExpire() {
         _refreshExpire.postValue(true)
     }
 
     fun getPagingMacroListValue(categorySeq: Int){ // seq를 입력하면 Pager 데이터로 변환
         macroListPage.postValue(categorySeq)
+    }
+
+    fun getPagingMacroListValue(title: String){
+        macroSearchListPage.postValue(title)
     }
 
     private fun getPagingMacroList(categorySeq: Int) =
@@ -44,6 +53,14 @@ class MacroViewModel: ViewModel() {
             }
         ).liveData
 
+    private fun getPagingMacroSearchList(title: String) =
+        Pager( // Pager로 데이터 변환
+            config = PagingConfig(pageSize = 1, maxSize = 9, enablePlaceholders = false),
+            pagingSourceFactory = {
+                Log.d(TAG, "getPagingMacroSearchList: ")
+                MacroDataSource(Retrofit.macroApi, 0, this@MacroViewModel, title)
+            }
+        ).liveData
 
 
     private val _macroList = MutableLiveData<MutableList<MacroDto>>()
@@ -106,6 +123,7 @@ class MacroViewModel: ViewModel() {
             }
         }
     }
+
 
     fun addMacro(title: String, content: String, category: String, emoji: String, video: File?) {
         viewModelScope.launch(Dispatchers.IO) {
