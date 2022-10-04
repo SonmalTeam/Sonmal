@@ -1,10 +1,7 @@
 # 🤙 Sonmal (손말: 수어 통역 서비스)
 
-<<<<<<< HEAD
+
 ![img_sonmal_logo_512px](https://user-images.githubusercontent.com/49026286/192984903-ed46455c-5a70-47ef-b97b-9f7f95829dc4.png)
-=======
-[로고이미지]
->>>>>>> 8bfcbde290500b558437bfbca2e99d52dc5d9f03
 
 ---
 
