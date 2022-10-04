@@ -20,15 +20,19 @@ import retrofit2.Response
 
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 0
-class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int, private val viewModel: MacroViewModel): PagingSource<Int, MacroDto>() {
-
+class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: Int = 0,
+                      private val viewModel: MacroViewModel, private val title: String = ""): PagingSource<Int, MacroDto>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
             val page = params.key?: START_PAGE_INDEX
-            var response: Response<PagingResult<MacroDto>>?
+
             Log.d(TAG, "MacroDataSource 요청 $categorySeq $page")
-            response = macroApi.getPageMacroList(categorySeq, page, 7)
+            val response = if(title.isEmpty()) {
+                macroApi.getPageMacroList(categorySeq, page, 7)
+            } else {
+                macroApi.getPageMacroSearchList(title, page, 5)
+            }
             var body = response.body()
             if(response.isSuccessful && body != null && body.totalPage > 0){
                 Log.d(TAG, "MacroDataSource ${response.body()}")
@@ -46,7 +50,11 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                         if(response.isSuccessful && response.body() != null) {
                             ApplicationClass.mainPref.token = response.body()!!.accessToken
                             ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
-                            body = macroApi.getPageMacroList(categorySeq, page, 7).body()
+                            body = if(title.isEmpty()) {
+                                macroApi.getPageMacroList(categorySeq, page, 7).body()
+                            } else {
+                                macroApi.getPageMacroSearchList(title, page, 5).body()
+                            }
                         } else {
                             Log.d(TAG, "refreshToken err ${response.code()}")
                             viewModel.pushRefreshExpire()
@@ -74,7 +82,6 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             Log.d(TAG, "load error: ${e.message}")
             LoadResult.Error(e)
         }
-
     }
 
     override fun getRefreshKey(state: PagingState<Int, MacroDto>): Int? {
