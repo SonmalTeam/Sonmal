@@ -122,7 +122,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val item = snapshot.getValue(Word::class.java)!!
                 item.firebaseKey = snapshot.key ?: ""
-                if(item.name == userName){
+                if(item.name != userName){
                     _word.postValue(item.word)
                 }
             }

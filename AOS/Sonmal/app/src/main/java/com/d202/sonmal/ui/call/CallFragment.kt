@@ -144,6 +144,7 @@ class CallFragment : Fragment() {
                     startTime = System.currentTimeMillis()
                     requireActivity().runOnUiThread {
                         hangulMaker.commit(result[0])
+                        viewModel.sendWord(binding.tvChatBottom.text.toString(), userName)
                     }
                 }
             }
@@ -183,7 +184,6 @@ class CallFragment : Fragment() {
             vm = viewModel
 
             hangulMaker = HangulMaker(tvChatBottom.onCreateInputConnection(EditorInfo()))
-            letterMaker = HangulMaker(etMergedText.onCreateInputConnection(EditorInfo()))
 
             ivCameraSwitch.setOnClickListener {
                 session.getLocalParticipant()!!.switchCamera()
@@ -240,12 +240,6 @@ class CallFragment : Fragment() {
                     if(it.size > 1){
                         tvChatTop.setText(it[it.size - 2].message)
                     }
-                    letterMaker.clear()
-                }
-            }
-            letter.observe(viewLifecycleOwner){
-                if(it.isNotEmpty()){
-                    letterMaker.commit(it[0])
                 }
             }
             getRemoteFrames()
@@ -273,12 +267,6 @@ class CallFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.stopSTT()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: ")
-
     }
 
     override fun onStop() {
@@ -410,6 +398,8 @@ class CallFragment : Fragment() {
         requireActivity().runOnUiThread {
             binding.localGlSurfaceView.clearImage()
             binding.localGlSurfaceView.release()
+            binding.remoteGlSurfaceView.clearImage()
+            binding.remoteGlSurfaceView.release()
         }
 
     }
