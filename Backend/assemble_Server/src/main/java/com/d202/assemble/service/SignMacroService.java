@@ -151,6 +151,23 @@ public class SignMacroService {
         return result;
     }
 
+    // 매크로 검색
+    @Transactional
+    public PagingResult<SignMacroResponseDto> macroSearch(Pageable pageable, long userSeq, String keyword) {
+        Page<SignMacro> signMacroPage = null;
+
+        signMacroPage = signMacroRepo.findByUserSeqAndTitleContaining(userSeq, keyword, pageable);
+
+        List<SignMacroResponseDto> signMacroList = new ArrayList<>();
+
+        for (SignMacro signMacro : signMacroPage) {
+            signMacroList.add(new SignMacroResponseDto(signMacro));
+        }
+
+        PagingResult result = new PagingResult<SignMacroResponseDto>(pageable.getPageNumber(), signMacroPage.getTotalPages() - 1, signMacroList);
+        return result;
+    }
+
     // 매크로 사용횟수 카운트
     @Transactional
     public void countSignMacro(long userSeq, long signMacroSeq) {
