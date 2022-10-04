@@ -81,11 +81,8 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 
 
-<<<<<<< HEAD
+
 🔈  실시간으로 텍스트 혹은 지수어를 입력하면 번역하여 음성으로 출력해줍니다.
-=======
-🔈  설명
->>>>>>> 8bfcbde290500b558437bfbca2e99d52dc5d9f03
 
 
 
@@ -97,11 +94,8 @@ The project was carried out with the aim of expanding the right to interpret sig
 [완성이미지]
 
 
-<<<<<<< HEAD
 🔈 자주 사용하는 문장을 수어 영상&텍스트 혹은 텍스트로 저장해놓고, 필요할 때 누르면 음성으로 출력해줘요.
-=======
-🔈 설명
->>>>>>> 8bfcbde290500b558437bfbca2e99d52dc5d9f03
+
 
 
 
@@ -113,11 +107,8 @@ The project was carried out with the aim of expanding the right to interpret sig
 [이미지]
 
 
-<<<<<<< HEAD
+
 🔈 통화를 할 때, 텍스트를 입력하면 음성으로 전달해줘요. 영상통화를 하면, 지수어도 번역해서 전달할 수 있어요.
-=======
-🔈 설명
->>>>>>> 8bfcbde290500b558437bfbca2e99d52dc5d9f03
 
 
 <br/>
