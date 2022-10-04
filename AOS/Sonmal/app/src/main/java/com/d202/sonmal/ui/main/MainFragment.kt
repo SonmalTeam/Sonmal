@@ -1,10 +1,9 @@
 package com.d202.sonmal.ui.main
 
-import android.Manifest
+import android.Manifest.permission.*
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +62,7 @@ class MainFragment : Fragment() {
 //                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
             }
             btnCall.setOnClickListener {
-                //checkPermission()
-
+                checkCallPermission()
             }
             btnSignLang.setOnClickListener {
                 checkPermission(0)
@@ -100,18 +98,42 @@ class MainFragment : Fragment() {
                         findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
                     }
                     else -> {
-
                     }
                 }
+//                parentFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
+//                    arguments = bundleOf("PHONE" to "test2")
+//                }).commit()
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
+                
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                requireContext().showToast("카메라, 오디오 권한을 허용해야 이용이 가능합니다.")
+                requireContext().showToast("권한을 허용해야 이용이 가능합니다.")
             }
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+//            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
+            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
+            .check()
+    }
+
+    private fun checkCallPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment("test"))
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
+
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                requireContext().showToast("권한을 허용해야 이용이 가능합니다.")
+            }
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
+//            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
             .check()
     }
 }
