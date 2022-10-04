@@ -73,7 +73,7 @@ class CallReceiver : BroadcastReceiver() {
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .addAction(
                                         R.mipmap.ic_launcher,
-                                        "Call",
+                                        "전화 받기",
                                         fullScreenPendingIntent
                                     )
                                     .setCategory(NotificationCompat.CATEGORY_CALL)

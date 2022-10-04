@@ -249,6 +249,11 @@ class CallFragment : Fragment() {
                     }
                 }
             }
+            sttResult.observe(viewLifecycleOwner){
+                binding.apply {
+                    etChatInput.setText("${etChatInput.text}\n${it}")
+                }
+            }
             getRemoteFrames()
         }
         macroViewModel.apply {
