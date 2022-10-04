@@ -26,10 +26,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroPagingAdapter
 import com.d202.sonmal.adapter.MacroPagingAdapter
-import com.d202.sonmal.common.ApplicationClass
-import com.d202.sonmal.common.OPENVIDU_SECRET
-import com.d202.sonmal.common.OPENVIDU_URL
-import com.d202.sonmal.common.REQUEST_CODE_PERMISSIONS
+import com.d202.sonmal.common.*
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
@@ -232,6 +229,7 @@ class CallFragment : Fragment() {
             initFirebaseDatabase(userName)
             setSurfaceViewRenderer(binding.remoteGlSurfaceView)
             initTTS(requireContext())
+            setUseFragment(FLAG_CALL)
             bitmap.observe(viewLifecycleOwner){
                 hands.send(it)
             }

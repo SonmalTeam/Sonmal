@@ -14,6 +14,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d202.sonmal.common.FLAG_CALL
+import com.d202.sonmal.common.FLAG_VOICE
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.Letter
 import com.d202.sonmal.model.dto.Word
@@ -178,6 +180,10 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
     private lateinit var translateInterface : TranslateInterface
     private lateinit var speechRecognizer: SpeechRecognizer
     private var FLAG_STT = false
+    private var FLAG_FRAGMENT = 0
+    fun setUseFragment(flag: Int){
+        FLAG_FRAGMENT = flag
+    }
     interface TranslateInterface {
         fun getResult(result: String)
     }
@@ -256,8 +262,9 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
 
         override fun onError(error: Int) {
-            if(FLAG_STT)
+            if(FLAG_STT && FLAG_FRAGMENT == FLAG_VOICE) {
                 startSTT(context, userName)
+            }
             when (error) {
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
                     context,

@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
 import com.d202.sonmal.adapter.VoiceAdapter
+import com.d202.sonmal.common.FLAG_VOICE
 import com.d202.sonmal.databinding.FragmentVoiceBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
 import com.d202.sonmal.utils.UploadingDialogFragment
@@ -86,6 +87,7 @@ class VoiceFragment : Fragment(), TextToSpeech.OnInitListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.apply {
+            setUseFragment(FLAG_VOICE)
             sttResult.observe(viewLifecycleOwner){
                 if (it.isNotBlank()) {
                     if(resultList.isEmpty()) {

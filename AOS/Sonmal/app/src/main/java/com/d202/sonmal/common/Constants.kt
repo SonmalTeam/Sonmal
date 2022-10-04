@@ -30,3 +30,4 @@ const val TFLITE_PATH = "converted_model.tflite"
 
 const val FLAG_MACRO = 0
 const val FLAG_CALL = 1
+const val FLAG_VOICE = 2
