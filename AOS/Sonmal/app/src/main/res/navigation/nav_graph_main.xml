@@ -134,7 +134,7 @@
 
     <fragment
         android:id="@+id/recordingDialogFragment"
-        android:name="com.d202.sonmal.ui.voice.UploadingDialogFragment"
+        android:name="com.d202.sonmal.utils.UploadingDialogFragment"
         android:label="RecordingDialogFragment">
 
     </fragment>

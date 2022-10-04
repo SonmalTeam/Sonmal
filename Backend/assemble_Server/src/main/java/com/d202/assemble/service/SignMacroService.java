@@ -1,11 +1,13 @@
 package com.d202.assemble.service;
 
+
 import com.d202.assemble.dto.*;
 import com.d202.assemble.repo.CategoryRepo;
 import com.d202.assemble.repo.SignMacroRepo;
 import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,13 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class SignMacroService {
 
     private final SignMacroRepo signMacroRepo;
@@ -27,23 +32,30 @@ public class SignMacroService {
     private final VideoFileRepo videoFileRepo;
     private final VideoFileService videoFileService;
 
-    // 매크로 등록
+    private final String uploadURL = "/home/files";
+//    private final String uploadURL = "D:\\DATA\\video";
+
+    // video 매크로 등록
     @Transactional
-    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile file){
+    public void createSignMacro(Long userSeq, SignMacroRequestDto request, MultipartFile multipartFile){
         try {
-            String origFilename = file.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            String savePath = "/files";
+            String origFilename = multipartFile.getOriginalFilename();
+            UUID uuid = UUID.randomUUID();
+            String filename = new MD5Generator(origFilename).toString() + "_" + uuid.toString();
+
+            String savePath = uploadURL;
             if (!new File(savePath).exists()) {
                 try{
+                    log.info("파일 생성!!");
                     new File(savePath).mkdir();
                 }
                 catch(Exception e){
+                    log.info("파일 생성 에러");
                     e.getStackTrace();
                 }
             }
-            String filePath = savePath + "/" + filename + ".mp4";
-            file.transferTo(new File(filePath));
+            String filePath = uploadURL + "/" + filename + ".mp4";
+            multipartFile.transferTo(new File(filePath));
 
             VideoFileDto videoFileDto = new VideoFileDto();
             videoFileDto.setOrigFilename(origFilename);
@@ -65,6 +77,15 @@ public class SignMacroService {
         signMacroRepo.save(signMacro);
     }
 
+    // 비디오 재생
+    public String videoRegion(long videoFileId) {
+        String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
+        String path = uploadURL + "/" + fileName + ".mp4";
+
+        return path;
+    }
+
+    // 매크로 등록
     public void createSignMacroVideoNull(Long userSeq, SignMacroVideoNullDto request){
         SignMacro signMacro = request.toEntity();
 
@@ -90,7 +111,14 @@ public class SignMacroService {
     @Transactional
     public PagingResult<SignMacroResponseDto> getSignMacroList(Pageable pageable, long userSeq, long categorySeq) {
 
-        Page<SignMacro> signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq, pageable);
+        Page<SignMacro> signMacroPage = null;
+
+        if (categorySeq == 0) {
+            signMacroPage = signMacroRepo.findAllByUserSeq(userSeq, pageable);
+        } else {
+            signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeq(userSeq, categorySeq, pageable);
+        }
+
         List<SignMacroResponseDto> signMacroList = new ArrayList<>();
 
         for (SignMacro signMacro : signMacroPage) {
@@ -105,7 +133,14 @@ public class SignMacroService {
     @Transactional
     public PagingResult<SignMacroResponseDto> sortSignMacroList(Pageable pageable, long userSeq, long categorySeq) {
 
-        Page<SignMacro> signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeqOrderByCountDesc(userSeq, categorySeq, pageable);
+        Page<SignMacro> signMacroPage = null;
+
+        if (categorySeq == 0) {
+            signMacroPage = signMacroRepo.findAllByUserSeqOrderByCountDesc(userSeq, pageable);
+        } else {
+            signMacroPage = signMacroRepo.findAllByUserSeqAndCategorySeqOrderByCountDesc(userSeq, categorySeq, pageable);
+        }
+
         List<SignMacroResponseDto> signMacroList = new ArrayList<>();
 
         for (SignMacro signMacro : signMacroPage) {
@@ -129,7 +164,10 @@ public class SignMacroService {
     @Transactional
     public void deleteSignMacro(long signMacroSeq) {
         SignMacro signMacro = signMacroRepo.findBySeq(signMacroSeq).get();
-        videoFileRepo.deleteById(signMacro.getVideoFileId());
+        if (signMacro.getVideoFileId() != null) {
+            videoFileRepo.deleteById(signMacro.getVideoFileId());
+        }
+
         signMacroRepo.delete(signMacro);
     }
 
@@ -139,5 +177,18 @@ public class SignMacroService {
         SignMacro signMacro = signMacroRepo.findBySeq(singMacroSeq).get();
         Category category = categoryRepo.findBySeq(categorySeq);
         signMacro.setCategory(category);
+    }
+
+    // 회원 전체 매크로 삭제
+    @Transactional
+    public void deleteUserMacro(long signMacroSeq) {
+        List<SignMacro> signMacros = signMacroRepo.findAllByUserSeq(signMacroSeq);
+        for (SignMacro signMacro : signMacros) {
+            if (signMacro.getVideoFileId() != null) {
+                videoFileRepo.deleteById(signMacro.getVideoFileId());
+            }
+
+            signMacroRepo.delete(signMacro);
+        }
     }
 }

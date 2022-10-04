@@ -58,18 +58,19 @@ class MainFragment : Fragment() {
 
     private fun initView() {
         binding.apply {
-            btnMacro.setOnClickListener { // btn macro 클릭 시 macro 분류 선택 프래그먼트로 이동
+            btnMacro.setOnClickListener { // btn m
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
+//                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
             }
             btnCall.setOnClickListener {
                 //checkPermission()
 
             }
             btnSignLang.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
+                checkPermission(0)
             }
             btnVoiceTranslate.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
+                checkPermission(1)
             }
         }
     }
@@ -85,15 +86,27 @@ class MainFragment : Fragment() {
     }
 
 
-    private fun checkPermission(){
+    private fun checkPermission(flag : Int){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment())
+                when(flag) {
+                    0 -> { // 수어 통역
+                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToSignLangFragment())
+                    }
+                    1 -> { // 음성 자막
+                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToVoiceFragment())
+                    }
+                    2 -> { // 매크로
+                        findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
+                    }
+                    else -> {
+
+                    }
+                }
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 requireContext().showToast("카메라, 오디오 권한을 허용해야 이용이 가능합니다.")
             }
-
         }
         TedPermission.create()
             .setPermissionListener(permissionListener)

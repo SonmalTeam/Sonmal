@@ -1,8 +1,9 @@
 package com.d202.assemble.dto;
-import lombok.*;
 
-@Getter
-@Setter
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
 public class SignMacroVideoNullDto {
 

@@ -28,7 +28,11 @@ import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
-import com.d202.sonmal.ui.voice.UploadingDialogFragment
+import com.d202.sonmal.ui.main.MainFragmentDirections
+import com.d202.sonmal.utils.UploadingDialogFragment
+import com.d202.sonmal.utils.showToast
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
@@ -79,6 +83,11 @@ class MacroAddFragment: Fragment() {
         }
 
         binding.btnRecord.setOnClickListener {
+            if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG) == false) {
+                Toast.makeText(requireContext(), "영상 등록 시 카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                checkPermission()
+                return@setOnClickListener
+            }
             val recordVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             val videoFile = File(
                 File("${requireActivity().cacheDir}/video").apply {
@@ -109,11 +118,12 @@ class MacroAddFragment: Fragment() {
                     binding.videoView.stopPlayback()
                     binding.btnPlay.text = "Play"
                     binding.videoView.setVideoURI(videoUri)
-                }                false -> {
+                }
+                false -> {
                 isVideoPlaying = true
                 binding.btnPlay.text = "Stop"
                 binding.videoView.start()
-            }
+                }
             }
         }
 
@@ -203,11 +213,16 @@ class MacroAddFragment: Fragment() {
 
     private fun initObserver() {
         macroViewmodel.macroAddCallback.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
-            if(videoFileSave != null) {
-                videoFileSave!!.delete()
+            if(it == 200) {
+                Toast.makeText(requireContext(), "등록 완료", Toast.LENGTH_SHORT).show()
+                if(videoFileSave != null) {
+                    videoFileSave!!.delete()
+                }
+                findNavController().navigateUp()
+            } else {
+                Toast.makeText(requireContext(), "등록 실패", Toast.LENGTH_SHORT).show()
             }
-            findNavController().navigateUp()
+
 
         }
         macroViewmodel.refreshExpire.observe(viewLifecycleOwner) {
@@ -269,7 +284,6 @@ class MacroAddFragment: Fragment() {
             CAMERA_PERMISSION_FLAG -> {
                 for(grant in grantResults) {
                     if(grant != PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(requireContext(), "카메라 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
                     }else{
 //                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
                     }
@@ -340,5 +354,20 @@ class MacroAddFragment: Fragment() {
         if(uploadingDialogFragment.isAdded) {
             uploadingDialogFragment.dismissAllowingStateLoss()
         }
+    }
+
+    private fun checkPermission(){
+        val permissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+
+            }
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+            }
+        }
+        TedPermission.create()
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한 : 카메라]")
+            .setPermissions(Manifest.permission.CAMERA)
+            .check()
     }
 }

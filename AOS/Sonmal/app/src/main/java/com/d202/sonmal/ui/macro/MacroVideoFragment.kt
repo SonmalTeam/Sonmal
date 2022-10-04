@@ -101,8 +101,4 @@ class MacroVideoFragment : Fragment() {
         var devide: Map<String, String> = mutableMapOf("JWT-AUTHENTICATION" to (ApplicationClass.mainPref.token ?: "l"))
         view.loadUrl(uri, devide)
     }
-
-
-
-
 }

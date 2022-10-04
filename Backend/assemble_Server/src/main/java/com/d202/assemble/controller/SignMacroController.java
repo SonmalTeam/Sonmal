@@ -47,16 +47,16 @@ public class SignMacroController {
     private final FireBaseService fireBaseService;
 
     // 매크로 등록
-    @ApiOperation(value = "매크로 등록")
-    @PostMapping
+    @ApiOperation(value = "Video 매크로 등록")
+    @PostMapping("/video")
     public void createSignMacro(@ApiIgnore Authentication auth, @RequestParam("file") MultipartFile file, SignMacroRequestDto request){
         long userSeq = (int)auth.getPrincipal();
         signMacroService.createSignMacro(userSeq, request, file);
     }
 
     // 비디오 없는 매크로 등록
-    @ApiOperation(value = "Null Video 매크로 등록")
-    @PostMapping("/videoNull")
+    @ApiOperation(value = "No Video 매크로 등록")
+    @PostMapping
     public void createSignMacroVideoNull(@ApiIgnore Authentication auth, SignMacroVideoNullDto request){
         long userSeq = (int)auth.getPrincipal();
         signMacroService.createSignMacroVideoNull(userSeq, request);
@@ -69,6 +69,7 @@ public class SignMacroController {
         long userSeq = (int)auth.getPrincipal();
         return signMacroService.getSignMacro(userSeq, signMacroSeq);
     }
+
 
     // 매크로 리스트 조회
     @ApiOperation(value = "매크로 리스트 조회")
@@ -136,8 +137,7 @@ public class SignMacroController {
     @RequestMapping(value = "/video/{videoFileId}", method = RequestMethod.GET)
     public ResponseEntity<ResourceRegion> videoRegion(@RequestHeader HttpHeaders headers, @PathVariable("videoFileId") long videoFileId) throws Exception {
 
-        String fileName = videoFileRepo.findById(videoFileId).get().getFilename();
-        String path = "/files/" + fileName + ".mp4";
+        String path = signMacroService.videoRegion(videoFileId);
         Resource resource = new FileSystemResource(path);
 
         long chunkSize = 1024 * 1024;

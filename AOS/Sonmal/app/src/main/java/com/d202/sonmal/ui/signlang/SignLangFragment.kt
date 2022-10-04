@@ -9,6 +9,8 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,8 +20,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.R
+import com.d202.sonmal.adapter.CallMacroPagingAdapter
+import com.d202.sonmal.adapter.SignMacroPagingAdapter
 import com.d202.sonmal.databinding.FragmentSignLangBinding
+import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import com.github.kimkevin.hangulparser.HangulParser
 import com.google.mediapipe.solutioncore.CameraInput
 import com.google.mediapipe.solutioncore.SolutionGlSurfaceView
@@ -44,26 +51,28 @@ import kotlin.math.sqrt
 
 class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
     private val TAG = "SIGN_LANG_FRAGMENT"
+
     private lateinit var binding : FragmentSignLangBinding
+    private val macroViewModel: MacroViewModel by viewModels()
+    private lateinit var macroAdapter: SignMacroPagingAdapter
+
     private lateinit var tts : TextToSpeech
     private lateinit var hands : Hands
     private lateinit var cameraInput: CameraInput
     private lateinit var glSurfaceView: SolutionGlSurfaceView<HandsResult>
+
     private var charlist = mutableListOf<String>()
     private var startTime = 0L
     private var isStarted = false
-    private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
-        Manifest.permission.ACCESS_NETWORK_STATE).toTypedArray()
-
     lateinit var hangulMaker: HangulMaker
 
+    private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.INTERNET, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
+        Manifest.permission.ACCESS_NETWORK_STATE).toTypedArray()
 
     private val classes = arrayListOf("ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ",
         "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "ㅏ", "ㅐ",
         "ㅑ", "ㅓ", "ㅔ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ")
 
-    private val Jun = arrayListOf("ㅏ", "ㅐ", "ㅑ", "ㅓ", "ㅔ", "ㅕ", "ㅗ", "ㅛ", "ㅜ", "ㅠ", "ㅡ", "ㅣ",
-        "ㅒ", "ㅟ", "ㅢ", "ㅚ", "ㅘ", "ㅞ", "ㅙ", )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,6 +90,8 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 glSurfaceView.post { startCamera() }
                 glSurfaceView.visibility = View.VISIBLE
 
+                initAdapter()
+                initViewModel()
                 initView()
             }
 
@@ -95,13 +106,49 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
             .setPermissions(*REQUIRED_PERMISSIONS)
             .check()
 
-        tts = TextToSpeech(requireContext(), this)
+        initTTS()
         return binding.root
+    }
+
+    private fun initTTS() {
+        tts = TextToSpeech(requireContext(), this)
+        tts.setPitch(1f)
+        tts.setSpeechRate(1f)
+        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(p0: String?) {
+                (activity as Activity).runOnUiThread {
+                    binding.ltSpeak.playAnimation()
+                }
+            }
+
+            override fun onDone(p0: String?) {
+                (activity as Activity).runOnUiThread {
+                    binding.ltSpeak.pauseAnimation()
+                    binding.ltSpeak.progress = 0f
+                }
+            }
+
+            override fun onError(p0: String?) {}
+        })
     }
 
     private fun initView() {
         binding.apply {
             tvSttResult.movementMethod = ScrollingMovementMethod()
+
+            etNowTranslate.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    //TODO("Not yet implemented")
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    Log.d(TAG, "afterTextChanged: ${binding.etNowTranslate.text.toString()}")
+                    macroViewModel.getPagingMacroListValue(binding.etNowTranslate.text.toString())
+                }
+            })
 
             test.setOnClickListener {
                 ivRecord.setImageResource(R.drawable.record_start)
@@ -131,17 +178,39 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                     ivRecord.setImageResource(R.drawable.record_start)
                     tvLiveTranslate.text = ""
                     hangulMaker.clear()
-                    //convertToSentence()
                 }
                 charlist.clear()
             }
 
             ltSpeak.setOnClickListener {
-                speakOut()
+                speakOut(binding.etNowTranslate.text.toString())
             }
 
             ltRecord.setOnClickListener {
                 startSTT()
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        macroAdapter = SignMacroPagingAdapter()
+        macroAdapter.apply {
+            onItemMacroClickListener = object : SignMacroPagingAdapter.OnItemMacroClickListener{
+                override fun onClick(content: String) {
+                    speakOut(content)
+                }
+            }
+        }
+        binding.rvMacro.apply {
+            adapter = macroAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun initViewModel() {
+        macroViewModel.apply {
+            pagingMacroSearchList.observe(viewLifecycleOwner){
+                macroAdapter.submitData(this@SignLangFragment.lifecycle, it)
             }
         }
     }
@@ -165,7 +234,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         glSurfaceView.setRenderInputImage(true)
 
         hands.setResultListener {
-            //logWristLandmark(it, false)
             translate(it)
             glSurfaceView.setRenderData(it)
             glSurfaceView.requestRender()
@@ -216,7 +284,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 v[i][j] = v2[i][j] - v1[i][j]
             }
         }
-        //Log.d(TAG, "onCreate: $v")
 
         for(i in 0..19) {
             val norm = sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2])
@@ -224,7 +291,6 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
                 v[i][j] /= norm
             }
         }
-        //Log.d(TAG, "onCreate: $v")
 
         val tmpv1 = mutableListOf<FloatArray>()
         for(i in 0..18) {
@@ -279,109 +345,12 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
             startTime = System.currentTimeMillis()
             hangulMaker.commit(classes[index][0])
 
-            // 들어온 글자가 모음인지 판별
-//            if(Jun.contains(classes[index])) {
-//                // 모음일 경우
-//                mergeJun(classes[index])
-//            }
-//            else {
-//                // 자음인 경우
-//                charlist.add(classes[index])
-//            }
             (activity as Activity).runOnUiThread {
                 binding.tvLiveTranslate.text = classes[index]
-                //binding.etNowTranslate.setText(binding.etNowTranslate.text.toString() + classes[index])
-            }
-
-        }
-    }
-
-    // 합칠 수 있는 모음이 있는지 판별하는 함수
-    private fun mergeJun(c: String) {
-        if(charlist.isEmpty())
-            return
-
-        val last = charlist.last()
-        if(Jun.contains(last)) {
-            when(c) {
-                "ㅣ" -> {
-                    if(last == "ㅡ") {
-                        charlist.removeLast()
-                        charlist.add("ㅢ")
-                    }
-                    else if(last == "ㅜ") {
-                        charlist.removeLast()
-                        charlist.add("ㅟ")
-                    }
-                    else if(last == "ㅗ") {
-                        charlist.removeLast()
-                        charlist.add("ㅚ")
-                    }
-                    else if(last == "ㅑ"){
-                        charlist.removeLast()
-                        charlist.add("ㅒ")
-                    }
-                    else if(last == "ㅘ") {
-                        charlist.removeLast()
-                        charlist.add("ㅙ")
-                    }
-                    else if(last == "ㅝ") {
-                        charlist.removeLast()
-                        charlist.add("ㅞ")
-                    }
-                    else if(last == "ㅕ") {
-                        charlist.removeLast()
-                        charlist.add("ㅖ")
-                    }
-                    else  {
-                        if(!Jun.contains(last)){
-                            charlist.add(c)
-                        }
-                    }
-                }
-                "ㅏ" -> {
-                    if(last == "ㅗ") {
-                        charlist.removeLast()
-                        charlist.add("ㅘ")
-                    }
-                    else {
-                        if(!Jun.contains(last)){
-                            charlist.add(c)
-                        }
-                    }
-                }
-                "ㅓ" -> {
-                    if(last == "ㅜ") {
-                        charlist.removeLast()
-                        charlist.add("ㅝ")
-                    }
-                    else {
-                        if(!Jun.contains(last)){
-                            charlist.add(c)
-                        }
-                    }
-                }
             }
         }
-        else {
-            charlist.add(c)
-        }
     }
 
-    // 문자들을 글자로 합치는 함수
-    private fun convertToSentence() {
-        if(charlist.isEmpty())
-            return
-
-        try {
-            val sentence = HangulParser.assemble(charlist)
-            binding.etNowTranslate.setText(sentence)
-        }
-        catch (e: Exception) {
-            Toast.makeText(requireContext(), "잘못된 문장입니다. 처음부터 다시 입력해주세요!", Toast.LENGTH_SHORT).show()
-            binding.etNowTranslate.setText("")
-        }
-    }
 
     private fun getTfliteInterpreter(path: String): Interpreter? {
         try {
@@ -402,34 +371,11 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
 
-    private fun speakOut() {
-        val text = binding.etNowTranslate.text as CharSequence
-        tts.setPitch(1f)
-        tts.setSpeechRate(1f)
-        tts.speak(text, TextToSpeech.QUEUE_ADD, null, "id1")
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(p0: String?) {
-                (activity as Activity).runOnUiThread {
-                    binding.ltSpeak.playAnimation()
-                }
-            }
+    private fun speakOut(content: String) {
+        tts.speak(content, TextToSpeech.QUEUE_ADD, null, "id1")
 
-            override fun onDone(p0: String?) {
-                (activity as Activity).runOnUiThread {
-                    binding.ltSpeak.pauseAnimation()
-                    binding.ltSpeak.progress = 0f
-                }
-            }
-
-            override fun onError(p0: String?) {
-            }
-
-        })
-
-        if(binding.etNowTranslate.text.toString().isNotEmpty()) {
-            binding.tvNextTranslate.text = binding.etNowTranslate.text.toString()
-            binding.etNowTranslate.text.clear()
-        }
+        binding.tvNextTranslate.text = content
+        binding.etNowTranslate.text.clear()
     }
 
     override fun onInit(p0: Int) {
@@ -438,7 +384,7 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         }
     }
 
-    private  fun startSTT() {
+    private fun startSTT() {
         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireContext().packageName)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
