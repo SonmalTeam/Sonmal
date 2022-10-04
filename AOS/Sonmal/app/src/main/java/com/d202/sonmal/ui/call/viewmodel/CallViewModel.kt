@@ -257,8 +257,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
 
         override fun onError(error: Int) {
             if(FLAG_STT)
-                Log.d(TAG, "onError: ${error}")
-//                startSTT(context, userName)
+                startSTT(context, userName)
             when (error) {
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
                     context,
