@@ -156,7 +156,7 @@ public class SignMacroService {
     public PagingResult<SignMacroResponseDto> macroSearch(Pageable pageable, long userSeq, String keyword) {
         Page<SignMacro> signMacroPage = null;
 
-        signMacroPage = signMacroRepo.findByUserSeqAndTitleContaining(userSeq, keyword, pageable);
+        signMacroPage = signMacroRepo.findByUserSeqAndTitleStartsWith(userSeq, keyword, pageable);
 
         List<SignMacroResponseDto> signMacroList = new ArrayList<>();
 

@@ -5,7 +5,6 @@ import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.service.FireBaseService;
 import com.d202.assemble.service.SignMacroService;
 import com.d202.assemble.service.VideoFileService;
-import com.d202.assemble.utils.MD5Generator;
 import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -23,16 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2

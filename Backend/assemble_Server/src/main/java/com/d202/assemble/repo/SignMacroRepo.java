@@ -16,5 +16,5 @@ public interface SignMacroRepo extends JpaRepository<SignMacro, Long> {
     Page<SignMacro> findAllByUserSeqOrderByCountDesc(long userSeq, Pageable pageable);
     Page<SignMacro> findAllByUserSeqAndCategorySeqOrderByCountDesc(long userSeq, long categorySeq, Pageable pageable);
     List<SignMacro> findAllByUserSeq(long userSeq);
-    Page<SignMacro> findByUserSeqAndTitleContaining(long userSeq, String keyword, Pageable pageable);
+    Page<SignMacro> findByUserSeqAndTitleStartsWith(long userSeq, String keyword, Pageable pageable);
 }
