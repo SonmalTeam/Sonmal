@@ -33,7 +33,7 @@
                     android:id="@+id/tv_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="01044443333"
+                    android:text="010"
                     android:textSize="40sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

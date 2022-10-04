@@ -121,8 +121,8 @@ class MainFragment : Fragment() {
     private fun checkCallPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment("test"))
-//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
+//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment("test"))
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
 
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
