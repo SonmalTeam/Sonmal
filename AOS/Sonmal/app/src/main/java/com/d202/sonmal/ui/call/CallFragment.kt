@@ -81,23 +81,23 @@ class CallFragment : Fragment() {
     private lateinit var userName: String
     private lateinit var audioManager: AudioManager
 
-    //MediaPipe
+    //SignLanguage
     private lateinit var hands: Hands
     private lateinit var imageView: HandsResultImageView
     private val REQUIRED_PERMISSIONS = mutableListOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS).toTypedArray()
     private var startTime = 0L
     private lateinit var hangulMaker: HangulMaker
-    private lateinit var letterMaker: HangulMaker
+    private var FLAG_SIGN_LANGUAGE = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentCallBinding.inflate(inflater, container, false)
         userId = MainSharedPreference(requireContext()).token.toString()
         userName = MainSharedPreference(requireContext()).token.toString()
-
 
         return binding.root
     }
@@ -115,7 +115,6 @@ class CallFragment : Fragment() {
         initViewModel()
         initViews()
         httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-
 
         viewModel.startSTT(requireContext(), userName)
 
@@ -143,6 +142,10 @@ class CallFragment : Fragment() {
                 if(System.currentTimeMillis() - startTime >= 2000){
                     startTime = System.currentTimeMillis()
                     requireActivity().runOnUiThread {
+                        if(!FLAG_SIGN_LANGUAGE){
+                            binding.tvChatBottom.setText("")
+                            FLAG_SIGN_LANGUAGE = true
+                        }
                         hangulMaker.commit(result[0])
                         viewModel.sendWord(binding.tvChatBottom.text.toString(), userName)
                     }
@@ -234,6 +237,10 @@ class CallFragment : Fragment() {
             }
             chatList.observe(viewLifecycleOwner){
                 binding.apply {
+                    if(FLAG_SIGN_LANGUAGE){
+                        tvChatBottom.setText("")
+                        FLAG_SIGN_LANGUAGE = false
+                    }
                     if(it.size > 0){
                         tvChatBottom.setText(it[it.size - 1].message)
                     }
