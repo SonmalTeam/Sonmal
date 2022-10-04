@@ -97,8 +97,7 @@ class CallFragment : Fragment() {
         binding = FragmentCallBinding.inflate(inflater, container, false)
         userId = MainSharedPreference(requireContext()).token.toString()
         userName = MainSharedPreference(requireContext()).token.toString()
-        initView()
-        initViewModel()
+
 
         return binding.root
     }
@@ -112,10 +111,11 @@ class CallFragment : Fragment() {
             phoneNumber = args.phone!!
         }
 
-
+        initView()
+        initViewModel()
         initViews()
         httpClient = CustomHttpClient(OPENVIDU_URL, "Basic " + Base64.encodeToString("OPENVIDUAPP:$OPENVIDU_SECRET".toByteArray(), Base64.DEFAULT).trim())
-        getToken(phoneNumber)
+
 
         viewModel.startSTT(requireContext(), userName)
 
@@ -139,11 +139,11 @@ class CallFragment : Fragment() {
             val result = translate(handsResult)
             if(result.isNotEmpty()) {
                 viewModel.setTranslateText(result)
+                viewModel.sendLetter(result, userName)
                 if(System.currentTimeMillis() - startTime >= 2000){
                     startTime = System.currentTimeMillis()
                     requireActivity().runOnUiThread {
                         hangulMaker.commit(result[0])
-                        viewModel.sendLetter(result, userName)
                     }
                 }
             }
@@ -293,6 +293,7 @@ class CallFragment : Fragment() {
         setupStaticImageModePipeline()
         Log.d(TAG, "onResume: CustomHttpClient")
         val sessionId = "-session"
+        getToken(phoneNumber)
 
     }
 
