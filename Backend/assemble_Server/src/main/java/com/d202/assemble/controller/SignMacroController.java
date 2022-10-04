@@ -5,7 +5,6 @@ import com.d202.assemble.repo.VideoFileRepo;
 import com.d202.assemble.service.FireBaseService;
 import com.d202.assemble.service.SignMacroService;
 import com.d202.assemble.service.VideoFileService;
-import com.d202.assemble.utils.MD5Generator;
 import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -23,16 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
@@ -91,6 +84,17 @@ public class SignMacroController {
         PagingResult result = signMacroService.sortSignMacroList(pageable, userSeq, categorySeq);
 
         return new ResponseEntity<PagingResult<SignMacroResponseDto>>(result, HttpStatus.OK);
+    }
+
+    // 매크로 검색
+    @ApiOperation(value = "매크로 검색")
+    @GetMapping("/search")
+    public ResponseEntity<?> macroSearch(@ApiIgnore Authentication auth, @RequestParam String keyword, @PageableDefault Pageable pageable) {
+        long userSeq = (int)auth.getPrincipal();
+
+        PagingResult macroList = signMacroService.macroSearch(pageable, userSeq, keyword);
+
+        return new ResponseEntity<PagingResult<SignMacroResponseDto>>(macroList, HttpStatus.OK);
     }
 
     // 매크로 사용횟수 카운트
