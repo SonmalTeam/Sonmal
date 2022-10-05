@@ -48,8 +48,8 @@ class CallReceiver : BroadcastReceiver() {
                             val notiManager =
                                 context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                             val notiChannel = NotificationChannel(
-                                "sonmal",
-                                "sonmal",
+                                "sonmal_channel",
+                                "sonmal_channel",
                                 NotificationManager.IMPORTANCE_HIGH
                             )
                             notiManager.createNotificationChannel(notiChannel)
@@ -85,7 +85,7 @@ class CallReceiver : BroadcastReceiver() {
                                 SettingsPreference().setCallNumber(phoneNo!!)
                             }
 
-                            notiManager.notify(1, incomingCallNotification)
+                            notiManager.notify(100, incomingCallNotification)
                         }
                     }
 

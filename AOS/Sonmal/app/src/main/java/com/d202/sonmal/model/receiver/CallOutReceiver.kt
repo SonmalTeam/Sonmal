@@ -23,7 +23,7 @@ class CallOutReceiver : BroadcastReceiver() {
         val telephonyManager =
             TedPermissionProvider.context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
         CoroutineScope(Dispatchers.IO).launch {
-            delay(2000)
+            delay(3000)
             if(SettingsPreference().getUseCall()) {
                 telephonyManager.endCall()
                 SettingsPreference().setUseCall(false)
