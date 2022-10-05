@@ -16,8 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class MacroBottomSheet: BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetMacroLayoutBinding
 
-    enum class Place {
-        Hospital, Traffic, Official, Restaurant, Work, Etc
+    enum class Category {
+        Hospital, Official, Restaurant, Traffic, Etc, Work
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,57 +39,57 @@ class MacroBottomSheet: BottomSheetDialogFragment() {
 
         binding.apply {
             btnHospital.setOnClickListener {
-                moveTo(Place.Hospital)
+                moveTo(Category.Hospital)
             }
             btnTraffic.setOnClickListener {
-                moveTo(Place.Traffic)
+                moveTo(Category.Traffic)
             }
             btnOffical.setOnClickListener {
-                moveTo(Place.Official)
+                moveTo(Category.Official)
             }
             btnRestaurant.setOnClickListener {
-                moveTo(Place.Restaurant)
+                moveTo(Category.Restaurant)
             }
             btnWork.setOnClickListener {
-                moveTo(Place.Work)
+                moveTo(Category.Work)
             }
             btnEtc.setOnClickListener {
-                moveTo(Place.Etc)
+                moveTo(Category.Etc)
             }
         }
     }
 
-    private fun moveTo(where: Place) {
+    private fun moveTo(where: Category) {
         val bundle = Bundle()
         bundle.putInt("args", where.ordinal + 1)
         
         when(where) {
-            Place.Hospital -> {
+            Category.Hospital -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             }
-            Place.Traffic -> {
+            Category.Traffic -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             }
-            Place.Official -> {
+            Category.Official -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             }
-            Place.Restaurant -> {
+            Category.Restaurant -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             }
-            Place.Work -> {
+            Category.Work -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
             }
-            Place.Etc -> {
+            Category.Etc -> {
                 val fragment = MacroCafeFragment()
                 fragment.arguments = bundle
                 childFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()

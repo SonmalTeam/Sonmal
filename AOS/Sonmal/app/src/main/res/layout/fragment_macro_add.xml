@@ -107,7 +107,7 @@
                     android:id="@+id/tv_category"
                     app:layout_constraintTop_toBottomOf="@id/tv_emoji"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/img_category1"
+                    app:layout_constraintBottom_toTopOf="@+id/img_hospital"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="20dp"
@@ -119,7 +119,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/img_category1"
+                    android:id="@+id/img_hospital"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
@@ -127,79 +127,79 @@
                     android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_category"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/img_category2"
-                    app:layout_constraintBottom_toTopOf="@id/img_category4"
+                    app:layout_constraintEnd_toStartOf="@id/img_official"
+                    app:layout_constraintBottom_toTopOf="@id/img_restaurant"
                     android:text="병원"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/img_category2"
+                    android:id="@+id/img_official"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/img_category1"
-                    app:layout_constraintEnd_toStartOf="@id/img_category3"
-                    app:layout_constraintTop_toTopOf="@id/img_category1"
-                    app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                    app:layout_constraintStart_toEndOf="@id/img_hospital"
+                    app:layout_constraintEnd_toStartOf="@id/img_traffic"
+                    app:layout_constraintTop_toTopOf="@id/img_hospital"
+                    app:layout_constraintBottom_toBottomOf="@id/img_hospital"
                     android:text="관공서"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/img_category3"
+                    android:id="@+id/img_traffic"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/img_category2"
+                    app:layout_constraintStart_toEndOf="@id/img_official"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/img_category1"
-                    app:layout_constraintBottom_toBottomOf="@id/img_category1"
+                    app:layout_constraintTop_toTopOf="@id/img_hospital"
+                    app:layout_constraintBottom_toBottomOf="@id/img_hospital"
                     android:text="교통"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/img_category4"
+                    android:id="@+id/img_restaurant"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toStartOf="@id/img_category5"
+                    app:layout_constraintEnd_toStartOf="@id/img_work"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/img_category1"
+                    app:layout_constraintTop_toBottomOf="@id/img_hospital"
                     app:layout_constraintBottom_toTopOf="@id/tv_video"
                     android:text="식당"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/img_category5"
+                    android:id="@+id/img_work"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/img_category6"
-                    app:layout_constraintStart_toEndOf="@id/img_category4"
-                    app:layout_constraintTop_toTopOf="@id/img_category4"
-                    app:layout_constraintBottom_toBottomOf="@id/img_category4"
+                    app:layout_constraintEnd_toStartOf="@id/img_custom"
+                    app:layout_constraintStart_toEndOf="@id/img_restaurant"
+                    app:layout_constraintTop_toTopOf="@id/img_restaurant"
+                    app:layout_constraintBottom_toBottomOf="@id/img_restaurant"
                     android:text="업무"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/img_category6"
+                    android:id="@+id/img_custom"
                     android:layout_width="80dp"
                     android:layout_height="44dp"
                     android:gravity="center"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/img_category5"
+                    app:layout_constraintStart_toEndOf="@id/img_work"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/img_category4"
-                    app:layout_constraintBottom_toBottomOf="@id/img_category4"
+                    app:layout_constraintTop_toTopOf="@id/img_restaurant"
+                    app:layout_constraintBottom_toBottomOf="@id/img_restaurant"
                     android:text="기타"
                     android:textColor="#5A5A5A"
                     android:textSize="20dp"/>
@@ -216,7 +216,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/img_category4" />
+                    app:layout_constraintTop_toBottomOf="@id/img_restaurant" />
 
                 <Button
                     android:id="@+id/btn_add_emoji"

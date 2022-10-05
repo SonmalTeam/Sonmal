@@ -167,27 +167,27 @@ class MacroAddFragment: Fragment() {
         }
 
         binding.apply {
-            imgCategory1.setOnClickListener {
+            imgHospital.setOnClickListener {
                 selectedCategoty = 1
                 categoryChange(selectedCategoty)
             }
-            imgCategory2.setOnClickListener {
+            imgOfficial.setOnClickListener {
                 selectedCategoty = 2
                 categoryChange(selectedCategoty)
             }
-            imgCategory3.setOnClickListener {
-                selectedCategoty = 4
-                categoryChange(selectedCategoty)
-            }
-            imgCategory4.setOnClickListener {
+            imgRestaurant.setOnClickListener {
                 selectedCategoty = 3
                 categoryChange(selectedCategoty)
             }
-            imgCategory5.setOnClickListener {
+            imgTraffic.setOnClickListener {
+                selectedCategoty = 4
+                categoryChange(selectedCategoty)
+            }
+            imgCustom.setOnClickListener {
                 selectedCategoty = 5
                 categoryChange(selectedCategoty)
             }
-            imgCategory6.setOnClickListener {
+            imgWork.setOnClickListener {
                 selectedCategoty = 6
                 categoryChange(selectedCategoty)
             }
@@ -196,9 +196,9 @@ class MacroAddFragment: Fragment() {
 
     private fun categoryChange(seq: Int) {
         var categories = mutableListOf<TextView>(
-            binding.imgCategory1, binding.imgCategory2,
-            binding.imgCategory4, binding.imgCategory3,
-            binding.imgCategory5, binding.imgCategory6
+            binding.imgHospital, binding.imgOfficial,
+            binding.imgRestaurant, binding.imgTraffic,
+            binding.imgCustom, binding.imgWork
         )
 
         var selected = seq-1

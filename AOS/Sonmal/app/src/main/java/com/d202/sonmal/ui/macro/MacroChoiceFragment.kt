@@ -41,19 +41,19 @@ class MacroChoiceFragment: Fragment() {
             btnHospital.setOnClickListener {
                 moveToMacroListFragment(1)
             }
-            btnPublic.setOnClickListener {
+            btnOfficial.setOnClickListener {
                 moveToMacroListFragment(2)
             }
-            btnWork.setOnClickListener {
+            btnRestaurant.setOnClickListener {
                 moveToMacroListFragment(3)
             }
-            btnRestaurant.setOnClickListener {
+            btnTraffic.setOnClickListener {
                 moveToMacroListFragment(4)
             }
-            btnStore.setOnClickListener {
+            btnCustom.setOnClickListener {
                 moveToMacroListFragment(5)
             }
-            btnCustom.setOnClickListener {
+            btnWork.setOnClickListener {
                 moveToMacroListFragment(6)
             }
         }
