@@ -132,7 +132,7 @@ class MainFragment : Fragment() {
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
+            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS, CALL_PHONE, ANSWER_PHONE_CALLS)
 //            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
             .check()
     }
