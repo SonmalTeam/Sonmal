@@ -341,13 +341,12 @@ class SignLangFragment : Fragment(), TextToSpeech.OnInitListener {
         val sortedOutput = outputs.sortedDescending()
         val index = outputs.indexOf(sortedOutput[0])
 
-        if(System.currentTimeMillis() - startTime >= 2000) {
+        (activity as Activity).runOnUiThread {
+            binding.tvLiveTranslate.text = classes[index]
+        }
+         if(System.currentTimeMillis() - startTime >= 2000) {
             startTime = System.currentTimeMillis()
             hangulMaker.commit(classes[index][0])
-
-            (activity as Activity).runOnUiThread {
-                binding.tvLiveTranslate.text = classes[index]
-            }
         }
     }
 

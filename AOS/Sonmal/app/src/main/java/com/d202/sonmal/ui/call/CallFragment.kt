@@ -172,8 +172,8 @@ class CallFragment : Fragment() {
         macroAdapter = CallMacroPagingAdapter()
         macroAdapter.apply {
             onItemMacroClickListener = object : CallMacroPagingAdapter.OnItemMacroClickListener{
-                override fun onClick(title: String) {
-                    binding.etChat.setText("${binding.etChat.text} ${title} ")
+                override fun onClick(content: String) {
+                    binding.etChat.setText("${binding.etChat.text}${content} ")
                 }
             }
         }
