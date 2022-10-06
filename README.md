@@ -171,7 +171,7 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 
 ## :five: ERD
 
-[ERD 이미지와 설명]
+![image](https://user-images.githubusercontent.com/49026286/194246933-db499a84-e2be-406b-8ff1-a77c23cb6cf0.png)
 
 
 <br/>
