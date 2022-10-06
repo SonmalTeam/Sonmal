@@ -13,7 +13,7 @@ class CallMacroPagingAdapter: PagingDataAdapter<MacroDto, CallMacroPagingAdapter
         fun bind(item: MacroDto){
             binding.data = item
             binding.constMacro.setOnClickListener {
-                onItemMacroClickListener.onClick(item.title)
+                onItemMacroClickListener.onClick(item.content)
             }
         }
     }
@@ -32,7 +32,7 @@ class CallMacroPagingAdapter: PagingDataAdapter<MacroDto, CallMacroPagingAdapter
 
     lateinit var onItemMacroClickListener: OnItemMacroClickListener
     interface OnItemMacroClickListener{
-        fun onClick(title: String)
+        fun onClick(content: String)
     }
 
     companion object {
