@@ -1,4 +1,4 @@
-# 🤙 Sonmal (손말: 수어 통역 서비스)
+# 🎁 Sonmal (손말: 수어 통역 서비스)
 
 
 ![img_sonmal_logo_512px](https://user-images.githubusercontent.com/49026286/192984903-ed46455c-5a70-47ef-b97b-9f7f95829dc4.png)
@@ -24,7 +24,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 **앱스토어**
 
-[링크]
+https://play.google.com/store/apps/details?id=com.d202.sonmal
 
 
 
@@ -73,7 +73,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 >  실시간 수어 통역과 매크로를 이용한 수어통역권 확장
 
 
-### :star2: 실시간 통역
+### 👍 실시간 통역
 
 
 
@@ -88,10 +88,10 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 
 
-### :star2: 매크로
+### 👍 매크로
 
 
-[완성이미지]
+![image](https://user-images.githubusercontent.com/49026286/194220677-9f1ef74c-fd9f-4e69-ba30-ca3a7449b3bc.png)
 
 
 🔈 자주 사용하는 문장을 수어 영상&텍스트 혹은 텍스트로 저장해놓고, 필요할 때 누르면 음성으로 출력해줘요.
@@ -101,11 +101,10 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 
 
-### :star2: 통화
+### 👍 통화
 
 
-[이미지]
-
+[완성이미지]
 
 
 🔈 통화를 할 때, 텍스트를 입력하면 음성으로 전달해줘요. 영상통화를 하면, 지수어도 번역해서 전달할 수 있어요.
@@ -163,17 +162,16 @@ The project was carried out with the aim of expanding the right to interpret sig
 
 <br/>
 
-## :four: 설계
+## :four: 시스템 구조도
 
-### :star: 아키텍처
 
-[시스템 아키텍처]
+![시스템구조도_수정본](https://user-images.githubusercontent.com/49026286/194219879-9ea9ee3a-fc48-4665-89f2-5bed7c271fca.png)
 
 <br/>
 
 ## :five: ERD
 
-[ERD 이미지와 설명]
+![image](https://user-images.githubusercontent.com/49026286/194246933-db499a84-e2be-406b-8ff1-a77c23cb6cf0.png)
 
 
 <br/>
@@ -187,7 +185,7 @@ The project was carried out with the aim of expanding the right to interpret sig
 ---
 
 
-✅ Git Flow
+🌐 Git Flow
 ```
 master : 제품으로 출시될 수 있는 브랜치
 release : 이번 출시 버전을 준비하는 브랜치
@@ -197,7 +195,7 @@ hotfix : 출시 버전에서 발생한 버그를 수정 하는 브랜치
 ```
 
 
-✅ Git branch 생성 규칙
+🌐 Git branch 생성 규칙
 
 master ← develop ←  (release) ← be/fe ← feat  **순서대로 머지** 한다.
 
@@ -212,7 +210,7 @@ UI만 작업을 할때는 가장 뒤에 UI를 작성한다.
 - FE/**feat/naver-login-UI**
 
 
-✅ Git 커밋 컨벤션 생성 규칙
+🌐 Git 커밋 컨벤션 생성 규칙
 ```
 feat : 기능 추가
 fix : 버그 수정
