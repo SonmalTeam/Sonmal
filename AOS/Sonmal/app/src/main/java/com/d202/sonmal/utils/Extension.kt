@@ -1,7 +1,9 @@
 package com.d202.sonmal.utils
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Insets
 import android.graphics.Point
 import android.util.Log
@@ -148,4 +150,18 @@ fun getTfliteInterpreter(path: String): Interpreter? {
         e.printStackTrace()
     }
     return null
+}
+
+fun Activity.showAlertDialog(
+    title: String,
+    message: String,
+    listener: DialogInterface.OnClickListener?
+) {
+    AlertDialog.Builder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton("확인", listener)
+        .setNegativeButton("취소", null)
+        .create()
+        .show()
 }
