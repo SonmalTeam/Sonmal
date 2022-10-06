@@ -51,11 +51,6 @@ class MacroAddFragment: Fragment() {
     // 권한
     private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
     private val CAMERA_PERMISSION_FLAG = 100
-    private val STORAGE_PERMISSION = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-    private val STORAGE_PERMISSION_FLAG = 200
 
     // 영상 캡쳐
     private val REQUEST_VIDEO_CAPTURE_CODE = 1
@@ -289,13 +284,6 @@ class MacroAddFragment: Fragment() {
                     }
                 }
             }
-//            STORAGE_PERMISSION_FLAG -> {
-//                for(grant in grantResults) {
-//                    if(grant != PackageManager.PERMISSION_GRANTED){
-//                        Toast.makeText(requireContext(), "저장소 권한을 승인해야지만 앱을 사용 할 수 있습니다.", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//            }
         }
     }
 

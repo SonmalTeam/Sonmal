@@ -104,7 +104,7 @@
                 android:id="@+id/btn_call"
                 android:layout_width="352dp"
                 android:layout_height="160dp"
-                android:background="@drawable/btn_home_call"
+                android:background="@drawable/btn_beta_call_340x160"
                 android:visibility="visible"/>
             
         </LinearLayout>
