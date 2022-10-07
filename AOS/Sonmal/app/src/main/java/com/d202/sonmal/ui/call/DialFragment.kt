@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,12 @@ import com.d202.sonmal.adapter.DialAdapter
 import com.d202.sonmal.databinding.FragmentDialBinding
 import com.d202.sonmal.ui.call.viewmodel.DialViewModel
 import com.d202.sonmal.utils.sharedpref.SettingsPreference
-import com.google.android.gms.tasks.Tasks.call
 
 private const val TAG ="DialFragment"
 class DialFragment : Fragment() {
     private lateinit var binding: FragmentDialBinding
     private val viewModel: DialViewModel by viewModels()
     private lateinit var dialAdapter: DialAdapter
-    private var phoneNumber = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,

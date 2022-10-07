@@ -80,8 +80,6 @@ fun  translate(result : HandsResult): String{
             v[i][j] = v2[i][j] - v1[i][j]
         }
     }
-    //Log.d(TAG, "onCreate: $v")
-
     for(i in 0..19) {
         val norm = sqrt(v[i][0] * v[i][0] + v[i][1] * v[i][1] + v[i][2] * v[i][2])
         for(j in 0..2) {
@@ -128,17 +126,13 @@ fun  translate(result : HandsResult): String{
 
     val outputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1,26), DataType.FLOAT32)
     outputFeature0.loadBuffer(modelOutput)
-
-    // ByteBuffer to FloatBuffer
     val outputsFloatBuffer = modelOutput.asFloatBuffer()
     val outputs = mutableListOf<Float>()
     for(i in 1..26) {
         outputs.add(outputsFloatBuffer.get())
     }
-//    Log.d(TAG, "outputs : $outputs")
     val sortedOutput = outputs.sortedDescending()
     val index = outputs.indexOf(sortedOutput[0])
-//    Log.d(TAG, "translate: ${classes[index]}")
     return classes[index]
 }
 

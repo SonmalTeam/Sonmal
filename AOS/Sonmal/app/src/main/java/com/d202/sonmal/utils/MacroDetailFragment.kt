@@ -22,11 +22,8 @@ class MacroDetailFragment(var item: MacroDto): DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         bindig = FragmentMacroDetailDialogBinding.inflate(inflater, container, false)
-
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
         return bindig.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,25 +40,20 @@ class MacroDetailFragment(var item: MacroDto): DialogFragment() {
             }
             tvTitleDetail.text = item.title
             tvContentDetail.text = item.content
-
         }
-
         resize()
     }
 
-    // 인터페이스
     interface OnButtonClickListener {
         fun onButton1Clicked(item: MacroDto) // 삭제
         fun onButton2Clicked() // 확인
         fun onButton3Clicked() // 이동
     }
 
-    // 클릭 이벤트 설정
     fun setButtonClickListener(buttonClickListener: OnButtonClickListener) {
         this.buttonClickListener = buttonClickListener
     }
 
-    // 클릭 이벤트 실행
     private lateinit var buttonClickListener: OnButtonClickListener
 
     override fun onResume() {

@@ -2,7 +2,6 @@ package com.d202.sonmal.model
 
 import com.d202.sonmal.common.ApplicationClass
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 
 class AuthInterceptor: Interceptor {

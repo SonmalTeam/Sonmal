@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.d202.sonmal.databinding.ItemCallMacroBinding
 import com.d202.sonmal.databinding.ItemSignLangMacroBinding
 import com.d202.sonmal.model.dto.MacroDto
 

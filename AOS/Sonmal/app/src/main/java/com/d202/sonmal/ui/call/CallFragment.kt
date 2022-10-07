@@ -3,10 +3,7 @@ package com.d202.sonmal.ui.call
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.media.AudioDeviceInfo
 import android.media.AudioManager
-import android.media.AudioRecord
-import android.media.AudioRecordingConfiguration
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Base64
@@ -17,7 +14,6 @@ import android.view.View.OnKeyListener
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d202.sonmal.adapter.CallMacroPagingAdapter
-import com.d202.sonmal.adapter.MacroPagingAdapter
 import com.d202.sonmal.common.*
 import com.d202.sonmal.databinding.FragmentCallBinding
 import com.d202.sonmal.ui.call.viewmodel.CallViewModel
@@ -38,15 +33,10 @@ import com.d202.webrtc.openvidu.LocalParticipant
 import com.d202.webrtc.openvidu.Session
 import com.d202.webrtc.utils.CustomHttpClient
 import com.d202.webrtc.websocket.CustomWebSocket
-import com.google.mediapipe.components.CameraHelper
 import com.google.mediapipe.solutions.hands.HandLandmark
 import com.google.mediapipe.solutions.hands.Hands
 import com.google.mediapipe.solutions.hands.HandsOptions
 import com.google.mediapipe.solutions.hands.HandsResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -59,7 +49,6 @@ import java.io.IOException
 
 
 private const val TAG = "CallFragment"
-private val CAMERA_FACING = CameraHelper.CameraFacing.FRONT
 
 class CallFragment : Fragment() {
     //View
@@ -127,9 +116,7 @@ class CallFragment : Fragment() {
                 .build()
         )
 
-        // Connects MediaPipe Hands solution to the user-defined HandsResultImageView.
         hands.setResultListener { handsResult ->
-//            logWristLandmark(handsResult,  /*showPixelValues=*/true)
             imageView.setHandsResult(handsResult)
             requireActivity().runOnUiThread(Runnable { imageView.update() })
             val result = translate(handsResult)
@@ -289,10 +276,7 @@ class CallFragment : Fragment() {
         viewModel.startSTT(requireContext(), userName)
         resizeView()
         setupStaticImageModePipeline()
-        Log.d(TAG, "onResume: CustomHttpClient")
-        val sessionId = "-session"
         getToken(phoneNumber)
-
     }
 
     private fun resizeView() {
@@ -413,43 +397,4 @@ class CallFragment : Fragment() {
         }
 
     }
-
-
-    private fun logWristLandmark(result: HandsResult, showPixelValues: Boolean) {
-        if (result.multiHandLandmarks().isEmpty()) {
-            return
-        }
-        val wristLandmark = result.multiHandLandmarks()[0].landmarkList[HandLandmark.WRIST]
-        // For Bitmaps, show the pixel values. For texture inputs, show the normalized coordinates.
-        if (showPixelValues) {
-            val width = result.inputBitmap().width
-            val height = result.inputBitmap().height
-            Log.i(
-                TAG, String.format(
-                    "MediaPipe Hand wrist coordinates (pixel values): x=%f, y=%f",
-                    wristLandmark.x * width, wristLandmark.y * height
-                )
-            )
-        } else {
-            Log.i(
-                TAG, String.format(
-                    "MediaPipe Hand wrist normalized coordinates (value range: [0, 1]): x=%f, y=%f",
-                    wristLandmark.x, wristLandmark.y
-                )
-            )
-        }
-        if (result.multiHandWorldLandmarks().isEmpty()) {
-            return
-        }
-        val wristWorldLandmark =
-            result.multiHandWorldLandmarks()[0].landmarkList[HandLandmark.WRIST]
-        Log.i(
-            TAG, String.format(
-                "MediaPipe Hand wrist world coordinates (in meters with the origin at the hand's"
-                        + " approximate geometric center): x=%f m, y=%f m, z=%f m",
-                wristWorldLandmark.x, wristWorldLandmark.y, wristWorldLandmark.z
-            )
-        )
-    }
-
 }

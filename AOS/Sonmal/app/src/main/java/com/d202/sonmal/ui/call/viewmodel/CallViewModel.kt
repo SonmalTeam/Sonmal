@@ -14,7 +14,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d202.sonmal.common.FLAG_CALL
 import com.d202.sonmal.common.FLAG_VOICE
 import com.d202.sonmal.model.dto.Chat
 import com.d202.sonmal.model.dto.Letter
@@ -194,9 +193,7 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
         Log.d(TAG, "startSTT: ")
         FLAG_STT = true
         setInterface(object : TranslateInterface{
-            override fun getResult(result: String) {
-                Log.d(TAG, "getResult: ${result}")
-            }
+            override fun getResult(result: String) {}
         })
         
         val ii = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -211,66 +208,33 @@ class CallViewModel: ViewModel(), TextToSpeech.OnInitListener{
             setRecognitionListener(recognitionListener(context, userName))
             startListening(speechRecognizerIntent)
         }
-
     }
 
     fun stopSTT(){
         FLAG_STT = false
     }
 
-    private val _sttStatus= MutableLiveData<String>("")
-    val sttStatus: LiveData<String>
-        get() = _sttStatus
-
     private val _sttResult = MutableLiveData<String>()
     val sttResult: LiveData<String>
         get() = _sttResult
 
-    private var errorCount = 0
-
     private fun recognitionListener(context: Context, userName: String) = object : RecognitionListener {
-
-        override fun onReadyForSpeech(params: Bundle?) {
-            Log.d(TAG, "onReadyForSpeech: ")
-            _sttStatus.postValue("onReadyForSpeech")
-        }
-
-        override fun onRmsChanged(rmsdB: Float) {
-        }
-
-        override fun onBufferReceived(buffer: ByteArray?) {
-            Log.d(TAG, "onBufferReceived: ")}
-
-        override fun onPartialResults(partialResults: Bundle?) {
-            Log.d(TAG, "onPartialResults: ")}
-
-        override fun onEvent(eventType: Int, params: Bundle?) {
-            Log.d(TAG, "onEvent: ")
-        }
-
-        override fun onBeginningOfSpeech() {
-            Log.d(TAG, "onBeginningOfSpeech: ")
-            _sttStatus.postValue("onBeginningOfSpeech")
-        }
-
+        override fun onReadyForSpeech(params: Bundle?) {}
+        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onBufferReceived(buffer: ByteArray?) {}
+        override fun onPartialResults(partialResults: Bundle?) {}
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+        override fun onBeginningOfSpeech() {}
         override fun onEndOfSpeech() {
-            Log.d(TAG, "onEndOfSpeech: ")
-            _sttStatus.postValue("onEndOfSpeech")
             if(FLAG_STT)
                 startSTT(context, userName)
         }
-
-
         override fun onError(error: Int) {
             if(FLAG_STT && FLAG_FRAGMENT == FLAG_VOICE) {
                 startSTT(context, userName)
             }
             when (error) {
-                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(
-                    context,
-                    "퍼미션 없음",
-                    Toast.LENGTH_SHORT
-                ).show()
+                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> Toast.makeText(context, "퍼미션 없음", Toast.LENGTH_SHORT).show()
             }
         }
 

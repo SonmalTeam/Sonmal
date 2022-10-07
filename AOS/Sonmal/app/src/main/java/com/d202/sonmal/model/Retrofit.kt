@@ -1,7 +1,6 @@
 package com.d202.sonmal.model
 
 import com.d202.sonmal.common.ApplicationClass
-import com.d202.sonmal.model.Retrofit.retrofit
 import com.d202.sonmal.model.api.MacroApi
 import com.d202.sonmal.model.api.SignApi
 import com.d202.sonmal.model.api.TokenApi

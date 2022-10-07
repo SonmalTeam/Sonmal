@@ -6,14 +6,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+
 import androidx.appcompat.widget.AppCompatImageView;
+
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.formats.proto.LandmarkProto.NormalizedLandmark;
 import com.google.mediapipe.solutions.hands.Hands;
 import com.google.mediapipe.solutions.hands.HandsResult;
+
 import java.util.List;
 
-/** An ImageView implementation for displaying {@link HandsResult}. */
 public class HandsResultImageView extends AppCompatImageView {
     private static final String TAG = "HandsResultImageView";
 
@@ -32,13 +34,6 @@ public class HandsResultImageView extends AppCompatImageView {
         super(context);
         setScaleType(AppCompatImageView.ScaleType.FIT_CENTER);
     }
-
-    /**
-     * Sets a {@link HandsResult} to render.
-     *
-     * @param result a {@link HandsResult} object that contains the solution outputs and the input
-     *     {@link Bitmap}.
-     */
     public void setHandsResult(HandsResult result) {
         if (result == null) {
             return;
@@ -61,7 +56,6 @@ public class HandsResultImageView extends AppCompatImageView {
         }
     }
 
-    /** Updates the image view with the latest {@link HandsResult}. */
     public void update() {
         postInvalidate();
         if (latest != null) {
@@ -75,7 +69,6 @@ public class HandsResultImageView extends AppCompatImageView {
             Canvas canvas,
             int width,
             int height) {
-        // Draw connections.
         for (Hands.Connection c : Hands.HAND_CONNECTIONS) {
             Paint connectionPaint = new Paint();
             connectionPaint.setColor(
@@ -92,12 +85,10 @@ public class HandsResultImageView extends AppCompatImageView {
         }
         Paint landmarkPaint = new Paint();
         landmarkPaint.setColor(isLeftHand ? LEFT_HAND_LANDMARK_COLOR : RIGHT_HAND_LANDMARK_COLOR);
-        // Draws landmarks.
         for (LandmarkProto.NormalizedLandmark landmark : handLandmarkList) {
             canvas.drawCircle(
                     landmark.getX() * width, landmark.getY() * height, LANDMARK_RADIUS, landmarkPaint);
         }
-        // Draws hollow circles around landmarks.
         landmarkPaint.setColor(
                 isLeftHand ? LEFT_HAND_HOLLOW_CIRCLE_COLOR : RIGHT_HAND_HOLLOW_CIRCLE_COLOR);
         landmarkPaint.setStrokeWidth(HOLLOW_CIRCLE_WIDTH);

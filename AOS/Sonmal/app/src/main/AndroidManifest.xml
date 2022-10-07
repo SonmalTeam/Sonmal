@@ -30,8 +30,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,23 +48,18 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
                     android:scheme="kakaoce84c336a434ef40ab1211b3099e0654" />
             </intent-filter>
         </activity>
-
         <receiver android:name=".model.receiver.CallReceiver"
             android:exported="true">
             <intent-filter>
@@ -73,14 +67,12 @@
                 <action android:name="android.intent.action.BATTERY_LOW"/>
             </intent-filter>
         </receiver>
-
         <receiver android:name=".model.receiver.CallOutReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
             </intent-filter>
         </receiver>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.d202.sonmal"
@@ -90,8 +82,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
-
     </application>
-
 </manifest>

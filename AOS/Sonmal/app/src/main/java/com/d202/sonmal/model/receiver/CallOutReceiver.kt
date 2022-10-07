@@ -41,8 +41,6 @@ class CallOutReceiver : BroadcastReceiver() {
                 }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
             pendingIntent.send()
-
-            Log.d(TAG, "onReceive: 전화 걸기 $number")
         }
 
     }

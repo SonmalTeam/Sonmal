@@ -12,7 +12,6 @@ import android.widget.MediaController
 import androidx.fragment.app.DialogFragment
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.DialogVideoBinding
-import com.d202.sonmal.databinding.FragmentMacroDetailDialogBinding
 
 private const val TAG = "VideoDialogFragment"
 class VideoDialogFragment(var videoId: Int): DialogFragment() {
@@ -35,7 +34,6 @@ class VideoDialogFragment(var videoId: Int): DialogFragment() {
         var mediaController = MediaController(requireContext())
         mediaController.setAnchorView(binding.vv)
 
-        Log.d(TAG, "비디오 id $videoId")
         var video = "https://d202.kro.kr/api/sign/macro/video/$videoId"
         var uriVideo = Uri.parse(video)
         binding.vv.apply {

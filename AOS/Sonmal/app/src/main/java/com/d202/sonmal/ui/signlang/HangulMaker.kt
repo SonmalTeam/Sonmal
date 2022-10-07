@@ -1,7 +1,5 @@
 package com.d202.sonmal.ui.signlang
 
-import android.os.Build
-import android.util.Log
 import android.view.inputmethod.InputConnection
 
 open class HangulMaker {

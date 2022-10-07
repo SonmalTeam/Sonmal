@@ -9,7 +9,6 @@ import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.dto.TokenDto
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -46,25 +45,21 @@ class SignViewModel: ViewModel() {
     fun joinWithKaKao(token: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d(TAG, "joinWithKaKao api 시작 token : $token")
                 ApplicationClass.jwtFlag = false
                 Retrofit.signApi.joinWithKakao(token).let {
                     if(it.isSuccessful && it.body() != null){
-                        Log.d(TAG, "joinwithkakao 통신 성공 ${it.body()}")
                         _isJoinSucced.postValue(true)
-                        Log.d(TAG, "_jwtToken1 ${it.body()}")
                         _jwtToken.postValue(it.body()!!.accessToken)
                         _refreshtoken.postValue(it.body()!!.refreshToken)
                         ApplicationClass.jwtFlag = true
                     }
                     else {
-                        Log.d(TAG, "joinWithKaKao api 통신 실패 ${it.body()}")
                         _isJoinSucced.postValue(false)
                         ApplicationClass.jwtFlag = true
                     }
                 }
             } catch (e: Exception){
-                Log.d(TAG, "kakao login: error ${e.message}")
+                Log.d(TAG, "joinWithKaKao : error ${e.message}")
                 ApplicationClass.jwtFlag = true
             }
         }
@@ -75,25 +70,21 @@ class SignViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 ApplicationClass.jwtFlag = false
-                Log.d(TAG, "joinWithNaver api 시작 token : $token")
                 Retrofit.signApi.joinWithNaver(token).let {
                     if(it.isSuccessful && it.body() != null){
-                        Log.d(TAG, "joinwithNaver 통신 성공 ${it.body()}")
                         _isJoinSucced.postValue(true)
-                        Log.d(TAG, "_jwtToken1 ${it.body()}")
                         _jwtToken.postValue(it.body()!!.accessToken)
                         _refreshtoken.postValue(it.body()!!.refreshToken)
                         ApplicationClass.jwtFlag = true
                     }
                     else if (it.code() == 500) {
-                        Log.d(TAG, "joinWithNaver api 통신 실패")
                         _isJoinSucced.postValue(false)
                         ApplicationClass.jwtFlag = true
                     }
                 }
 
             } catch (e: Exception) {
-                Log.d(TAG, "naver login: error ${e.message}")
+                Log.d(TAG, "joinWithNaver : error ${e.message}")
                 ApplicationClass.jwtFlag = true
             }
         }
@@ -109,16 +100,13 @@ class SignViewModel: ViewModel() {
                     else if(it.code() == 401) {
                         runBlocking {
                             try {
-                                Log.d(TAG, "refreshToken tokens ${ApplicationClass.mainPref.token} ${ApplicationClass.mainPref.refreshToken}")
                                 var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                                 val response = Retrofit.tokenApi.refreshToken(tokens)
                                 if(response.isSuccessful && response.body() != null) {
-                                    Log.d(TAG, "refreshToken sucess ${response.body()}")
                                     ApplicationClass.mainPref.token = response.body()!!.accessToken
                                     ApplicationClass.mainPref.refreshToken = response.body()!!.refreshToken
                                     unregister()
                                 } else {
-                                    Log.d(TAG, "refreshToken err ${response.code()}")
                                     _refreshExpire.postValue(true)
                                 }
 
@@ -128,7 +116,6 @@ class SignViewModel: ViewModel() {
                             }
                         }
                     } else {
-                        Log.d(TAG, "unregister 실패 error ${it.code()}")
                         _unregisterCallBack.postValue(false)
                     }
                 }

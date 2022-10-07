@@ -9,8 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputFilter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +26,11 @@ import com.d202.sonmal.R
 import com.d202.sonmal.common.ApplicationClass
 import com.d202.sonmal.databinding.FragmentMacroAddBinding
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
-import com.d202.sonmal.ui.main.MainFragmentDirections
 import com.d202.sonmal.utils.UploadingDialogFragment
-import com.d202.sonmal.utils.showToast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.regex.Pattern
 
 
 private val TAG = "MacroAddFragment"
@@ -72,10 +67,6 @@ class MacroAddFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initObserver()
-
-        if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG)){
-//            checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
-        }
 
         binding.btnRecord.setOnClickListener {
             if(checkPermission(CAMERA_PERMISSION, CAMERA_PERMISSION_FLAG) == false) {
@@ -136,9 +127,6 @@ class MacroAddFragment: Fragment() {
                 Toast.makeText(requireContext(), "제목, 내용, 아이콘, 카테고리 입력 필요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            Log.d(TAG, "macro add start")
-
 
             // 필수
             var title = binding.etTitle.text.toString()
@@ -280,7 +268,6 @@ class MacroAddFragment: Fragment() {
                 for(grant in grantResults) {
                     if(grant != PackageManager.PERMISSION_GRANTED){
                     }else{
-//                        checkPermission(STORAGE_PERMISSION, STORAGE_PERMISSION_FLAG)
                     }
                 }
             }
@@ -290,10 +277,8 @@ class MacroAddFragment: Fragment() {
     private fun showdialog(){
         val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(requireContext())
         builder.setTitle("제목을 나타내는 이모티콘 등록")
-
         val input = EditText(requireContext())
         input.setHint("이모티콘 입력")
-//        input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
         builder.setPositiveButton("등록", DialogInterface.OnClickListener { dialog, which ->
@@ -305,31 +290,6 @@ class MacroAddFragment: Fragment() {
 
         builder.show()
     }
-
-    //cache 이용 테스트
-    private fun createCacheFile() {
-        var filename = "a"
-        val cacheFile = File(requireContext().cacheDir,filename)
-//        cacheFile.delete() // 특정 파일 삭제
-//        requireContext().deleteFile(filename) // 캐시에서 해당 이름의 파일 삭제제
-   }
-
-    private fun deleteCacheFile() {
-        var filename = "a"
-    }
-
-    /** 이모티콘이 있을경우 "" 리턴, 그렇지 않을 경우 null 리턴  */
-    private val specialCharacterFilter =
-        InputFilter { source, start, end, dest, dstart, dend ->
-            for (i in start until end) {
-                // 이모티콘 패턴
-                val unicodeOutliers: Pattern = Pattern.compile("[\\uD83C-\\uDBFF\\uDC00-\\uDFFF]+")
-                if (unicodeOutliers.matcher(source).matches()) {
-                    return@InputFilter "emoji"
-                }
-            }
-            null
-        }
 
     fun showUploading() {
         if(!uploadingDialogFragment.isAdded) {

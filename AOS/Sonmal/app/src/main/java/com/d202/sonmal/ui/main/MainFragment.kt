@@ -68,8 +68,6 @@ class MainFragment : Fragment() {
         defualtAppIntent = intent
 
         initView()
-
-        // Interpreter 초기화
         ApplicationClass.interpreter = Interpreter(loadModelFile(requireActivity(), TFLITE_PATH)!!)
 
     }
@@ -88,7 +86,6 @@ class MainFragment : Fragment() {
         binding.apply {
             btnMacro.setOnClickListener { // btn m
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingFragment())
-//                checkPermission(2) // acro 클릭 시 macro 분류 선택 프래그먼트로 이동
             }
             btnCall.setOnClickListener {
                 requireActivity().showAlertDialog("알림","베타기능 이용 시 오류가 발생할 수 있습니다.\n사용에 주의해 주세요.", object : DialogInterface.OnClickListener{
@@ -138,11 +135,6 @@ class MainFragment : Fragment() {
                     else -> {
                     }
                 }
-//                parentFragmentManager.beginTransaction().replace(R.id.frame_main, CallFragment().apply {
-//                    arguments = bundleOf("PHONE" to "test2")
-//                }).commit()
-//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
-                
             }
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 requireContext().showToast("권한을 허용해야 이용이 가능합니다.")
@@ -151,7 +143,6 @@ class MainFragment : Fragment() {
         TedPermission.create()
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
-//            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS)
             .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
             .check()
     }
@@ -159,7 +150,6 @@ class MainFragment : Fragment() {
     private fun checkCallPermission(){
         val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-//                findNavController().navigate(MainFragmentDirections.actionMainFragmentToCallFragment("test"))
                 findNavController().navigate(MainFragmentDirections.actionMainFragmentToDialFragment())
 
             }
@@ -171,7 +161,6 @@ class MainFragment : Fragment() {
             .setPermissionListener(permissionListener)
             .setDeniedMessage("권한을 허용해주세요. [설정] > [앱 및 알림] > [고급] > [앱 권한]")
             .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, READ_CONTACTS, READ_PHONE_NUMBERS, READ_CALL_LOG, PROCESS_OUTGOING_CALLS, CALL_PHONE, ANSWER_PHONE_CALLS)
-//            .setPermissions(CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS)
             .check()
     }
 }

@@ -31,8 +31,6 @@ class PrivacyPolishDialog(var mContext: Context): DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // PrivacyPolish.txt를 읽어오는 과정
         var string: String? = ""
         val stringBuilder = StringBuilder()
 

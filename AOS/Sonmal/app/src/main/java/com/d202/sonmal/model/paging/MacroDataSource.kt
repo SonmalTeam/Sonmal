@@ -1,10 +1,6 @@
 package com.d202.sonmal.model.paging
 
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.d202.sonmal.common.ApplicationClass
@@ -12,11 +8,8 @@ import com.d202.sonmal.model.Retrofit
 import com.d202.sonmal.model.api.MacroApi
 import com.d202.sonmal.model.dto.MacroDto
 import com.d202.sonmal.model.dto.TokenDto
-import com.d202.sonmal.ui.macro.MacroCafeFragment
-import com.d202.sonmal.ui.macro.MacroCafeFragmentDirections
 import com.d202.sonmal.ui.macro.viewmodel.MacroViewModel
 import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 
 private const val TAG ="MacroDataSource"
 private const val START_PAGE_INDEX = 0
@@ -26,8 +19,6 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MacroDto> {
         return try {
             val page = params.key?: START_PAGE_INDEX
-
-            Log.d(TAG, "MacroDataSource 요청 $categorySeq $page")
             val response = if(title.isEmpty()) {
                 macroApi.getPageMacroList(categorySeq, page, 7)
             } else {
@@ -35,7 +26,6 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             }
             var body = response.body()
             if(response.isSuccessful && body != null && body.totalPage > 0){
-                Log.d(TAG, "MacroDataSource ${response.body()}")
                 LoadResult.Page(
                     data = body.result,
                     prevKey = if(page == 0) null else page -1,
@@ -44,7 +34,6 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
             } else if (response.code() == 401) {
                 runBlocking {
                     try {
-                        Log.d(TAG, "MacroDataSource  401")
                         var tokens = TokenDto(ApplicationClass.mainPref.token!!, ApplicationClass.mainPref.refreshToken!!)
                         val response = Retrofit.tokenApi.refreshToken(tokens)
                         if(response.isSuccessful && response.body() != null) {
@@ -71,7 +60,6 @@ class MacroDataSource(private val macroApi: MacroApi, private val categorySeq: I
                     nextKey = if(page == body!!.totalPage-1) null else page +1
                 )
             } else {
-                Log.d(TAG, "getPageMacroList fail ${response.code()}")
                 LoadResult.Page(
                     data = body!!.result,
                     prevKey = if(page == 0) null else page -1,
