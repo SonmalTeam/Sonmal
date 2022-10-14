@@ -76,8 +76,8 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 ### 👍 실시간 통역
 
 
-
-[완성이미지]
+![image](https://user-images.githubusercontent.com/49026286/195801301-88057f53-8387-48a6-a52d-a590bf53e38a.png)
+![image](https://user-images.githubusercontent.com/49026286/195801423-36f7f1e5-397a-488c-8c71-ae6300274af5.png)
 
 
 
@@ -104,7 +104,7 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 ### 👍 통화
 
 
-[완성이미지]
+![image](https://user-images.githubusercontent.com/49026286/195800558-f05ff4f0-4234-4a00-8e56-066fc0040193.png)
 
 
 🔈 통화를 할 때, 텍스트를 입력하면 음성으로 전달해줘요. 영상통화를 하면, 지수어도 번역해서 전달할 수 있어요.
