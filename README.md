@@ -165,7 +165,7 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 ## :four: 시스템 구조도
 
 
-![시스템구조도_수정본](https://user-images.githubusercontent.com/49026286/194219879-9ea9ee3a-fc48-4665-89f2-5bed7c271fca.png)
+![시스템 구조도](https://user-images.githubusercontent.com/49026286/199017240-4da672b2-7141-4ccf-bb4c-e80bad827435.png)
 
 <br/>
 
