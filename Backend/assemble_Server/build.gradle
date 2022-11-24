@@ -8,9 +8,9 @@ group = 'com.d202'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-#bootRun {
-#	systemProperty "jasypt.encryptor.password", findProperty("jasypt.encryptor.password")
-#}
+//bootRun {
+//	systemProperty "jasypt.encryptor.password", findProperty("jasypt.encryptor.password")
+//}
 test{
 	systemProperty "jasypt.encryptor.password", System.getProperties().get("jasypt.encryptor.password")
 }
