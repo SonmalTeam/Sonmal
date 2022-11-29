@@ -248,25 +248,25 @@ feat: 회원관리 | 네이버 로그인 기능 추가
 <table>
     <tr>
         <td height="140px" align="center"> <a href="https://github.com/nhee-dev">
-            <img src="https://avatars.githubusercontent.com/u/49919262?v=4" width="140px" /> <br><br> 김남희 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/49919262?v=4" width="140px" /> <br><br> 김남희 <br></a> Android <br><br></td>
         <td height="140px" align="center"> <a href="https://github.com/Sicoree">
-            <img src="https://avatars.githubusercontent.com/u/97591071?v=4" width="140px" /> <br><br> 배시현 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/97591071?v=4" width="140px" /> <br><br> 배시현 <br></a> Backend <br><br></td>
         <td height="140px" align="center"> <a href="https://github.com/toy9910">
-            <img src="https://avatars.githubusercontent.com/u/50603217?v=4" width="140px" /> <br><br> 배한용 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/50603217?v=4" width="140px" /> <br><br> 배한용 <br></a> Android <br><br></td>
         <td height="140px" align="center"> <a href="https://github.com/forlivd">
-            <img src="https://avatars.githubusercontent.com/u/84622281?v=4" width="140px" /> <br><br> 서재형 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/84622281?v=4" width="140px" /> <br><br> 서재형 <br></a> Android <br><br></td>
         <td height="140px" align="center"> <a href="https://github.com/JeongBJ">
-            <img src="https://avatars.githubusercontent.com/u/85900947?v=4" width="140px" /> <br><br> 정봉진 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/85900947?v=4" width="140px" /> <br><br> 정봉진 <br></a> Android <br><br></td>
             <td height="140px" align="center"> <a href="https://github.com/pmi4202">
-            <img src="https://avatars.githubusercontent.com/u/49026286?v=4" width="140px" /> <br><br> 편예린 <br></a> <br></td>
+            <img src="https://avatars.githubusercontent.com/u/49026286?v=4" width="140px" /> <br><br> 편예린 <br></a> Backend <br><br></td>
     </tr>
     <tr>
-        <td align="center"> 팀장 <br> Android <br> UI/UX <br> 프로젝트 관리
-        <td align="center"> Backend <br> DB, API 설계 <br> 서버 배포 <br> 매크로 API<br> OpenVidu
-        <td align="center"> Android <br> 자료 수집 <br> point 처리 <br> TensorflowLite 변환 <br> 실시간 통역
-        <td align="center"> Android <br> 회원 관리 <br> 매크로 기능
-        <td align="center"> Android <br> 자료 수집 <br> 모델 분석 <br> TensorflowLite 변환 <br> 통화 기능
-        <td align="center"> Backend <br> DB, API 설계 <br> 서버 배포 <br> 회원관리 API <br> JWT
+        <td align="center"> 팀장<br> UI/UX <br> 프로젝트 관리
+        <td align="center"> DB, API 설계 <br> 서버 배포 <br> 매크로 API<br> OpenVidu
+        <td align="center"> 자료 수집 <br> point 처리 <br> TensorflowLite 변환 <br> 실시간 통역
+        <td align="center"> 회원 관리 <br> 매크로 기능
+        <td align="center"> 자료 수집 <br> 모델 분석 <br> TensorflowLite 변환 <br> 통화 기능
+        <td align="center"> DB, API 설계 <br> 서버 배포 <br> 회원관리 API <br> JWT
     </tr>
 </table>
 
