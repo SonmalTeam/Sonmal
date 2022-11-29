@@ -75,9 +75,18 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 
 ### 👍 실시간 통역
 
+<img src="https://user-images.githubusercontent.com/49026286/195801301-88057f53-8387-48a6-a52d-a590bf53e38a.png" width="750" height="450">
 
-![image](https://user-images.githubusercontent.com/49026286/195801301-88057f53-8387-48a6-a52d-a590bf53e38a.png)
-![image](https://user-images.githubusercontent.com/49026286/195801423-36f7f1e5-397a-488c-8c71-ae6300274af5.png)
+**실행 화면**
+
+<img src="./assets/01_수어인식.gif" width="200" height="450"><span> </span><img src="./assets/02_STT.gif" width="200" height="450">
+
+<img src="https://user-images.githubusercontent.com/49026286/195801423-36f7f1e5-397a-488c-8c71-ae6300274af5.png" width="750" height="450"> 
+
+**실행 화면**
+
+<img src="./assets/02_STT.gif" width="200" height="450">
+
 
 
 
@@ -92,6 +101,10 @@ https://play.google.com/store/apps/details?id=com.d202.sonmal
 
 
 ![image](https://user-images.githubusercontent.com/49026286/194220677-9f1ef74c-fd9f-4e69-ba30-ca3a7449b3bc.png)
+
+**실행 화면**
+
+<img src="./assets/04_매크로등록.gif" width="200" height="450">
 
 
 🔈 자주 사용하는 문장을 수어 영상&텍스트 혹은 텍스트로 저장해놓고, 필요할 때 누르면 음성으로 출력해줘요.
